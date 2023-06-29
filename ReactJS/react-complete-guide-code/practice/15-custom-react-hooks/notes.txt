@@ -1,0 +1,164 @@
+*************************************************** Module Introduction *************************************************
+. What & Why?
+. Building a Custom Hook
+. Custom Hook rules & practices
+
+************************************************** What are "Custom Hooks?" *********************************************
+. Custom hooks are just regular functions just as the built-in hooks, like useState, are in the end just functions, but 
+  they are functions which can contain stateful logic. You can build custom hooks, these custom hook functions are used to
+  outsource stateful logic into reusable functions.
+
+. Unlike regular functions, custom hooks can use other React hooks, including other custom hooks. And they can, therefore,
+  also leverage React state managed with useState or useReducer. They can access useEffect and so on. With custom hooks,
+  you can outsource logic, which you might be using in different components, into a custom hook, which you can then call
+  from all these various components. So, it is simply a mechanism of reusing logic.
+
+************************************************** Creating a Custom Hook Fucntion **************************************
+. In ForwardCounter and BackwardCounter component, we have almost same logic, so here we can export counter logic using
+  custom hook.
+
+. we store every hook in a standalone file. So I will start by creating a new hooks folder side-by-side to the components
+  folder and in there, I will add the use-counter.js file. Now, the file name is totally up to you. You don't have to name
+  it, use-counter. I do name it like this though because there is a clear rule which we have to follow when it comes to the
+  function name inside of that file because we are going to create a function here,  that function which you do create
+  has to start with a use in its name. That is a must do. That is a hard rule which you have to follow.
+
+  It will be a normal function in the end but the use at their beginning signals to react that it will be a custom hook
+  and it gives the reacts to guarantee that you will use that function by respecting these rules of hooks so that you will
+  use this custom hook function just as you use to build in hooks. And that is a guarantee react needs because otherwise if 
+  you start using react hooks in your custom hook and you would use your custom hook in a wrong, in a forbidden place,
+  you would implicitly also use to build in hooks in a wrong place.
+
+************************************************** using cutom hooks ***************************************************
+. Well, you are going to use a custom hook just as you use to built-in hooks. You are just calling it like a function 
+  because it is just a function. So therefore we wanna import useCounter here in the ForwardCounter component, And in the
+  ForwardCounter we can then just call useCounter().
+
+  Now that alone will not do everything we need to do but it is a start. Now we are calling this custom hook function.
+  So when this gets called, obviously, all that code will execute. So that state will be registered and that effect will
+  be fired. Now, if you call a custom hook in one of your components and that component, for example of registers a state
+  or an effect as we do it here then this state and effect will be tied to the component in which you use your custom hook.
+  So if I call useCounter in the ForwardCounter component the state created here, in useCounter will be tied to this 
+  ForwardCounter.
+  
+  If we use a custom hook in multiple components every component will receive its own state. So just because we use a 
+  custom hook does not mean that we share state or effects across components. Instead for every component the custom hook 
+  is executed again. And every component instance then receives its own state. So it's just a logic which has shared
+  not the concrete state.
+
+************************************************** Configuring custom hooks *********************************************
+. So, in the BackwardCounter component we got the same logic as in the forward counter, but we are deducting,here,instead
+  of adding. Nonetheless, we can use our custom hook here, we just need to do something which we often do with functions 
+  that we write. We make them reusable and configurable, you could say, by accepting arguments, parameters. Just as our 
+  components receive props and just as any function in JavaScript, or programming in general, can accept parameters,
+  custom hooks, since they are just functions can also accept parameters.
+
+************************************************** Onwards to the more realistic example ********************************
+. created another project where we use http logic.
+
+. We got two similar kind of operations in two different parts of this application. And that would be here in the 
+  new task component when we send the request to store data and in the app component when we send the request to get data.
+  Now, regarding the details, the code is different. When we get the tasks, we configured a request like this we send a 
+  GET request without a body and without headers and we have some transformation logic which we apply to the response.
+  
+  Whereas in the NewTask case we send a POST request and we do add data and we have a different transformation logic
+  for the response. But even though these details are different, there are a lot of parts where the code is pretty much 
+  the same. For example, in both components, we are managing a loading and an error State and we are setting the loading 
+  and error States in the same way. We are also having the same error handling logic here and so on.
+
+  So there are parts which are quite similar and because that's the case because we have some code duplication some code
+  re-usage here because of that we might wanna consider outsourcing this logic into a separate function. But since the 
+  logic or at least parts of the logic, which is being reused contains the usage of other React Hooks and the usage of 
+  State. Since that's the case, our regular function won't do the trick because there we're not allowed to use React Hooks.
+  That's why here we have a great opportunity for building a custom Hook where we outsource the Http logic, and then still
+  in the end can reuse that stateful logic for the loading and error State.
+
+  Refer App.js and NewTask component
+
+************************************************** Building a Custom Http hook ******************************************
+. Created useHttp custom hook. refer use-http.js
+
+************************************************** Using the Custom Http hook *******************************************
+. Modified App component to use useHttp custom hook. refer App.js
+
+************************************ Adjusting the custom hook logic: usecase of useCallback ***************************
+. We should add fetchTasks as a dependency here to useEffect because you'll learn that basically every piece data or
+  function which is set up inside of a component function, which you are using in useEffect should be added as 
+  dependency. The problem with that is that this would create an infinite look. Why? Because we will call fetchTasks 
+  here and this will then go ahead and execute this sendRequest function in the custom hook, and that will then set some 
+  states.
+
+  When the states are set the component where we use the custom hook will be re-rendered because I explained that when 
+  you use a custom hook, which uses state and you use that hook in that component that component will implicitly use 
+  that state set up in the custom hook. So the state configured in the custom hook is attached to the component where 
+  you use the custom hook. So if we call setIsLoading and setError here in the sendRequest function in the custom hook
+  this will trigger the app component to be re-evaluated because I'm using that custom hook here in that component.
+
+  Now, that, however, will then call the custom hook again when that component is re-evaluated and when that custom hook 
+  is called again, I am indeed recreating the sendRequest function and I'm returning a new function object and therefore 
+  useEffect will run again. And that happens because as I explained earlier in the course in the behind the scenes 
+  module functions are objects in JavaScript. And every time a function is recreated even if it contains the same logic,
+  it's a brand new object in memory and therefore useEffect would treat it as a new value, even if it's technically the 
+  same function and it would re-execute it. So to avoid this, we should go to useHttp and wrap sendRequest with use 
+  callback. 
+
+. Now useCallback, also needs of dependency array of though, and this dependency array also should list everything 
+  which is being used in here. And in my case, that requestConfig object but also this appliedData function which 
+  recalling. Now this poses yet another problem though, since that is the case, we should add requestConfig and 
+  applyData as dependencies here. But of course, both again are objects requestConfig as a standard JavaScript object,
+  applyData as a function which you learned also is an object.
+
+  So back in the App component where we're passing in this object and this function. We again have to ensure that these
+  objects are not recreated all the time when this function runs again which they currently would be. So here in App 
+  component, we also should wrap transformTasks here with useCallback, and add our dependency array here and here we 
+  don't have to add anything because in here I'm not using anything external other than set tasks which is a state 
+  updating function. And as explained multiple times in the course, these are guaranteed to never change.
+
+  Now with that we're guaranteeing that transform tasks will not change all the time, but this object here will we are 
+  recreating it here all the time. whenever the app component is re-evaluated. So to work around that, we could look 
+  into useMemo or anything like that to ensure that this object doesn't change all the time.
+
+. Or we change our custom hook again. Instead of accepting the requestConfig here in the hook itself, why don't we 
+  expect that here in the sendRequest function after all that is the function which is being called with that Config.
+  Then we don't need to add it as a dependency here because it's now a parameter of this wrapped function, not an 
+  external dependency. And therefore we got rid of this issue.
+
+  And of course we could do something similar with the data transformation function. If using useCallback that here in 
+  app component is too cumbersome for you if you don't like this approach. We can get rid of that and instead just pass 
+  transformTasks as second argument to fetchTasks here and not to useHttp so that we call useHttp without any arguments.
+  And we actually create transform tasks inside of the effect, then there's all there's no external dependency in the 
+  effect.
+
+**************************************** Using the custom hook in more components **************************************
+. To use useHttp() in Newtask component, We don't need to work with useCallback or anything like this here, because we 
+  are only calling sendTaskRequest in the enterTaskHandler, not inside of useEffect or anything like that. Therefore 
+  here, we won't have the problem of an infinite loop, because this request will not be sent whenever the component is 
+  re-evaluated, but only when this function runs which happens when the form is submitted.
+
+. Now in my createTask function, I'm missing the taskText though. That's a problem. I'm missing the text which was, 
+  passed from the form to that HTTP request. We do have that text available here inside of enterTaskHandler. To make it 
+  available inside of this createTask function, which we pass to sendTaskRequest, we got two main options.
+  We could either grab this function and define it here, inside of enterTaskHandler to have a nested function inside of 
+  a nested function inside of the component function, and that would work due to how JavaScript scoping works. We now do 
+  have access to the enter task text.
+
+  Or alternatively, we leave it like this to avoid this deep nesting. And we instead expect to get the task text as an 
+  argument here, as a parameter in createTask text. And therefore we want two parameters here when actually our custom 
+  hook, which is calling createTask in the end, only passes in one parameter. It only passes the data.
+  To work around that, we could use the bind method in JavaScript. We could call bind here on createTask when we pass it 
+  to sendTaskRequest and the bind method allows us to pre-configure a function. It does not execute the function right 
+  away.
+  
+  Instead it's a default JavaScript method, which you can use on any function object to pre-configure that function.
+  The first argument you pass to bind then allows you to set the this keyword in the to-be-executed function, which does
+  not matter to us here. Hence, we can set this to null. But the second argument you pass to bind will then be the first
+  argument received by that to-be-called function. So if you wanna pass in the task text here, we can set this to taskText 
+  here because that will then refer to the taskText. we're getting from the form submission.
+
+  Now the other argument taskData will still be received here because this is our pre-configuration. Any other 
+  arguments which might be passed by the place where the function is then actually being called which happens in useHttp,
+  will then simply be appended to the end of the parameter list. So the data which we pass here as the only argument to 
+  apply data in the custom hook will be appended as a second argument on createTask because of us calling bind here.
+  So when it's being called, this receives all the data which is needed. And this is all just regular JavaScript.
+  
+  Refer NewTask.js

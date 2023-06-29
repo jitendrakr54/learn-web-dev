@@ -1,0 +1,568 @@
+********************************************* An Overview of Modern JavaScript Development *****************************
+. Refer pdf notes
+
+. Let's start a section with a general overview of Modern JavaScript Development. So basically of how we write JavaScript
+  today. Because when we build applications, we don't just write all of our code into one big script, send that script as
+  it is to the browser, and call it a day. Now it used to be like this, but the way we build JavaScript applications, has
+  changed tremendously over the last couple of years.
+
+  So back in the day, we used to write all our codes into one big script or maybe multiple scripts. But today, we divide 
+  our projects into multiple modules and these modules can share data between them and make our code more organized and 
+  maintainable.
+
+  Now, one great thing about modules is that we can also include 3rd-party modules into our own code. And there are
+  thousands of open source modules, which we also call packages, that developers share on the NPM repository. And we can 
+  then use these packages for free in our own code. For example, the popular React framework or jQuery, or even the 
+  Leaflet library, that we used before in our Mapty project. All of these packages are available through NPM.
+
+. Now NPM stands for Node Package Manager, because it was originally developed together with Node.js and for Node.js.
+  However, NPM has established itself as the go to repository for all kinds of packages in Modern JavaScript Development.
+  Now, in order to actually download and use and share packages, we use the NPM software installed on our computer. And 
+  this is just a simple command line interface that allows us to do all that. So basically NPM is both the repository in 
+  which packages live and a program that we use on our computers to install and manage these packages.
+
+  So let's say that we are done writing our project code. So we divided it into multiple modules and we included some
+  3rd-party modules as well. And so now the development step is complete. However, usually that's not the end of the story.
+  At least not when re-building a real world application. Instead, our project now needs to go through a build process, 
+  where one big final JavaScript bundle is built. And that's the final file, which we will deploy to our web server for 
+  production. So basically it's the JavaScript file, that will be sent to browsers in production. And production simply 
+  means that the application is being used by real users in the real world.
+
+. Now, a build process can be something really complex, but we gonna keep it simple here and only include two steps.
+  And the first step, we'll bundle all our modules together into one big file. This is a pretty complex process which
+  can eliminate unused code and compress our code as well. Now this step is super important for two big reasons.
+  First, older browsers don't support modules at all. And so code that's in a module could not be executed by any older
+  browser. And second, it's also better for performance to send less files to the browser, and it's also beneficial that
+  the bundling step compresses our code.
+
+  the second step, we do something called transpiling and polyfilling, which is basically to convert all modern JavaScript
+  syntax and features back to old ES5 syntax, so that even older browsers can understand our code without breaking. And 
+  this is usually done using a tool called "Babel". So these are the two steps of our build process.
+
+. and after these two steps, we end up with that final JavaScript bundle, ready to be deployed on a server for production.
+  Now, of course we don't perform these steps ourselves. Instead, we use a special tool to implement this build process
+  for us. And the most common build tools available, are probably "webpack" and "Parcel". And these are called JavaScript
+  bundlers because well, as the name says they take our raw code and transform it into a JavaScript bundle.
+  
+  Now Webpack is the more popular one, but it can be really hard and confusing to set it up. So that's because there's
+  a lot of stuff that we need to configure manually, in order to make it work properly. Parcel, on the other hand is a zero
+  configuration bundler, which simply works out of the box. And so in this bundler, we don't have to write any set up code, which is really amazing. Now these development tools are actually also
+  available on NPM. So just like packages that we include in our code, we will download and manage tools using NPM as well.
+  And these tools include the live-server that we've been using all along, the Parcel bundler that we just talked about or
+  Babel to transpile code back to ES5. 
+  
+  All right, so this is a high level overview, of how we develop Modern JavaScript applications today. And if you ask me,
+  this is really exciting stuff, because this is how professional developers actually write JavaScript today. And so in 
+  the rest of the section, you will take a big step in the direction of becoming a professional developer too.
+
+********************************************** An Overview of modules in JavaScript *************************************
+. Refer pdf notes
+
+. A module is a reusable piece of code that encapsulates implementation details of a certain part of our project. Now that
+  sounds a bit like a function or even a class, but the difference is that a module is usually a standalone file. Now that's
+  not always the case, but normally when we think of a module we think of a separate file. So of course a module always 
+  contains some code but it can also have imports and exports. So with exports, as the name says, we can export values out
+  of a module for example, simple values or even entire functions. And whatever we export from a module is called the 
+  public API.
+
+  So this is just like classes where we can also expose a public API for other codes to consume. Now, in the case of 
+  modules, this public API is actually consumed by importing values into a module. So just like we can export values in 
+  modules, we can usually also import values from other modules. And these other modules from which we import are then 
+  called dependencies of the importing module.
+
+. ADVANTAGES: Now, of course we can write code without modules, and actually we've been doing that up until this point.
+  but that's because our applications have been very simple. However, when a code base grows bigger and bigger, there 
+  start to be many advantages of using modules -
+
+  1. Compose Software: Modules are small building blocks that we put together to build complex applications.
+     modules make it really easy to compose software. So we can think of modules as small building blocks that we can
+     then put together in order to build really complex applications.
+
+  2. Isolate Component: Modules can be developed in isolation without thinking about the entire codebase.
+     And so isolating components is another huge advantage of using modules. And again, isolating components essentially
+     means that each module can be developed in isolation without the developer having to think about the entire code
+     base. He doesn't even need to understand all of it, which makes it really easy to collaborate on a larger team.
+
+  3. Abstract Code: Implement low-level code in modules and import these absractions into other modules.
+     Modules make it very easy to abstract or code. basically we can use modules to implement low level code then other
+     modules, which don't really care about these low level details can import these abstractions and use them.
+
+  4. Organized code: Modules naturally lead to a more organized codebase.
+     Modules also naturally lead to a more organized code base. Because when we break up our code into separate isolated
+     and abstracted modules, this will automatically organize our code and make it easier to understand.
+
+  5. Reuse Code: Modules allow us to easily reuse the same code, even across multiples projects.
+     Modules allow us to easily reuse the same code in a project and even across multiple projects. For example, if we
+     use the module to implement a couple of mathematical functions in a certain project, and if we then need the same
+     functions in the next project, all we need to do is to copy that module to the new project.
+
+. As of ES6, JavaScript has a native built-in module system. Now we didn't have modules before ES6, but we had to implement
+  them ourselves or use external libraries. So ES6 modules are modules that are actually stored in files and each file is
+  one module. So there is exactly one module per file.
+
+  But now you might be thinking, well, scripts are usually also files, right? And that's of course true. And so let's Now
+  compare these two types of files in order to understand that there are actually huge differences between old school 
+  scripts and modern ES6 modules -
+
+  1. Top-level variables: The first difference is that in modules, all top level variables are scoped to the module.
+     So basically variables are private to the module by default. And the only way an outside module can access a value
+     that's inside of a module is by exporting that value. But if we don't export, then no one from the outside can see
+     the variable.
+     Now in scripts, on the other hand, all top level variables are always global and this can lead to problems
+     like global namespace pollution, where multiple scripts try to declare variables with the same name and then
+     these variables collide. So private variables are the solution to this problem.
+
+  2. Default modeL: ES6 modules are always executed in strict mode while scripts on the other hand are executed in
+     sloppy mode by default. So with modules, there is no more need to manually declare strict mode.
+
+  3. Top-level this: this keyword is always undefined at the top level in modules while in scripts it points at the
+     window object.
+
+  4. Imports and exports: what's really special about modules is that we can export and import values between them using
+     this ES6 import and experts syntax. In regular scripts, importing and exporting values is just completely
+     impossible.
+     Now, there is something really important about imports and exports which is the fact that they can only happen
+     at the top level. So outside of any function or any if block.
+     Also all imports are hoisted. So no matter where in a code you're importing values, it's like the import statement
+     will be moved to the top of the file. So in practice importing values is always the first thing that happens in a
+     module.
+
+  5. HTML lining: To link a module to an HTML file, we need to use the script tag with the type attribute set to module,
+     instead of just a plain script tag. <script type="module"> <script>
+
+  6. File downloading: This always automatically happens in an asynchronous way. And this is true for a module loaded
+     from HTML as well as for modules that are loaded by importing one module into another, using the import syntax.
+     on the other hand, regular scripts are downloaded by default in a blocking synchronous way, unless we use the async
+     or differ attributes on the script tag.
+
+. Now let's dig a bit deeper and really understand how modules actually import other modules behind the scenes.
+  And to do that, let's analyze what happens in this small code example.
+
+  import {rand} from '.math.js';
+  import {showDice} from '.dom.js';
+  const dice = rand(1, 6, 2);
+  showDice(dice);
+
+  Now, as always, when a piece of code is executed, the first step is to parse that code. And this is the moment in which
+  imports are hoisted. And in fact, the whole process of importing modules happens before the code in the main module is 
+  actually executed. 
+  
+  So in this example, the index.js module imports, the dom and math modules in synchronous way. What that means is that 
+  only after all imported modules have been downloaded and executed, the main index.js module will finally be executed as
+  well. Now this is only possible because of top level imports and exports that's because if we only export and import 
+  values outside of any code that needs to be executed, then the engine can know all the imports and exports during the 
+  parsing phase.
+
+. Now, if we were allowed to import a module inside of a function, then that function would first have to be executed 
+  before the import code happened. And so in that case, modules could not be imported in a synchronous way. So the 
+  importing module would have to be executed first.
+
+  But you might ask why do we actually want modules to be loaded in a synchronous way? Isn't synchronous bad?
+
+  Well, the answer is that this is the easiest way in which we can do things like bundling and dead code elimination. So
+  basically deleting code that's actually not even necessary.
+
+. So after the parsing process, has figured out which modules it needs to import, then these modules are actually 
+  downloaded from the server. And remember downloading actually happens in an asynchronous way. It is only the importing
+  operation itself that happens synchronously. Then after a module arrives, it's also parsed and the modules exports
+  are linked to the imports in index.js. 
+  
+  So for example, the math module exports a function called rent. And this export is then connected to the rent import in
+  the index.js module. And this connection is actually a live connection. So exported values are not copied to imports.
+  Instead, the import is basically just a reference to the export at value like a pointer. So when the value changes in 
+  the exporting module, then the same value also changes in the importing module.
+
+************************************************* Exporting and importing in ES6 modules *******************************
+. If we use import then we don't need to use strict mode, because all modules are executed in strict mode by default.
+
+. If something is defined inside another module and we try to use that in our module we get error, so to use that we need
+  to first export that from another module.
+
+  In ES modules, there are two types of exports, Named Exports and Default Exports. and named imports is actually the
+  simplest way of exporting something from a module, because all we have to do is to put export in front of anything,
+  that we might want to export.
+
+  exports always need to happen in top level cart, so not in any block.
+
+  we can also export multiple things from a module using Named Exports. And actually, that is the main use case of Named
+  Exports, so, basically when we want to export multiple things.
+
+  we can also import all the exports of a module at the same time as follows - 
+    import * as ShoppingCart from './shoppingCart'
+  Now ShoppingCart is an object containing everything.
+
+. Default export: 
+  So usually, we use Default Exports when we only want to export one thing per module, and so that's the reason why they 
+  are called default. no name is involved at all. We simply export the value. and any name can be given in importing module.
+  and while importing we can give any name we want.
+
+  we could even mix all of them in the same import statement. So if we wanted, we could have default and named imports
+  and exports all at the same time. Below is just for example, default export is used if only we wnat to export one
+  thing per module.
+        import add, { addToCart, totalPrice as price, tq } from './shoppingCart.js';
+
+  However in practice, we usually never mix Named and Default Exports in the same module.
+
+. Refer script.js, shoppingCart.js
+
+***************************************************** Top-level await (ES2022) *****************************************
+. From ES2022 version, we can now use the await keyword outside of async functions, at least in modules. To use script 
+  type should be set as module in html.
+
+  But await blocks the execution of entire module. This can be useful in some situations but many times, it can
+  also be harmful.
+
+. We can use top-level await for writing clean code. 
+
+. One more implication of top-level await is that if one module imports a module which has a top-level await, then the
+  importing module will wait for the imported module to finish the blocking code.
+
+. Refer script.js
+
+***************************************************** The module pattern ***********************************************
+. We uses to use before to implement modules in JavaScript. 
+
+  just like in regular modules that we just learned about, the main goal of the module pattern is to encapsulate 
+  functionality, to have private data, and to expose a public API. And the best way of achieving all that is by simply
+  using a function, because functions give us private data by default and allow us to return values, which can become our
+  public API.
+
+  And usually we write an IIFE, actually. So an immediately invoked function expression. And the reason for that is 
+  because this way we don't have to call it separately and we can also ensure that it's only called once.
+
+. Now, the problem is that if we wanted one module per file, like we have with ES6 modules, then we would have to create
+  different scripts and link all of them in the HTML file. And that then creates a couple of problems, like we have to be
+  careful with the order in which we declare them in HTML, and we would have all of the variables living in the global 
+  scope, and finally, we also couldn't bundle them together using a module bundler.
+  
+  And so that's exactly the reason why native modules were added to the language in ES6.
+
+. Refer script.js
+
+***************************************************** CommonJS Modules *************************************************
+. Besides native ES Modules, and the module pattern, there are also other module systems, that have been used by
+  JavaScript in the past. But again, they were not native JavaScript. so they relied on some external implementations.
+  And two examples are: AMD Modules, and CommonJS modules.
+
+. Now CommonJS modules are important for us, because they have been used in Node.js, for almost all of its existence.
+  So only very recently, ES Modules have actually been implemented, in Node.js. And remember, Node.js is a way of
+  running JavaScript on a web server, outside of a browser.
+  
+  Now the big consequence of this, is that almost all the modules, in the npm repository. So all these modules that we can
+  use in our own code, still use the CommonJS module system. And the reason for that, is that npm was originally only 
+  intended for node. Which as they said, uses commonJS. Only later npm became the standard repository, for the whole 
+  JavaScript world. And so now we are basically stuck, with CommonJS. And so therefore, you will see probably, a lot of 
+  CommonJS still around.
+
+. Like ES6 module, in CommonJS, one file is one module.
+
+. Refer script.js
+
+*************************************************** A Brief Introduction to the command line ****************************
+. Learnt some basic linux command
+
+*************************************************** Introduction to NPM ************************************************
+. NPM stands for Node Package Manager, and it's both a software on our computer and a package repository.
+
+  But why we actually need something like NPM. So, why do we actually need a way of managing packages or dependencies
+  in our project?
+
+  Well, back in the day before we had NPM, we used to include external libraries right into our HTML. So, basically
+  using the script tag. And this would then expose a global variable that we could use, and actually that's exactly
+  what we did earlier in our Mapty project. So we simply included the leaflet.js file basically using a script tag and
+  did that before or own script so that our own script could then use the global variable that was exposed by this
+  library here.
+
+  Now, this actually creates a couple of problems, at least in a big project so maybe not in this particular project
+  that is really small, but in a huge project and a huge team, this is just not manageable.
+
+  First, it doesn't make much sense having the HTML loading all of JavaScript, that is just really messy.
+
+  Second, many times we would actually download a library file to our computer directly, for example, a jQuery JavaScript
+  file. But then whenever a new version would come out, we would have to manually go to the site, download the new
+  version, change the file in our file system manually, and then include it here again, maybe with some other name,
+  with some other version number. And that was just a huge pain.
+
+  Third reason is that before NPM, there simply wasn't a single repository that contained all the packages
+  that we might need. And so this made it even worse and more difficult to manually download libraries and manage them
+  on our computers. So in summary, this all used to be a huge pain and a huge mess.
+
+. But anyway, all of this is just to say that we really need a way to manage our dependencies in a better and more modern
+  way. And NPM is exactly how we do that.
+
+  Now in each project in which we want to use NPM, we need to start by initializing it. And so for that, we write 
+  "npm init", and this will then ask us a couple of question in order to create a package.json file. So just press OK-OK
+  
+  And then we end up with a special file called package.json. Now, this file here is basically what stores the entire 
+  configuration of our project.
+
+  And now let's actually install the leaflet library that we used before, but this time using NPM.
+      npm install leaflet or npm i leaflet
+
+  And now you'll see that two things happened. So first of all, in our package.json file, a new field here was created for
+  the dependencies. And the dependency that we have here now is leaflet that we just installed at version 1.6.0.
+
+  the second thing is that we now have this folder called node modules. And this folder itself contains the leaflet folder.
+  which contains code of this leaflet library.
+  
+. let me show you how we can install and import one of the most popular JavaScript libraries, which is Lodash. Lodash is 
+  essentially a collection of a ton of useful functions for erase, objects, functions, dates, and more. So, it's a lot of
+  like functions that could or should be included in JavaScript, but are not.
+
+  npm i lodash-es
+
+  Now let's import cloneDeep from lodash.
+
+  Refer script.js
+
+  We can install all the dependencies mentioned in package.json using "npm install". And so then, NPM will reach into your
+  package.json file, look at all the dependencies and install them back.
+
+. Refer script.js
+
+******************************************** Bundling with Parcel and NPM Scripts **************************************
+. npm i parcel
+
+. with Parcel there's no need for specifying the entire path to any module. all we need to say is that we want to include
+  the lodash library. And so Parcel will then automatically find the path to this module.
+
+. And in fact, this works with all kinds of assets. So even with HTML or CSS or SAAS files, or even images, and of course 
+  also all kinds of modules. So not only ES6 modules, but this is also going to work with CommonJS modules.
+
+. Parcel is a module bundler and it's super fast and easy to use, and, even more importantly, it works out of the box
+  without any configuration. There is another module bundler "Webpack" which is probably the most popular bundler
+  and especially in react world.
+
+. Installing Parcel: "npm i parcel --save-dev" After this command it will be added in devDependencies in package.json
+
+. Using Parcel: There are two ways of using parcel 
+  1. "npx parcel index.html"
+    After this Parcel will create a folder called dist which will have final resource.
+
+  2. npm script: In package.json, we need to add in script property as - this is the way we use in practice
+      "scripts": {
+        "start": "parcel index.html"
+      }
+
+. Hot Module Replacement:
+  what hot module replacement means is that whenever we change one of the modules, it will then, of course, trigger a
+  rebuild, but that new modified bundle will then automatically, like magic, get injected into the browser without 
+  triggering a whole page reload.
+
+  So again, whenever we change something here, this will then not reload this part of the page. And so that's going to
+  be amazing for maintaining state on our page whenever we are testing out something.
+
+  So this used to be something quite annoying in the past. For example, in our Bankist the application, where whenever we 
+  reloaded the page, we needed to log in again into the application. But with Parcel and hot module replacement, that's 
+  not going to happen, because the page will not reload. Below code is for hot module replacement.
+
+    if (module.hot) {
+      module.hot.accept();
+    }
+  
+  now we can run "npm run start" in terminal
+
+. Whenever we are done developing our project, it is time to build the final bundle. So the bundle that is compressed
+  and has dead code elimination and all of that. And so for that, we need another Parcel command. And so let's add that as
+  another script here.
+      "scripts": {
+        "start": "parcel index.html",
+        "build": "parcel build index.html"
+      },
+  Then run this: "npm run build"
+
+  We get an output wih size of each file and html and js file will look different means compressed. and these are the files
+  which will go in production.
+
+. We can install package globally - "npm i parcel -g"
+  
+  we were then simply able to use live server in every directory on our computer. So basically the big difference
+  between globally and locally installed packages and especially these tools like Parcel or live server, is that we
+  can use the global tools directly in the command line without the intermediate step of an NPM script.
+  However, most of these tools actually advise developers to always install the tools locally so that they can always
+  stay on the latest version.
+
+. Refer script.js
+
+************************************************ Configuring Babel and Polyfilling *************************************
+. Babel is a free and open-source JavaScript transcompiler that is mainly used to convert ECMAScript 2015+(ES6) code
+  into a backwards compatible version of JavaScript that can be run by older JavaScript engines. Parcel actually 
+  automatically uses Babel to transpile or code.
+
+  Basically Babel works with plugins and presets that can both be configured. Now a plugin is basically a specific
+  JavaScript feature that we want to transpile, so to convert. So for example let's say we only wanted to convert
+  arrow functions back to ES5 but leave everything else in ES6 for example, const and var declarations.
+
+  Now usually that doesn't make a lot of sense because basically we will want to transpile everything at the same time.
+  And so usually instead of using single plugins for each of these features, Babel actually uses presets. And so a
+  preset is basically a bunch of plugins bundled together. And its by default parcel is going to use (@babel/preset-env)
+  preset and preset here. And this preset will automatically select which JavaScript features should be compiled
+  based on browser support.
+
+. So everything that we used from ES6 is now converted into regular ES5 code but now let me show you something important.
+  So let's write some code here which is basically not part of this preset here because this preset (@babel/preset-env)
+  does actually only include final features. So features that are already part of the language after passing the four stages
+  of the ECMA process. Let's include class field in script.js which is at stage three.
+
+. Promise is an ES6 feature but again, it was not converted back to ES5 and the reason for that is that Babel can actually
+  only transpile ES6 Syntax. So the things like arrow functions, classes, const, or the spread operator. So these are 
+  basically things that have an equivalent way of writing them in ES5. So for example the arrow function, it is simply a 
+  different syntax. And so Babel can simply write function instead of that. And the same goes with const.
+  
+  So it's very easy to simply convert that to VAR but the same is not true for real new features that were added to
+  the language like find and promise. So these new additions to the language so these new features, they can simply not
+  be transpiled. It's simply not possible. Only syntax is easy to convert, so easy to compile.
+
+  However, all hope is not lost. So for these added features again, such as Promises or all the array methods like finds
+  and really a bunch of other stuff, we can polyfill them. And so that's why since the beginning I've always been saying
+  transpiling and polyfilling. So these new features, we have to polyfill them.
+
+  Now Babel used to do polyfilling out of the box some time ago but recently they started to simply recommending another
+  library. And so we now have to manually import that as well. So import 'core-js/stable' so that's the name of the library.
+  And then we usually only want to import a part of that library and that's called Stable. need to install manually?
+
+  but you will notice that's the code we had before is actually still there. So it's still the same and promise and find 
+  have not been replaced. And that's because that's simply not the way it's supposed to work. So instead what polyfilling
+  does is to basically recreate defined function and to make it available in this bundle so that the codes can then use it.
+
+. The polyfilling is going to polyfill everything even if we don't need it, we could cherry pick basically just the
+  features that we actually want to polyfill. Now that of course is a lot of work but it will also greatly reduce the
+  bundle size. And so it might be worth it if that's really a concern.
+
+  There is one more thing which is not poyfilled by 'core-js/stable' which is async function. So for that we need to install
+  npm install regenerator-runtime
+
+. Refer script.js
+
+************************************************ Review: Writing Clean and Modern JavaScript ***************************
+. Refer pdf notes
+
+. READBLE CODE:
+
+  One of the most important things when you code, is that you should write readable code, which basically means that you 
+  should write code so that others can understand it, and also, so that you can understand it yourself in the future.
+
+  You should try to avoid writing too clever and maybe over complicated solutions that might make you feel really smart as
+  a developer, but which also might make your code very confusing and unreadable. And so in many situations it's best to 
+  simply write the most straightforward solutions.
+
+  Another thing that's very important for readable code is to give functions and variables, very descriptive names. So for
+  variables, you should name them according to what they contain, and for functions you should name them according to what
+  they do. And so by doing this, you will make it really clear and obvious to everyone what each variable is, and what each
+  function does.
+
+. GENERAL:
+  Next, there are some more general rules that you should follow in order to write modern and clean code, which are to use
+  the DRY principle. So don't repeat yourself, which means that you should essentially refactor your code whenever you can.
+  
+  Also, you should not pollute the global namespace, and instead, encapsulate your data into functions or classes or modules.
+  Also, you shouldn't use var for declaring variables. you should always use const and only if you want to change any 
+  variable, then use let, but never var.
+
+  And finally, you should always use strong type checks. So always use the triple equals over the simple double equals,
+  which do not perform type checks.
+
+. FUNCTIONS:
+  Main rule that we should follow by writing functions is that each function should usually only do one thing. Now many 
+  times of course we will want to break that rule, but in general it's good to keep this rule in mind, so that you always
+  write like small functions which only do one thing, but do it really well.
+
+  Next, you shouldn't use more than three parameters in a function. And this actually goes in line with the previous 
+  guideline because of course, if a function only does one thing, then probably it doesn't need so many parameters in the
+  first place.
+
+  Also use default parameters in your functions whenever that's possible, and in general return the same data type as you
+  received. So for example, if you receive two or three numbers as an input to a function, then probably you will want to
+  return a number as well. So that then makes more sense for when you consume, so for when you use the function later.
+  And again, this is a rule that you can of course break, but it's again good to keep this one in mind.
+
+  Finally, you can and should use arrow functions whenever they make the code more readable. And here, many people actually
+  have different opinions. So some people started to use arrow functions everywhere, and some people don't like them at 
+  all, because they think that they completely make code unreadable no matter when they're used.
+
+  But personally, I like to kind of follow a middle ground. So I still use the more regular functions in many situations.
+  But if arrow functions make the code more readable, then I will totally use arrow functions. And one great use case in 
+  my opinion is in the callback functions of array methods.
+
+. OOP:
+  In my opinion in order to implement OOP in JavaScript, you should now use ES6 classes.
+
+  Now when designing your classes, make sure that you encapsulate any data that shouldn't be accessible from the outside,
+  so that you don't mutate that data from outside the class. Now probably you will still need to at least manipulate some
+  data that's in the class, but for that you should then implement a public API. So basically a couple of methods that can
+  then manipulate that data exactly as you want that to happen.
+
+  Now as you implement your methods in your classes, make sure that you implement chaining in all the methods where it'll
+  actually makes sense. Because this can make your methods way easier to use, not only for you, but maybe also for other
+  developers on your team. So this is yet another great practice when you're writing your classes.
+
+  Finally, one important thing to also mention here is that in regular objects when you're writing methods, then please 
+  don't use the arrow functions there. Because by doing that, you will not get access to the this keywords of that object.
+  so always avoid arrow functions, even if you're not even using the this keyword in a method. Because simply by getting
+  into the habit of avoiding arrow functions as methods in this situation, you'll then not commit any mistakes ever.
+
+. AVOID NESTED CODE:
+  which basically means writing code inside of blocks inside of other blocks is really really bad for readable code.
+  And so we should avoid nested code at all costs. And one great way of avoiding nested code is to use guard clauses,
+  So guard clauses basically simply means to use an early return, in case some condition is not met.
+
+  Also you can use the ternary operator, or even logical operators instead of an if statement. Because the ternary operator
+  of course does not create a new code block, while the if statement does.
+
+  Now if you really do need an if statement, then instead of an if else statement, you should use multiple ifs instead.
+  Because again, this will make code a lot more readable than having to go through all these if and else if, and else blocks.
+
+  Next, you should completely avoid any kind of loops. And with that I mean any for loops. So the for, and also for-of loops,
+  should be avoided if you want to avoid nested code. And so instead, you can use array methods like a map, filter and 
+  reduce.
+
+. ASYNCHRONOUS CODE:
+  And finally, you should avoid callback-based asynchronous API's whenever you can. So for best readability, always consume
+  Promises using async/await and not using the then and the catch methods. Because these methods actually require callback
+  functions, which will then introduce even more nested code. So these two go kind of together. So avoiding callback based
+  asynchronous API's, and instead opting for using Promises and then consume these Promises with async/await.
+
+  Now, something that's very important is that whenever you can, you should run Promises in parallel using the Promise.all
+  combinator function. So when you have two Promises that can run at the same time, so Promises that do not depend on each
+  other, then please run them in parallel to make the application a little bit faster for your users.
+
+  And finally, always handle errors and Promise rejections. So this is simply a best practice for clean code.
+
+************************************************ Let's fx some bad code: Part 1 ****************************************
+. Refer clean.js
+
+************************************************ Declarative and Functional JavaScript Principles ***********************
+. Refer pdf notes
+
+. There are two fundamentally different ways of writing code in programming, which we also call paradigms. And these two 
+  paradigms, are imperative code and declarative code.
+
+  Now, whenever we write imperative code, we basically need to explain to the computer how to do a certain things. So, 
+  basically, we need to explain every single step that the computer needs to follow in order to achieve a certain result.
+  So we need to define step-by-step process.
+
+  On the other hand, we also have declarative programming, where the programmer tells the computer only what to do. And so,
+  when we write declarative code, we simply describe the way that the computer should achieve a certain result. But the how
+  it should do it, so basically, the step by step instructions, they get abstracted away, so we do not care about them.
+
+. So, the declarative paradigm is actually a really big and popular programming paradigm, which has even given rise to a 
+  sub paradigm called, functional programming. And functional programming, is basically a declarative paradigm, which is
+  based on the idea of writing software, simply by combining multiple so called pure functions, while avoiding side effects
+  and mutating data.
+
+  And actually, functional programming and writing declarative code, has now basically become the modern way of writing 
+  code in the JavaScript world. we also see that functional programming is about avoiding mutating data, and we do that by
+  using something called immutability.
+
+  we can actually mix imperative and declarative programming in our own codes, we don't have to go 100% declarative. Or in
+  other words, we don't have to go 100% in the direction of making our code completely functional.
+
+************************************************ Let's fx some bad code: Part 2 ****************************************
+. As discussed in previous lecture, we will focus on three big areas of functional JavaScript -
+  Immutability, side effects and pure functions, making data transformaions using pure functions, such as map, filter
+  and reduce.
+. Object.freeze() makes object immutable
+. Object.freeze() here basically only freezes the first level of the object. So it's not a so-called deep freeze
+  because we can still change objects inside of the object.
+
+. Refer clean.js

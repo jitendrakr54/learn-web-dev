@@ -1,0 +1,426 @@
+******************************** What are components? And why is all about them? ***************************************
+. React is a JavaScript library for building user interfaces. And we also learned that of course in general, HTML, CSS 
+  and JavaScript are about building user interfaces as well. But I also mentioned in the first course section that we use 
+  libraries like React because that simplifies building those user interfaces.
+
+. We don't need it, you can build any website without React but if you are having more complex user interfaces like the 
+  one we have in this expense tracker. If you use something like React it all of a sudden becomes much easier to build 
+  something like this. You won't have to focus on all the nitty-gritty details and it will be less error prone if you use
+  something like React because you will be able to focus on your core business logic that makes up your application
+  instead of having to focus on the actual steps of updating the page when something happens somewhere. That's why we use
+  libraries like React. 
+
+. And to make that job simpler for us, to make that work simpler for us, React embraces a concept called components. 
+  React is all about components. Components are in the end just a combination of HTML code, CSS code for styling and 
+  possibly JavaScript code for some logic. And you don't have to reuse a component to make it a component. It's just one
+  of its traits that it is reusable. You build these individual components and then you tell React how to compose them 
+  together into a final user interface. And React embraces this concept of components because of that reusability aspect
+  and because it allows us to separate our concerns.
+
+. Having a separation of concerns helps us with keeping our code base small and manageable instead of having one large 
+  file which holds all the HTML code and all the JavaScript logic. For the entire user interface we have small separated
+  units, these components where every component has one clear concern, one focus, one specific task it focuses us on.
+  And if we split that code across multiple files then as we are going to do it though out this course then we'll have 
+  small pieces of code which are easy to manage and maintain.
+
+******************************************* React code is written in a "Declarative way" ******************************
+. React uses something which is called a declarative approach for building these components. And you will see what 
+  exactly that is, but it basically means that with React, you will not tell React that a certain HTML element should be 
+  created and inserted in a specific place on the user interface as you would be doing it with Vanilla JavaScript, for 
+  example. Instead with React, you will always define the desired end state, the target state or possibly also different 
+  target states depending on different conditions and it's then React's job to figure out which elements on the actual 
+  webpage might need to be added or removed or updated. And you don't write these concrete DOM updating instructions on 
+  your own as you would be doing it with just JavaScript, instead with React and React components, you just define these 
+  end states and under which conditions which state should be used and then React will do all of the rest under the hood.
+
+******************************************** Creating a new React project **********************************************
+. To start writing some React code we need a React project. And the easiest way of getting started with a React project
+  is to use a tool called Create React App. You can simply Google for a Create React App to find this GitHub repository
+  with more information about it. You can also visit, create-React-app.dev for the full documentation.
+
+  Github Repo : https://github.com/facebook/create-react-app
+
+. with create-react-app, will give you a nice development environment with a development web server which allows you to 
+  preview the application locally on your machine. And it will allow you to preview this application in a way where the 
+  browser will automatically update the page whenever you make changes in your code and so on. That's why we use a tool 
+  like create-react-app. It simply simplifies our development process. It adds a couple of key transformation steps which
+  we need and it will later also help us optimize our React code before we push it to a production server.
+
+. However, to execute these steps you first of all need to visit nodejs.org. Node.js is a technology which is not 
+  directly related to React. It isn't the end a runtime for JavaScript which would allow you to run JavaScript code 
+  outside of the browser. And therefore of course, it's not something we need at all for React. Because React code is 
+  JavaScript code that runs in the browser.
+
+. We will need node.js however, for this create-react-app tool. To run this command here we'll need node.js installed on 
+  our system, otherwise this will fail. And behind the scenes the project which is generated by a create-react-app will 
+  use node.js for this development preview server and for this behind the scenes transformation and optimization steps 
+  which we also need to build production ready applications.
+
+. Once you've got node js installed, you are ready to execute these commands to create a new React application.
+  and therefor a new folder, to then navigate into that folder and to then run a special script, which exists inside
+  of that project folder to bring up a development server this preview server I was talking about.
+  
+  npx create-react-app my-app
+  cd my-app
+  npm start
+
+. Inside react project folder, you will find package.json file which in the end holds all the dependencies of this 
+  project, for example, React, but also a couple of development dependencies, which are involved with these 
+  transformation and optimization steps. The src folder holds the actual source code you will be working on.
+
+****************************************** Analyzing a Standard React Project *****************************************
+. And you will see more files in there than I have it here because I already cleaned up that folder. And speaking of 
+  that, I wanted to show you how you can create new React projects because ultimately that is what you need once you're 
+  done with that course, but to make sure that we're all starting on the same page and we're all working on the same 
+  kind of project setup attached you find this cleaned up starting project which I created for you. Simply download it 
+  unzip it and then open that with visual studio code. That's the project we should continue on because here we'll all 
+  have the exact same starting state and you will learn the latest version of React with that as well.
+
+. Now navigate to downloaded project folder and on terminal run below 2 commands -
+  npm install - this will look into the package.json file and download and install all the required packages and 
+  dependencies npm start - to start the development server
+
+. In src folder, let's start with the index.js file. this is actually the first code file, which will be executed
+  whenever this page is loaded. So whenever you visit localhost:3000 here at the moment, this index JavaScript file holds
+  the code, which is executed initially.
+
+. And we are importing ReactDOM into index.js to then call a method on it, the createRoot() method. This creates 
+  basically the main entry point, the main hook of the overall user interface you are about to build with React. That's 
+  the idea behind createRoot, and what this does in the end is it tells React where this React application, this user 
+  interface, which you build with React in the end should be placed in the web page that is loaded. And that leads us to
+  one other file, the index.html file in that public folder. This folder is a folder in which we will rarely work but it 
+  holds one important file. This index.html file. This is the single HTML file, which is in the end loaded by the 
+  browser here. 
+  
+  This is basically the only HTML file that is being used by this overall React application because it's a so-called 
+  single page application. It has a single HTML file and all subsequent changes on the user interface, on the web page 
+  will be handled by React. And it's this single HTML file that is the entry point, the place where the React-driven 
+  user interface should be rendered into so to say. And in this index.html file, we've got a regular HTML document 
+  structure.
+
+. you will find a div like this in here. A div with the id root in this case. That's a regular div, which actually 
+  doesn't hold any content, but that's the div where we want to attach or inject our React-driven user interface. 
+  So the user interface, which we will build with React. So it's this div where the React-based user interface should be 
+  rendered into and therefore, in index.js, from the ReactDOM library to be precise, which is part of the React library 
+  though to tell React that this should be the root of our React application, the main place where the React application 
+  gets rendered to That's what createRoot does.
+
+. Then we store this root object in a constant or variable, and then on that object, on that root object, we can call the
+  render() method to tell React what should be rendered in that div that we selected here. the content of this div and as
+  you can tell, there is no content, so what's inside of this div should be replaced with that. So, of course, that 
+  brings up another question. What is that app thing here?
+
+. Well, first of all, it's also something which we're importing. We're importing App from the App file, and that's this 
+  App.js file. And from that file, we import App. And then we do something with it but that is definitely not regular 
+  JavaScript syntax here. Indeed, it isn't. This is a syntax called JSX. App, in the end, is a component, and you might 
+  remember, components are important. Here we see our first component in action. It's this App component, which we, in 
+  the end, render in the place of that element with an id of root.
+
+. Now, what's this App.js function doing though? Not much as you can tell. It's a function named App. Starting with a 
+  capital character might be a bit strange but it's valid JavaScript syntax. And then all we do in here is we return 
+  something. But what we return again is strange. It's HTML code inside of a JavaScript file. And again, that's not 
+  something you regularly see. It's also not something we're used to. And it's also not valid JavaScript code normally.
+  Yet here, everything seems to work. The reason for that is that this is a feature called JSX. It's a special syntax 
+  invented and introduced by the React team, and it works in these JavaScript files because of our overall project setup
+  and again, because of these transformation steps, which are running behind the scenes.
+
+******************************************************* Introducing JSX ************************************************
+. JSX stands for JavaScript XML because HTML in the end is XML.
+
+********************************************* How React works ***********************************************************
+. If you're new to React, you do know some basic JavaScript at least you should. And all of a sudden you see code like 
+  this which is not regular JavaScript. Well, this is just developer friendly code which we can write, which is transformed behind the scenes.
+
+  eg: function App() {
+        return (
+            <div>
+                <h2>Let's get started!</h2>
+                <p>This is also visible</p> //adding paragraph is so simple in react as it supports html like syntax (JSX)
+            </div>
+        );
+        // This is how paragraph is added behind the scene
+        const para = document.createElement('p');
+        para.textContent = 'This is also visible';
+        document.getElementById('root').append(para);
+      }
+
+********************************************* Building a first custom component *****************************************
+. Refer Expense tracker project
+. Create a component folder, and inside that create a file named as ExpenseItem.js
+  eg: 
+      function ExpenseItem() {
+        return <h2>Expense Item</h2>;
+      }
+      export default ExpenseItem;
+
+   and import it in App.js
+   
+   function App() {
+    return (
+        <div>
+            <h2>Let's get started</h2>
+            <ExpenseItem></ExpenseItem>
+        </div>
+    );
+   }
+
+. Refer ExpenseItem.js
+
+********************************************* Writing more complex JSX code *********************************************
+. In react components, there is one important rule, regarding this HTML, this JSX code which you return, inside of a 
+  component. You must only have, one root element here, per return statement or per JSX code snippet, you could say.
+  And here we have this div, side-by-side with this div. Which means we have two, root elements here, in this statement.
+  And that's simply not allowed. 
+
+  function ExpenseItem() {
+    return <div>Date</div><div><h2>Title</h2><div>Amount</div></div>;
+  }
+
+  And therefore the question is how we may work around that. One of the easiest work arounds, is to wrap this into 
+  another div, opening and closing. So opening div, and then a closing div.
+
+  function ExpenseItem() {
+    return (
+        <div>
+            <div>Date</div>
+            <div>
+                <h2>Title</h2>
+                <div>Amount</div>
+            </div>
+        </div>
+    );
+ }
+
+. Refer ExpenseItem.js
+
+******************************* Outputting dynamic data & working with expressions in JSX *******************************
+. To output dynamic data you use a special syntax React gives you inside of these JSX code snippets. You can replace hard
+  coded data with opening and closing curly braces {}. Single curly braces opening and closing. And the special thing 
+  about these curly braces inside of your JSX code snippets is that in these curly braces between them, you can run 
+  basic JavaScript expressions.
+
+  eg:
+     function ExpenseItem() {
+        const expenseDate = new Date(2021, 2, 28);
+        const expenseTitle = "Car Insurance";
+        const expenseAmount = 246.67;
+
+        return (
+            <div>
+                <div>{expenseDate.toISOString()}</div>
+                <div>
+                    <h2>{expenseTitle}</h2>
+                    <div>${expenseAmount}</div>
+                </div>
+            </div>
+        );
+    }
+. Refer ExpenseItem.js
+
+*********************************************** Adding Basic CSS Styling ************************************************
+. To add CSS into component, first import css file into component and then use "className" attribute in JSX element as
+  "class" is reserved keyword in JavaScript.
+
+   import "./ExpenseItem.css";
+
+   <div className="expense-item">
+
+****************************************** Passing data via "Props" ****************************************************
+. Props is a way to share data between React components. You can make your components truly reusable and configurable
+  by using this props concept. The main idea behind props is always the same though. We wanna make sure that we can pass
+  data into our components to make them configurable and reusable.
+
+  eg:
+    Passing data to component via Props
+        <ExpenseItem
+            title={expense[0].title}
+            amount={expense[0].amount}
+            date={expense[0].date}
+        ></ExpenseItem>
+    
+    Using passed data via props
+        function ExpenseItem(props) {
+            return (
+                <div className="expense-item">
+                    <div>{expenseDate.toISOString()}</div>
+                    <div className="expense-item__description">
+                        <h2>{props.title}</h2>
+                        <div className="expense-item__price">${props.amount}</div>
+                    </div>
+                </div>
+            );
+        }
+
+****************************************** Adding normal JavaScript logic to components ********************************
+. Adding date logic
+  eg:
+    function ExpenseItem(props) {
+        const month = props.date.toLocaleString("en-US", { month: "long" });
+        const day = props.date.toLocaleString("en-US", { month: "2-digit" });
+        const year = props.date.getFullYear();
+
+        return (
+            <div className="expense-item">
+                <div>
+                    <div>{month}</div>
+                    <div>{year}</div>
+                    <div>{day}</div>
+                </div>
+                <div className="expense-item__description">
+                    <h2>{props.title}</h2>
+                    <div className="expense-item__price">${props.amount}</div>
+                </div>
+            </div>
+        );
+    }
+
+****************************************** Splitting components into multiple components *******************************
+. Creating ExpenseDate component and using that in ExpenseItem component
+. Refer ExpenseItem.js and ExpenseDate.js
+
+****************************************** Assignment 1 ****************************************************************
+. Creating another component as Expenses and add use ExpenseItem and pass all data to it.
+. Remove ExpenseItem from App component ans use Expenses here as we don't want to make App component bulky.
+
+****************************************** The concepts of "composition" (Children props) ******************************
+
+In App.js we're using Expenses, in there we are using ExpenseItem, in there we're using ExpenseDate.
+Generally, this approach of building a user interface from smaller building blocks is called composition.
+
+******************* Card:
+In web development, when you hear the term card, it's typically means some kind of container look with rounded corners, 
+drop shadows, and elements like these.
+
+. you can't use your custom components as wrappers around other kind of content. Having content between opening and closing
+  tags doesn't work just like that.
+  eg:
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+    </Card>
+
+  But of course it does work for built-in HTML elements, like the div or the h2 tag.
+  eg:
+
+     <div className="expense-item">
+       <ExpenseDate date={props.date} />
+       <div className="expense-item__description">
+         <h2>{props.title}</h2>
+         <div className="expense-item__price">${props.amount}</div>
+       </div>
+     </div>
+
+. So it would be nice if we could also make it work for our custom components to build such reusable wrapper components
+  like this, And of course, React has a solution here. We can build such wrapper components. In Card.js we again, when I 
+  accept props. But now, as I mentioned we'll not work with same attributes but instead we will use one special prop 
+  which is built into React, which every component receives, even if you're never setting it explicitly. And that's a 
+  prop which value I wanna output between the opening and closing tag of this div, inside of the card component 
+  function. 
+  
+  It's the props.children prop. children is a reserved name. We don't set a children prop on this card. I'm setting a 
+  class named prop and actually at the moment, this won't do anything. But I'm not setting a children prop. Children, as 
+  I said, is a reserved name and the value of this special children prop will always be the content between the opening 
+  and closing tags of your custom component. So in this case, this content between the opening and closing card tag, 
+  that is what will be available on props.children inside of that card.
+
+  return <div className="card">{props.children}</div>;
+
+. Now, why would we do that? What did we gain by doing that? Well, in this case, of course, not a whole lot but we were 
+  able to extract some code duplication from inside our CSS files into this separate wrapper component. And it's not just
+  a duplicate CSS code. We also were able to extract this HTML code, this JSX code, this div here. In this case, it's 
+  just one div but throughout the course you will also see more complex wrapper components which might have a more 
+  complex JSX structure. Things like modals and alerts. 
+  
+  And in such cases, being able to extract that often allows you to save a lot of code duplication and it often allows 
+  you to keep your other components clean. And this is another aspect of  composition. We compose our ExpenseItem 
+  component by using card as a wrapper, by using some built-in HTML elements, and by then all the putting in the 
+  ExpenseDate. And all these components and elements are composed together to form the overall ExpenseItem component 
+  which then again, is used in other components to in the end overall, build the overall user interface.So composition 
+  is important. You use it all the time when working with React. Whenever you combine components, you are using 
+  composition. And an especially important part of composition is this props children feature which allows you to also 
+  create wrapper components which is a special type of component.
+
+************************************************ A first summary *******************************************************
+. Now, maybe you already noticed one important thing, with all these components, which we are building, in the end we're 
+  just splitting up our code across multiple files and building blocks so that if we want to have more than one expense 
+  item, we can just use our custom ExpenseItem component multiple times instead of repeating all that code multiple times,
+  that's the idea behind components.
+
+. In the end, what ends up on the screen are just default HTML elements, though. If you inspect your page with the 
+  developer tools, here, in the Chrome developer tools with the Elements tab, you will notice that you don't see your 
+  custom components here, there is no card or ExpenseItem component, you just see divs and H2 elements, and so on.
+  And that is how the web works and how React works. These custom components are not really HTML elements, which end up 
+  on the screen, you just use them in your code in your React code, in your JSX code. What ends up on the screen are just
+  the HTML elements because, ultimately, every custom component you build either uses these built in HTML elements or it 
+  uses another of component which, at some point, if you drill into your components deeply enough will end up using these
+  built in elements.
+
+********************************************** A closer look at JSX ****************************************************
+
+    <div>
+        <h2>Let's get started!</h2>
+        <Expenses items={expenses}></Expenses>
+    </div>
+
+  converted:
+    React.createElement('div', {}, React.createElement('h2', {}, "Let's get started"), React.createElement(Expenses, {items: expenses}));
+
+. There is a createElement method, which we can call. And when you use JSX, it's near this method which is called. 
+  CreateElement takes three arguments. The first argument is the element which should be created. For example, a div.
+  And if it's a built-in HTML element,you just pass in a string with the name of that element, like div. The second 
+  argument is an object that configures this element. Specifically, an object which sets all the attributes of this element.
+
+  This div has no attributes, so here we can pass in an empty object {}. The third argument now is the content between 
+  the opening and closing div tags. And actually it's not just a third argument. You can now have an infinitely long 
+  list of arguments, which are the different content pieces between the opening and closing tags. So here we have two 
+  elements, so we would have two extra arguments. The third argument would be our H2 element. So the first child in that 
+  div. And therefore here, again, we would call React createElement and create an H2 element here. And that H2 element, 
+  again, has no attributes, so the second argument of this second createElement call would be an empty object. And the 
+  third argument of this createElement call would be the content in this H2 tag, so this string, in this case. So we 
+  would pass this string here, and escape this single quote. And if we now format it, it would look like this. Now next 
+  to this second createElement call, We could have a third createElement call, which is the neighbor element to this H2 
+  element, so this expenses component. 
+  
+  Again, we create an element here, but now we're working with a custom component instead of a built-in ne. In such 
+  cases, you don't use a string here, but you just point at your imported function, which it in the end is, because your 
+  components are just functions, right? So here we set Expenses. We point at Expenses as an element here. The second 
+  argument is an object of properties that should be set, of attributes that should be set, and here we have the items 
+  prop, the items attribute, so we would add an items key here. Keep in mind, this is just a JavaScript object, so we
+  have the property name, and then a colon, and then the value, which here would be expenses. And then as a third 
+  argument, we have to content between the opening and closing tags. And in this case, there is no such contents, so we 
+  omit it. And this here would be the alternative to this JSX code using this React object.
+
+. And this here would be the alternative to this JSX code using this React object. And therefore, if I saved that, we go 
+  back to the screen, we see exactly the same as before. Now, you could write your entire React app like this. It just 
+  turns out that this is a bit harder to read and a bit more cumbersome than using this JSX code. But that's why you 
+  needed to import React from React in all your component files in the past, because this is the under-the-hood code 
+  which kind of gets created automatically when you use JSX. Now in more modern project setups, you can omit this React 
+  import because the project setup is able to make that transformation without the import being added. But if you see 
+  component functions where this import is there, it is there because, in the past, you always did need to add it. And 
+  therefore, because of that reason, I will now also import it and add it to all components where I use some JSX code.
+
+  And if you have a look at this code, it should also be clear why you need some wrapping element as a root JSX element.
+  Why you can't have just these two side-by-side elements being returned. Because how will you write this in the React
+  createElement world? You, in the end, would be trying to return this, and that doesn't work. You can't return more than
+  one thing. You could return an array, sure, but this is not an array of elements. This is two separate elements side by
+  side. That's why you always need such a wrapper, because in createElement world, you always create one element which 
+  then may have more child elements. So that's why we have this one wrapper root JSX element which we always need. This 
+  is why we need that. That's the under-the-hood, behind-the-scenes stuff
+
+*********************************************** Organizing component files ********************************************
+. As your project grows and as you have more and more components you might want to organize them into sub folders
+  and not just throw them all into one components folder. And, indeed, that is something we can already get started with.
+  Here, we could argue that we have some general UI components some general user interface elements, which are not tied 
+  to a specific feature of the app. And then, we got some features specific components, like these components, which are 
+  dealing with rendering expenses and expense data. And, therefore, in the components sub folder, we could create an 
+  Expenses sub folder, and next to that a UI sub folder for general user interface elements. And we could move the card 
+  files into the UI folder and the Expenses, ExpenseItem, and ExpenseDate files into the Expenses folder.
+
+********************************************** An alternative Function syntax ****************************************
+. Using arrow function for components
+  eg:
+     const ExpenseItem = () => {}

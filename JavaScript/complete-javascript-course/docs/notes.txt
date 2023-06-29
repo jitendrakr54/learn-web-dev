@@ -1,0 +1,230 @@
+Truthy/Falsy Values: 
+    . falsy values are values that are not exactly false, but will become false when we try to convert them
+      into a boolean.
+    . In JavaScript, there are only five falsy values - 
+        zero, empty string, undefined, null and not a number (0, '', undefined, null, NaN)
+    . All of these five values will be converted to false when we attempt to convert them to a boolean.
+    . They're not exactly false initially,but they will become when converted to a boolean.
+        So, that's the definition of falsy values.
+    
+    . Everything else are our so-called truthy values.
+    . So, values that will be converted to true, for example, any number that is not zero or any string that is not
+        an empty string will be converted to true when we attempt to convert them to a boolean.
+    
+Dot vs Bracket notation(Accessing object properties):
+    . Using dot, we need to provide exact properties name but using bracket allows us to evaluate properties name from 
+      expression.
+      eg: jitendra.firstName   jitendra['first' + nameKey] where nameKey is any variable
+      
+While loop:
+    When it is uncertainity about no of iteration. When we only have idea about specific condition.
+
+Imogi on windows: windows + .
+
+Selectors:
+    . getElementById() is little bit faster than queryselector
+
+JS engine & compilation:
+
+    JavaScript engine always contains a call stack and a heap.
+    The call stack is where our code is actually executed using something called execution contexts.
+    Then the heap is an unstructured memory pool which stores all the objects that our application needs.
+
+    Now many people still think that JavaScript is an interpreted language but that's not really true anymore.
+    So instead of simple interpretation, modern JavaScript engine now use a mix between compilation and interpretation
+    which is called just-in-time compilation.
+
+    This approach basically compiles the entire code into machine code at once and then executes it right away.
+    So we still have the two steps of regular ahead of time compilation but there is no portable file to execute.
+    And the execution happens immediately after a compilation.
+    And this is perfect for JavaScript as it's really a lot faster than just executing code line by line.
+
+    So as a piece of JavaScript code enters the engine the first step is to parse the code which essentially means to 
+    read the code.
+    During the parsing process, the code is parsed into a data structure called the abstract syntax tree or AST.
+    This works by first splitting up each line of code into pieces that are meaningful to the language like the 
+    const or function keywords, and then saving all these pieces into the tree in a structured way.
+
+    This step also checks if there are any syntax errors and the resulting tree will later be used to generate the machine code.
+
+    Anyway, the next step is compilation which takes the generated AST and compiles it into machine code 
+    just as we learned in the previous slide.
+    This machine code then gets executed right away because remember modern JavaScript engine use just-in-time compilation.
+    And remember execution happens in the JavaScript engines call stack
+
+JavaScript runtime:
+    we can imagine a JavaScript runtime as a big box or a big container which includes all the things that we need
+    in order to use JavaScript. In this case, in the browser.
+
+    JavaScript engine:
+    And to heart of any JavaScript, runtime is always a JavaScript engine.
+    Without an engine there is no runtime and there is no JavaScript at all.
+
+    web APIs:
+    However the engine alone is not enough.In order to work properly, we also need access to the web APIs - DOM, Timers, Fetch API.
+    So essentially web APIs are functionalities provided to the engine, but which are actually not part of the JavaScript
+    language itself. JavaScript simply gets access to these APIs through the global window object.
+    But it still makes sense that the web APIs are also part of the runtime, because again a runtime is just like a box
+    that contains all the JavaScript related stuff that we need.
+
+    callback queue:
+    Next a typical JavaScript runtime also includes a so called callback queue. Next a typical JavaScript runtime
+    also includes a so called callback queue. This is a data structure that contains all the callback functions that are
+    ready to be executed. 
+    For example we attach event handler functions to DOM elements like a button to react to certain events, right?
+    And these event handler functions are also called callback functions okay. So as the event happens,
+    for example a click, the callback function will be called.
+    And here is how that actually works behind the scenes. So the first thing that actually happens after the event
+    is that the callback function is put into the callback queue.
+    Then when the stack is empty the callback function is passed to the stack so that it can be executed.
+    And this happens by something called the event loop.
+    So basically the event loop takes callback functions from the callback queue and puts them in the call stack
+    so that they can be executed.
+
+    And remember how I said in the last lecture that the event loop is how JavaScript's nonblocking concurrency model
+    is implemented.
+
+    JavaScript runtime outside of Browser(Node js):
+    Alright, so as they already said the focus in this course is on JavaScript in the browser and that's why we analyzed
+    the browser JavaScript runtime. However, it's also important to remember that JavaScript can exist outside of browsers,
+    for example, in Node.js.
+    And so here is what the node JS JavaScript runtime looks like.
+    It's pretty similar, but since we don't have a browser of course, we can't have the web APIs because it's the browser
+    who provides these.
+    Instead we have multiple C++ bindings and a so called thread pool.
+
+What is an execution context?
+    How is JavaScript code executed?
+    We already know that it happens in a call stack in the engine, but let's dig a bit deeper now.
+    And let's start by supposing that our code was just finished compiling.
+    Just in the way that we learned in the last lecture. So the code is now ready to be executed.
+    What happens then, is that a so-called global execution context is created for the top-level code.
+    And top-level code is basically code that is not inside any function.
+
+    Execution context:
+    An environment in which a piece of JavaScript is executed.
+    It's like a box that stores all the necessary information for some code to be executed.
+    Such as local variables or arguments passed into a function.
+    So, JavaScript code always runs inside an execution context.
+    
+    In any JavaScript project, no matter how large it is, there is only ever one global execution context.
+    It's always there as the default context, and it's where top-level code will execute.
+    And speaking of execute, now that we have an environment where the top-level code can be executed, it finally is 
+    executed.
+
+    Once top-level of code is finished, functions finally start to execute as well.
+    And here is how that works. For each and every function call, execution context will be created containing all the 
+    information that is necessary to run exactly that function.
+    And the same goes for methods, of course, because they're simply functions attached to objects.
+
+    when all functions are done executing, the engine will basically keep waiting for callback functions to arrive
+    so that it can execute these.
+    For example, a callback function associated with a click event. And remember, that it's the event loop who provides
+    these new callback functions.
+
+    Execution contexts belonging to arrow functions, do not get their own arguments keyword, nor do they get the this 
+    keyword. Basically arrow functions don't have the arguments object and the this keyword.
+    Instead, they can use the arguments object, and the this keyword from their closest regular function parent.
+
+    The call stack, together with the memory heap, makes up the JavaScript engine itself.
+
+    Temporal dead zone:
+    temporal dead zone of a variable declared with a let or const, starts from the beginning of the current scope
+
+this keyword:
+    . this does not point to function rather it points to owner of the function.
+    . Arrow function does not get its own this, it takes from its surrounding(form its parent scope).
+    . Arrow function also does not get arguments keyword, it woly exist in regular function.
+
+Primitive vs Object:
+
+    . when we declare a variable as an object, an identifier is created, which points to a piece of memory in the stack,
+      which in turn points to a piece of memory in the heap. And that is where the object is actually stored.
+      And it works this way because objects might be too large to be stored in the stack.
+      Instead they are stored in the heap, which is like an almost unlimited memory pool. And the stack just keeps a 
+      reference to where the object is actually stored in the heap so that it can find it whenever necessary.
+
+Object copy:
+    Object.assign() only creates a shallow copy and not a deep clone which is what we would like to have.
+    So, again, a shallow copy will only copy the properties in the first level while a deep clone would copy everything.
+    Or in other words, if we have an object inside the object, then this inner object will actually still be the same.
+
+Destructuring:
+    Destructuring is an ESX feature and it's basically a way of unpacking values from an array or an object into separate
+    variables.
+    So in other words destructuring is to break a complex data structure down into a smaller data structure like a variable.
+    So for arrays we use destructuring to retrieve elements from the array and store them into variables in a very easy way.
+
+Spread operator:
+    We use the spread operator to basically expand an array into all its elements.
+    So basically unpacking all the array elements at one.
+    So basically it take all the values out of this arr. array, and then write them individually
+    as if we wrote seven, eight, nine here manually.
+    const arr = [7, 8, 9];
+    const newArr = [1, 2, ...arr];
+
+    . the spread operator is actually a bit similar to destructuring, because it also helps us get elements out of arrays.
+      Now, the big difference is that the spread operator takes all the elements from the array and it also doesn't 
+      create new variables. And as a consequence, we can only use it in places where we would otherwise write values 
+      separated by commas.
+
+    . the spread operator works on all so-called iterables. iterables are things like all arrays, strings, maps, or sets,
+      but not objects.
+
+    . since ES 2018, the spread operator actually also works on objects, even though objects are not iterables.
+
+    . Use cases of Spread operator:
+        1. build new arrays - const menu = [...restaurant.starterMenu, ...restaurant.mainMenu]
+        2. pass multiple values into a function - restaurant.orderPasta(...ingredients)
+      In both cases, we use the spread operator to expand an array into individual elements.
+
+Rest pattern:
+    . The rest pattern uses the exact same syntax however, to collect multiple elements and condense them into an array.
+    . so that's really the opposite of spread The spread operator is to unpack an array while rest is to pack elements
+      into an array.
+    . rest is used on the left hand side of assignment operator - const [a, b, ...others] = [1, 2, 3, 4, 5];
+    . rest pattern always must be the last in the destructuring assignment because otherwise how will JavaScript know
+      until when it should collect the rest of the array
+    . 
+
+Short Circuiting:
+    . Three properties of logical operators - 
+        1. They can use any data type.
+        2. They can return any data type
+        3. and they do something called short circuiting
+
+    . logical OR (||)
+        In the case of the OR operator, short circuiting means that if the first value is a truthy value, it will 
+        immediately return that first value.
+        eg: console.log(3 || 'Jonas') output: 3
+        OR operator will return the first truthy value of all the operands, or simply the last value if all of them are falsy.
+
+    . logical AND (&&)
+        AND operator will return the first falsy value or the last value if all of them are truthy.
+
+Nullish Coalescing Operator:
+    . the nullish coalescing operator works with the idea or with the concept of nullish values instead of falsy values.
+    . And nullish values are null and undefined.
+    . It does not include a zero or the empty string. So basically, for the nullish coalescing operator, it is as if the
+      zero and the empty string were not falsy values and were instead truthy values as well.
+
+      
+Enhanced object literal:
+    . we can now include existing object as property name in object literal.
+        eg: const openingHours = {}; const restaurant = {openingHours};
+    . ES6 we no longer have to create a property, and then set it to a function expression,
+        eg: const restaurant = {
+                order(starterIndex, mainIndex) {
+                    return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
+                }
+            }
+    . we can now actually compute property names instead of having to write them out manually and literally.
+      And compute just means like calculate.
+      eg: const weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+            const openingHours = {
+                [weekdays[3]]: {
+                    open: 12,
+                    close: 22,
+                }
+            }
+

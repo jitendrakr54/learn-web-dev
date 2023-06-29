@@ -1,0 +1,183 @@
+************************************************** Module Introduction **************************************************
+. Content
+        . Handling async tasks with Redux
+        . Where to put our code
+        . The Redux DevTools
+
+************************************************ Side Effects, Async tasks & Redux *************************************
+. Refer pdf notes
+. There is one super important rule. Your reducer functions must be pure, side-effect free, and synchronous. So your 
+  reducer functions should take some input in the case of the Redux reducer, the old state and the action, and then 
+  produce some output. And that's, by the way not just the case for Redux reducer function. The reducer function you pass
+  to use reducer, is react hook, works in the same way. 
+  
+. But of course, that brings up an important question when working with redux, when we dispatch some action that would 
+  involve a side effect, like HTTP request that should be sent, where should we then put the side effect code? Where 
+  should we put our asynchronous code when working with redux?
+
+  The answer to this question is that we have two possible places where we can put our side effects. We can put our side
+  effects possibly asynchronous code directly into the component with useEffect for example, so just as we did it before 
+  in this course, and then we only dispatch an action once that side effect is done so Redux doesn't know anything about
+  that side effect,
+
+  or, we write our own action creator functions, so we don't use the automatically generated ones redux toolkit gives us
+  but instead we write our own action creators. And it turns out that for those action creators redux actually has a 
+  solution that allows us to perform side effects and run asynchronous tasks as part of this action creators without 
+  changing the reducer function because that function must stay side effect free.
+
+************************************************ Refresher/Practice: Part 1/2 ******************************************
+. Created ui-slice.js for toggle cart and used logic in CartButton.js and App.js
+. Created cart-slice.js
+
+************************************************ Refresher/Practice: Part 2/2 ******************************************
+. Added removeItemFromCart() in cart-slice.js
+. Added DUMMY_PRODUCT to Product.js to show some data, made "Add to cart" functionality work, Refer ProductItem.js
+. Worked on Cart functionality, refer CartButton.js(shown data from store), refer Cart.js(Shown data from store), made
+  - + button work correctly(Refer CartItem.js)
+
+************************************************ Redux & Async Code ****************************************************
+. Refer pdf notes
+. Let's see how we can connect Redux with side effects and asynchronous code. Now I wanna add a backend, a server to 
+  which we can send our cart. Because my idea is that whenever I edit the cart, because we add items or we reduce the 
+  quantity or remove items, whenever that happens I wanna send the request to a backend server to store that updated 
+  cart on the backend so that when we reload this front-end application, we can fetch that saved cart from the server,
+  load it and display it here.
+
+. Now keep in mind, reducers must be pure, side-effect free, and synchronous. So when we have any code that produces a 
+  side effect or is asynchronous like sending an http request, such code must not go into our reducer functions.
+  Instead, when it comes to running such code, we have two main options where to put such code. We can execute it in the 
+  components, so we can simply ignore Redux if you wanna call it like this or we create something which is called the 
+  action creator which we only used indirectly thus far which also would allow us to run asynchronous code or generally 
+  any side effect code.
+
+************************************************ Frontend Code vs Backend Code ******************************************
+. Let's maybe start with adding items to a card from inside the product item component. That means that in here we have 
+  this addToCartHandler() and we could of course then not just dispatch an action to our Redux store but we could also 
+  send that data to Firebase to the backend. We would just have one problem with that. If we just send the product data 
+  to Firebase. So the data which we're sending to Redux here if we just sent that to Firebase, we would just store that 
+  product data in Firebase, but Firebase the way we are using it does not have any logic on its own on the backend.
+  So on the Firebase backend we don't run any extra code. So if we send some product data there that product data would 
+  simply be added to the database but all the logic we have in the reducer for checking whether a product is already 
+  part of the cart and if it is updating as quantity, if it's not adding it that kind of logic simply does not run on 
+  Firebase, because that's a pretty dumb backend here the way we're using it and therefore we don't have such logic 
+  there.
+
+. Now if you would be using Firebase for a real project you could add server side code to it. There is a service called 
+  functions which allows you to add your own code on the Firebase backend which can be triggered for incoming requests 
+  and which would allow you to transform data on the backend. So it would be possible to integrate this here.
+
+  And if you're using your own backend built with Node.js or PHP or whatever if you build your own backend API then of 
+  course you're also totally free to add code on that backend API that does more with the incoming data than just store 
+  it in the database.
+
+. Refer pdf notes
+  Now if we would have a backend API that does a lot of work so that does not just store incoming data but also 
+  transform it. If we had an API like this then our frontend application could do less work. It could just send data 
+  like data for a product that should be added to a cart. It could send that data to the backend, lets the backend do 
+  the transformation and then use the response on the frontend to then just there hand it off to the reducer for example,
+  to store that response. So then we could slim down our reducer and basically just take the incoming data which is 
+  coming from the backend and which was transformed there so let's say the final cart we could just take that and store 
+  that in Redux that's something we could do then.
+
+  But that's not the scenario we have here for the reasons mentioned a couple of seconds ago. Instead here we have a 
+  backend that does not do a lot of work. It basically just stores incoming data in the format It receives it in.
+  And that means that we do need to do more work on the frontend. There we don't just need to store data in the Redux 
+  store, we also need to prepare that data. We need to transform the data. So exactly what we're doing here in add item 
+  to cart and in remove item from cart. We are not just getting the finished cart as a payload on the action instead we
+  get a product and we need to find out how to add it to the cart here in this code. And the same for removing.
+
+  and therefore we will need to find a way to still do the work here on the frontend and at the same time then send
+  that transformed data to the backend without doing that sending inside of the reducer because we learned that we're 
+  not allowed to do it there. So that's the problem set with which we have to work here. And therefore let's now 
+  determine where to best put our code for sending the updated card to the backend if the backend is not doing that work 
+  for us.
+
+************************************************ Where to put our logic ************************************************
+. Here these two main options (refer pdf) where we can run our async code become important again. We can run it into 
+  component or in an action creator. Now as mentioned, let's start with the component.
+
+. Refer pdf
+
+************************************************ Using useEffect with Redux *********************************************
+. Let's say in App.js as our root component. There we can simply get hold of our overall cart by basically using 
+  useSelector and listening to changes to our cart state. And whenever our cart state does change we can send the Http 
+  request. So that's what I'll do here. I'll use useSelector, which we're already importing to get hold of my overall 
+  cart and then I'll store it in that constant like this. And now we can use useEffect which we import from React
+  to watch for changes in our cart state, because you learned that useEffect allows you to run side effects. So it 
+  sounds like a good choice here, and it allows you to run an effect whenever some dependency changes.
+
+. And if we send a PUT request we also do store data on Firebase. But the difference to POST is that the new data will 
+  not be added in a list of data so to say, but that it will override existing data. So when sending a PUT request,
+  will override the existing cart with the incoming data and that's exactly what we want here.
+
+. Now, since we're using cart in here we should add it as a dependency to useEffect so that this Effect function 
+  re-executes whenever our cart changes, which is exactly what we want. Now, the great thing is that useSelector sets up 
+  a subscription to Redux. So whenever our Redux store does change this component function will be re-executed and we 
+  will get to the latest state. So in this case, the latest cart. So that means that effect will also be re-evaluated
+  and it will re-execute if our carts did change and that is exactly what we need.
+
+  Now if I reload my application if I open up the network tab so that we can see Http requests, if I add something to my 
+  cart, you see a Http request is sent and that happens whenever I update my cart. And if we go to Firebase, we 
+  therefore see the cart's there. And we see that here we have the correct cart reflected.
+
+  Refer App.js
+************************************************ A Problem with useEffect() *********************************************
+. We face one problem when using useEffect the way we currently do it: It will execute when our app starts. Why is this 
+  an issue?
+
+  It's a problem because this will send the initial (i.e. empty) cart to our backend and overwrite any data stored there.
+  We'll fix this over the next lectures, I just wanted to point it out here!
+
+************************************************ Handling Http states & feedback with Redux *****************************
+. Refer App.js
+
+************************************************ Using an Action creator Thunk ******************************************
+. Now we can also write our own action creators and we can write them to create so-called thunks. Now what is a thunk? 
+  And why might we want to do that? A thunk is simply a function, that delays an action until later, until something else 
+  finished. And we could write an action creator as a thunk, to write an action creator, which does not immediately 
+  return the action object, but which instead, returns another function which eventually returns the action. So that we 
+  can run some other code before we then dispatch the actual action object that we did want to create. This might sound 
+  cryptic, but that's a very common pattern and it is easy to implement.
+
+. We never did this ourselves, because Redux toolkit, creates these action creators automatically for us, for all those 
+  reducer methods. Every method in the reducers object, receives such an action creator, which is called, by using that 
+  reducer function name.
+
+  In App.js, we are dispatching sendCardData() Now this might look weird. What we dispatched before, always were action 
+  creators. So functions that return an action object with a type and so on. Now in cart slice, we are instead 
+  dispatching a function that returns another function. But the great thing about Redux, when using Redux toolkit, is 
+  that it's prepared for that. It does not just accept action objects with a type property. Instead it also does accept,
+  action creators that return functions.
+
+  So Redux will execute that function for you. And with that function, I mean this function here, it will give us that 
+  dispatch argument automatically. So that in that executed function, we can dispatch again, because there's a such a 
+  common pattern that we wanna have action creators that can perform side effects. So we can use a function that returns
+  another function, as a action as well. That is built into Redux when using Redux toolkit.
+
+. Why would we wanna use that pattern? Well, it's simply an alternative to having that logic in your component. You can 
+  add that logic in your components. You can stick to the approach we had before, but it's also not a bad idea to keep 
+  your components lean, to not have too much logic in them. And at the moment, by moving that logic to this action 
+  creator function, we did achieve this. This component is now leaner. It only dispatches one action, not multiple 
+  actions. It doesn't care about sending the HTTP request, and all the hard work, happens inside of our custom action 
+  creator function, 
+  in our Redux files.
+
+. Redux Thunk middleware allows you to write action creators that return a function instead of an action. The thunk can be
+  used to delay the dispatch of an action, or to dispatch only if a certain condition is met. The inner function receives
+  the store methods dispatch and getState as parameters.
+  
+************************************************ Getting started with fetching data **************************************
+. Now what we learned about thunks and thunk action creators, so these action creator functions here. Now, did we learn 
+  about that, let's build a app action creator that fetches the cart when the application loads. Because at the moment 
+  we're only sending data but we never fetched data when the application load. And therefore, if we reload, all our state 
+  is still lost.
+
+. Created cart-actions.js and moved action creators there.
+
+************************************************ Finalizing the fetching logic *****************************************
+
+
+************************************************ Exploring the Redux DevTools *******************************************
+. Install Redux devtools extension in edge
+
+************************************************ Summary ****************************************************************

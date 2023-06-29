@@ -1,0 +1,230 @@
+************************************************ Module Content ******************************************************
+. JSX limitations & Fragments
+. Getting a Cleaner DOM with Portals
+. Working  with Refs
+
+*************************************** JSX limitations & Workarounds *************************************************
+. See pdf notes
+. JSX has certain limitations that if we have adjacent root level JSX elements like in this example. we'll get an error.
+    return (
+      <h2>Hi there!</h2>
+      <p>this does not work :(</p>
+    );
+  And with root level that we have two JSX elements next to another, not wrapped by another JSX element. And we then 
+  return these side by side JSX elements or we try to store them in variables. This will not work because in React in JSX
+  in general you can't have more than one root JSX element. So if you return a value or if you store a value in a 
+  variable or in a constant or in a property that value must only be exactly one JSX element, not two or three or four 
+  side by side adjacent elements. Now that one element which you are allowed to have may of course have more children 
+  which then also can be adjacent to each other. But that top most element which you're storing or returning must only 
+  be one element.
+
+. You can solve this problem by simply wrapping the adjacent elements with a div. If you do that if you wrap them with a
+  div then you only have one thing that you return only one value.
+
+  return (
+    <div>
+      <h2>Hi there!</h2>
+      <p>this does not work :(</p>
+    </div>
+  );
+
+. Now there're actually is always an alternative to that instead of using a div we could use a native JavaScript array.
+  We could remove my opening and closing div tags and put Component here and that dynamic expression here into an array,
+  separated by commas.
+
+  return [
+      <h2>Hi there!</h2>,
+      <p>this does not work :(</p>
+    </div>
+  ];
+
+. So React knows how to work with arrays of JSX elements and hence we could also return such an array of JSX elements.
+  If we do that and we previewed application we do get a warning though because whenever you're working with an array
+  of JSX elements, React wants a key on every element. And that's no exception here. it wants that key if you map 
+  dynamically through a list of data and map that data to JSX elements but it also wants such a key if you have a 
+  hard-coded array of JSX elements as we have it here. Now of course we can simply add a key and since this is not 
+  generated dynamically we can hard-code keys here.
+
+  return [
+      <h2 keys="">Hi there!</h2>,
+      <p keys="">this does not work :(</p>
+    </div>
+  ];
+
+. but typically you don't use this solution because adding those keys wrapping it in an array is a little bit cumbersome.
+  It's way easier to simply add a wrapping div here like we had it before.
+
+. However with the wrapping div or generally any wrapping element a new problem arises. Now we can end up with <div> 
+  soup. So we can end up with a real DOM that's being rendered where you have many nested React Components and all those 
+  Components for various reasons need wrapping divs or have wrapping Components. And you have all these unnecessary divs
+  being rendered into real DOM even though they're only there because of this requirement or this limitation of JSX.
+  And this is not an unrealistic scenario. In bigger applications It's a very possible that in your final HTML page
+  which is being served to your end users you have a lot of unnecessary divs or other elements which are only there
+  because you needed them as wrappers even though they don't add any semantic or structural meaning to your page.
+  eg: see in pdf notes
+
+********************************************* Creating a wrapper coponent *********************************************
+. As a solution to <div> soup, What if we would use a dirty little trick? Here in my components folder,(Refer AddUser.js 
+  add-user project) I'll add a new sub folder helpers. I'll name it helpers because that best describes which kind of 
+  component I'm going to add. I'm going to add a wrapper component. I'll name the file Wrapper.js. And in there, I won't 
+  even import React because I'm not going to write any JSX code in there. Instead, I'll just create my wrapper 
+  component, get props and have my function body, and export this wrapper. And now you might be wondering what I'm going 
+  to do here if I'm not writing any JSX code. Well, I'll just return props.children. 
+  
+  Remember the children prop holds all the content you're passing between the opening and closing tag of your custom 
+  component. Now it is valid in a component to just return that content which you got between the opening and closing 
+  text. And now I can import my wrapper, for example, here in AddUser, I can import wrapper from helpers. And I can use 
+  it as a regular react component. So I can go down there and replace my div, which has no other meaning than fulfilling 
+  this JSX requirement with my wrapper. So I'm using my wrapper component here and just to make this really clear again, 
+  this is basically an empty component. Everything it does is that it returns props children. But this is enough to 
+  fulfill this requirement JSX has. If I save this my application still works just fine.
+
+************************************************ React Fragment ********************************************************
+. Now, because it's so convenient and also so obvious in the end, at least once you saw it, this wrapper component
+  is actually not a component we need to build on our own. Instead it comes with React. There, it's the fragment component
+  which you can access on React.Fragment, or you just import Fragment from React. (See pdf notes)
+  
+  Or in some projects, you can also use the shortcut on the right, but this depends on your project set up because your 
+  build workflow needs to support this. The left syntax will always work. And that's the same as our wrapper.
+  These two syntaxes here render empty wrappers, which don't render any actual HTML element to the DOM. It's just built 
+  into React, but I showed you our custom wrapper so that you understand what these built in wrappers do.
+
+  eg:
+    return (
+      <>
+        <AddUser onAddUser={addUserHandler} />
+        <UsersList users={usersList} />
+      </>
+    );
+
+  or 
+
+  return (
+    <React.Fragment>
+      <AddUser onAddUser={addUserHandler} />
+      <UsersList users={usersList} />
+    </React.Fragment>
+  );
+
+************************************************ React Portals *********************************************************
+. React portals are another useful feature, which do something similar, which also help us write cleaner code.
+. See pdf notes
+
+. If we inspect the Real DOM that is being rendered and I trigger that modal by submitting an invalid form, you see the 
+  modal divs for the backdrop and for the card, for the modal overlay, are being rendered here next to that card that 
+  holds my form, instead of the root div. Now in this application because it's so tiny, that's actually not too bad.
+  But of course it's easy to imagine that you have an application where your AddUser Component is not that close to the 
+  top of the whole application, but where it's deeply nested in some other Components and therefore your backdrop and 
+  your modal divs would also be deeply nested in some other content in your DOM. I might wanna have that structure the 
+  backdrop div right below the body, so as a direct child of the body and the same for the modal, a direct child of the 
+  body next to that root div which holds the rest of our application. And this is something you can achieve with well, 
+  portals.
+
+************************************************* Working with Portals *************************************************
+. How do we actually use them? 
+  Portals need two things. You need a place you wanna port the Component to and then you need to let the Component know 
+  that it should have a portal to that place. Now to mark that place, we go into the public folder and there into the 
+  HTML file which is being rendered in the end. And here it's common that you add a div with an id which you will then 
+  use to identify this place later. And here I could have my backdrop-root and then also maybe my modal-root. And you 
+  could create multiple such roots for different kinds of Components that should be portaled there or use simplify this 
+  a bit, and you have your backdrop-root and simply your overlay-root, which will then hold all kinds of overlays, 
+  modals, side drawers, and so on. And that's what I'll go with. So I added these two divs here.
+
+. And we now wanna call a method which is actually not defined on React but on another library that comes together with 
+  React, the React DOM library. You can imagine React being the library that has all the React features, state 
+  management, onsen, baked-in. And React DOM uses React to bring that logic and these features into the web browser. So 
+  to make them compatible to working with the DOM, put in other words, the React library itself doesn't care whether you 
+  run it in an environment that has a DOM or if you would use it to build a native app. And for example, you can use 
+  React Native in conjunction with React, to build native mobile apps.
+
+. So React DOM is kind of the adapter for React to the browser and therefore since now we're going to portal something
+  into a different place in the real DOM, we need to import from React DOM. So import something from react-dom and that 
+  something here can just be ReactDOM. So you can give this any name you want, but since I named my React import React,
+  I'll name this ReactDOM. 
+    import ReactDOM from 'react-dom'
+
+  And on ReactDOM, you can now call a createPortal method. Now the createPortal method takes two arguments. The first one
+  is your React node that should be rendered. And here I can render my Backdrop. Now the second argument of createPortal 
+  is a pointer to that container in the real DOM where this elements should be rendered in.
+    ReactDOM.createPortal(
+        <Backdrop onConfirm={props.onConfirm} />,
+        document.getElementById("backdrop-root")
+      )
+  And in the Elements tab, we see that in the backdrop-root, we now got the modal backdrop. And now it will always be 
+  there, no matter where you would use your ErrorModal in your JSX code. No matter how deeply nested it is in other 
+  elements, it will always be here, which is of course very close to the body.
+
+. So wherever you would normally just use the Component, you can use createPortal to portal, to move that Component's 
+  HTML content somewhere else, only in the actual DOM that is being rendered. In JSX, in your Components, you continue 
+  working with those Components as you did before.
+
+. Now, with fragments and portals, we had two cool features that help us write cleaner HTML code. The app worked in 
+  exactly the same way before we added those features too but with those features, we end up with semantically more 
+  correct HTML code and that's never a bad thing. It makes your app more accessible, makes sure you don't render 
+  unnecessarily many divs.
+
+. Refer ErrorModal.js
+
+******************************************** Working with Refs (References) *********************************************
+. Refs allow us to get access to other DOM elements and work with them.
+
+. Now, what do I mean with that? Let's go to the AddUser component again. There we have our inputs and we manage what the
+  user enters by simply keeping track of it. We simply have our state and with every keystroke, we update our state.
+  So with every keystroke, we update the value we get by the user and we store it in our state and we feed that state 
+  back into the input and we then use that state later on to reset the inputs but also to send it to the place where we 
+  need the data. So that is a perfectly fine way of managing this. But updating the state with every keystroke when we 
+  only need it when we submit the form sounds a bit redundant to me. And that's a scenario where refs could help us, 
+  though they're not limited to that.
+
+. How do refs work?
+  With refs, we can set up a connection between a HTML element which is being rendered in the end and our other 
+  JavaScript code. And for that, we first of all, need to create a ref, which we do with the help of another React hook. 
+  We use the useRef hook here and we then simply call useRef here in our code, in our functional component. And like all
+  React hooks, useRef is only usable inside of functional components.
+
+. It takes a default value you wanna initialize it to but we don't need this here but I'm very interested in what it 
+  returns because it returns a value which allows us to work with that ref later, so which allows us to work with that 
+  element to which we're going to connect it.
+   const nameInputRef = useRef();
+
+. Now, we can let React know that we wanna connect a ref to a HTML element by going to that element to which we wanna 
+  connect the ref and adding a special prop there, the ref prop. Just like the key prop, that's a built-in prop, which 
+  you can add to any HTML element because, and that's important.
+  <input id="username" type="text" ref={nameInputRef} />
+
+. What will end up inside of nameInputRef in the end This ref value, which is being generated here always is an object,
+  which always has a current prop and the current prop holds the actual value that ref is connected with. Now, by 
+  default, it's undefined but as soon as this code ran, because of this ref prop, the nameInputRef is connected to that 
+  input and  hence, it's actually the input which is being stored as a value in the current prop. And what's being 
+  stored here really is the actual DOM node. 
+  
+  So not some theoretical value or anything like that but the real DOM node, which you could now manipulate and do all 
+  kinds of things with. Now, it is recommended that you don't manipulate it. Your DOM should really only be manipulated 
+  by React. You're using React to let it do all the heavy lifting but reading data from the input doesn't sound too bad 
+  because you're not changing anything with that. You're just reading data. So here instead of log will really be a real 
+  DOM element later.
+
+. Now, in general, the question is not whether refs or state is better. You can use either of the two. You will sometimes
+  have usecases where you just want to quickly read a value, for example. And if you only want to read a value and you 
+  never plan on changing anything, well, then you don't really need state because just to use state as a keylogger is not
+  that great. It's a lot of unnecessary code and work. So if you just want to read a value, refs are probably better.
+  In scenarios like this, it's up to you what you prefer.
+
+************************************************* controlled vs uncontrolled Components *******************************
+. Now, this approach of using refs to interact with dom elements specifically with input elements also has a special    
+  name. We're talking about uncontrolled components if we access values with a ref. So these input components here, 
+  would now be uncontrolled components. Why uncontrolled? Because their internal state, so to value which is reflected 
+  in them is not controlled by react. 
+  
+  We rely on the default behavior of the input where a user of course is able to enter something and that entered value 
+  is reflected. And we then just Fetch it, with a react feature but we don't feed data back into the input. When I set a 
+  new value to those inputs here with this work around, we're absolutely not using react here. Sure we're using the ref, 
+  but in the end we get access to the native dom element with that and I then just use the regular dom API for setting 
+  the value of a dom node of a input dom node. So that's why this is uncontrolled because we're not controlling these 
+  state off the input element with react.
+  
+. In most cases, we recommend using controlled components to implement forms. In a controlled component, form data is 
+  handled by a React component. The alternative is uncontrolled components, where form data is handled by the DOM itself.
+  To write an uncontrolled component, instead of writing an event handler for every state update, you can use a ref to 
+  get form values from the DOM.
+  link : https://reactjs.org/docs/uncontrolled-components.html#:~:text=To%20write%20an%20uncontrolled%20component,form%20values%20from%20the%20DOM.&text=Since%20an%20uncontrolled%20component%20keeps,code%20when%20using%20uncontrolled%20components.

@@ -1,0 +1,299 @@
+*************************************************** Module Introduction ************************************************
+. Module Content:
+          . Generic & font families
+          . Using & Importing font families
+          . Font properties
+          . Font Shorthand
+
+******************************************* Comparing Genric Families & font families **********************************
+. Refer pdf
+
+. The thing is that these generic families are a kind of a headline which therefore define a specific attribute of the 
+  fonts that are inside this generic family. For example, the cursive generic family includes fonts which are cursive and 
+  by saying include, this brings us to the font families because that's actually more specific and these are actually the 
+  different fonts we have inside our generic family. 
+  
+  For serif for example, this could be Times New Roman or Georgia, so both are part of this generic family, the serif 
+  family.
+
+. We have generic families which kind of define a specific core attribute and inside these generic families, we have 
+  multiple font families which share this common attribute of course but nevertheless, look different.
+
+*********************************************** Understanding the browser setting **************************************
+. Check fonts here - edge://settings/fonts and try to understand it.
+
+. what will actually be displayed, which font will be used by the browser? Refer pdf
+
+  Now the default behavior, the one right here is basically defined by the browser, Well the default behavior simply means
+  that we didn't specify any kind of font family in our CSS code because with that, the browser will simply choose the 
+  standard font that we applied and use the font family that is selected in the browser, that's the default behavior that
+  we have.
+
+  Now another alternative we have is this one, we can define a generic family in our CSS code right here. With that, we 
+  could use one of the other options we saw because we had this standard font, this was option one but then we could also
+  see that we could choose different font families for the different generic families in the browser settings and with that,
+  we could tell the browser to please choose a specific generic family, sans-serif for example and then select the font
+  family that was chosen in the browser settings, that's the second option we have.
+
+. The third option will be that we specify a font family, in contrast to that, this will not be influenced directly by the
+  browser settings because in the browser settings, we have different font families available but we could also select a 
+  font family in our CSS code which is not available by default in the browsers of our users. Because of that, we have 
+  three different options again, where to retrieve these font families from.
+
+  The first option would be this one, the font family we specify in the CSS code is saved locally on the user's computer.
+  Now as you can already imagine, this can lead to a lot of problems because the user's computer is a local computer and 
+  therefore, we cannot control which font families are installed, which ones are not, so the chances are quite high that 
+  our website, at least the fonts in our website will look different for a lot of users.
+
+  then we have the second option, we can use web fonts and this is what we actually do in our project here because as we 
+  saw, we import our fonts that we used on the website from Google fonts with a so-called web font, so basically, we 
+  retrieve the font from a third party.
+
+  The third option simply means that we retrieve the fonts that we want to apply, the font family from a server and this 
+  could be for example our own server, so the server where our website is hosted. Therefore, we again have the control of 
+  the font families and make sure that the user can display these families, nevertheless if these are available in the 
+  browser or if these are saved to the computer and with that, we can ensure that the website looks as intended for most 
+  of our users. 
+  
+  So these are the options we have.
+
+*********************************************** Using the default font families ****************************************
+. If we dont't add any font-family then our html page would take fonts from browser setting.
+
+. Try removing "font-family" from body selector
+
+*********************************************** Understanding the "font-family" syntax **********************************
+. body {
+    font-family: "Montserrat", sans-serif;
+  }
+
+  The first value right here, ("Montserrat"), is the font family that we want to address. Please note the capital letter 
+  right here and the quotation marks, the quotation marks are actually not necessary all the time right here, you have to
+  add them though if your font family consists of multiple separate names and so therefore, you have whitespaces, then 
+  it's required.
+
+  After this font family, we have this sans-serif right here and as we learned, sans-serif is a generic family and this 
+  already shows you the general pattern how you should write this declaration. You first start with the most specific 
+  thing you have and the most specific thing you have is basically your font family. This could by the way not only be 
+  one family, this could also be two or more families, for example we could use Verdana right here.
+    
+    font-family: "Montserrat", "Verdana", sans-serif;
+
+  What will simply happen then is your browser will look for Monserrat, in case you can't find it, you will apply the
+  Monserrat font family. If they can't find it, he will jump to the next font family, Verdana. If it cannot find this one,
+  he will jump through the next one and so on and so on and in the end, he will simply fallback to this fallback, the 
+  generic family and then simply apply a font family out of the generic family you defined.
+
+  Now what I simply mean by that is if we would fallback to sans-serif, the browser would select Helvetica in our case 
+  because we specified in the browser settings that if the generic family that should be displayed based on their code is
+  sans-serif, then use the Helvetica font family please.
+
+  But in the end, you'll specify a generic family because with that, you always make sure that the text on the website can
+  be displayed and the text that should be displayed should at least be part of a generic family of your choice.
+
+*********************************************** Working with locally saved fonts **************************************
+. To use local fonts, go to "cssfontstack.com" and check for the font families available right here because with that, you
+  can of course make sure that a lot of your users should have this font family installed on their machines and therefore,
+  should be able to see your website the way you intend it to look like. But of course that's not the best approach because
+  we don't want to be limited by the default font families installed on the machine.
+
+  Therefore, we used this web font right here which we imported from Google fonts.
+
+  <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+*************************************************** Working with google fonts ******************************************
+. Added google fonts for package page.
+  .package__info {
+    font-family: "Roboto", sans-serif;
+  }
+
+. But the problem with that way is,  we have to add it to each HTML file that we have because otherwise, the font is not 
+  available on the page we want to have it and this can definitely cause errors, so there might be a better alternative, 
+  how to add such web fonts. 
+  
+  The good thing is if we go back to Google fonts right here, we can see that the alternative we have is the @import method
+  right here. This allows us to import the font in the CSS file right here by using this command right here, so basically 
+  the @import function. Added below import in shared.css
+  
+    @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+*************************************************** Understanding font faces & "font-style" *****************************
+. To use font-weight of our choice we need to import font faces definaed by particular font that we want to use as below-
+
+    @import url("https://fonts.googleapis.com/css2?family=Roboto:400,900&display=swap");
+
+    These 400,900 ara font faces. Now we can change the font-weight to 900.
+
+    .package__info {
+      font-family: "Roboto", sans-serif;
+      font-weight: 900;
+    }
+
+. Now we can change font-style in same way-
+
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,900;1,100&display=swap');
+
+*************************************************** Importing our custom fonts ******************************************
+. Select the font, we want to use and then download it, after extracting downloaded zipfile we would get .ttf file then
+  copy these into project files. then add below css -
+
+  @font-face {
+    font-family: "AnonymousPro";
+    src: url("AnonymousPro-Regular.ttf);
+  }
+
+  .package__info {
+    font-family: "AnonymousPro", sans-serif;
+  }
+
+  and with that, if we would assume that we have our code for the website hosted on our server, we would also host our code
+  for the font families right there and with that, we would again ensure that each visitor of our website can access this
+  font.
+
+*************************************************** Understanding font formates ****************************************
+. To specify font-format, we use below css, which is not compulsory but keep our code as complete as possible.
+
+    @font-face {
+      font-family: "AnonymousPro";
+      src: url("AnonymousPro-Regular.ttf) format("truetype");
+    }
+
+  Beside .ttf, there are other font format as well for example "woff - Web open font format", and we can check browser 
+  compatibility on - "caniuse.com".
+
+  @font-face {
+      font-family: "AnonymousPro";
+      src: url("anonymousPro-Regular.woff2) format("woff2"),
+           url("anonymousPro-Regular.woff2) format("woff"),
+           url("anonymousPro-Regular.ttf) format("truetype");
+    }
+
+*************************************************** Diving into font properties ****************************************
+. .testimonial__text {
+    margin: 0.2rem;
+    /* font-size: 40px; */
+    /* font-variant: small-caps; */
+    font-stretch: ultra-condensed;
+  }
+
+*************************************************** Adding "letter-spacing" *******************************************
+. 
+  .testimonial__text {
+      margin: 0.2rem;
+      /* letter-spacing: 5px; */
+      /* white-space: normal; */
+      /* white-space: nowrap; */
+      /* white-space: pre; */
+      /* white-space: pre-wrap; */
+      white-space: pre-line;
+    }
+
+******************************************************* Changing the line height **************************************
+. 
+  line-height: 2;
+
+*************************************************** Applying "text-decoration" & "text-shadow" *************************
+. "text-decoration" can be used to add or remove decoration.
+  .package__info {
+    text-decoration: underline;
+    text-decoration: overline;
+    text-decoration: line-through dotted red;
+    text-decoration: underline wavy red;
+  }
+
+  .package__info {
+    padding: 1rem;
+    border: 1px solid #0e4f1f;
+    font-size: 1.2rem;
+    color: #0e4f1f;
+    background: white;
+    text-shadow: 2px 2px 7px gray;
+  }
+
+*************************************************** Understanding the "font" Shorthand ********************************
+. For font shorthand, order matters a lot and some values are mandatory and some are optional. for example <font-size> and
+  <font-family> are mandatory.
+
+  font: <font-size> <font-family>
+      font: 1.2rem "AnonymousPro", sans-serif;
+
+  <font-weight>, <font-variant>, <font-style> should be positioned ahead of <font-size>.
+      font: italic small-caps 700 1.2rem "AnonymousPro", sans-serif;
+
+  line-height is added after font-size by putting slash.
+      font: italic small-caps 700 1.2rem/2 "AnonymousPro", sans-serif;
+            <font-style> <font-variant> <font-weight> <font-size>/<line-height> <font-family>
+
+. The second option with the font shorthand referring to system fonts. These system fonts or system font values simply 
+  refer to default font families which are applied to different parts of your operating system, this could be fonts which
+  are used in menus for message boxes or for status bars for example.
+  
+  Now talking about menus, if I now add menu right here, like that and reload the page, you can see that the font change 
+  to a font that is used for menus on the Mac in my case right here. Another value would for example be a status bar which
+  we could add right here and as you can see, the font size now decreases for example, for such status bars. So that's the
+  second option we have when using this font shorthand.
+
+  /* font: menu; */
+  /* font: status-bar; */
+
+*************************************************** loading performance & "font-display" ********************************
+. Refer pdf notes
+
+. font-display always works in connection with our custom fonts that we imported by using @font-face. However, font-display
+  is a property as you can imagine and for this property, we can apply different values which impact the loading behavior 
+  of our custom fonts. The values we can have are swap, block, fallback, optional or if we don't set anything, then it will
+  be set to a value of auto by default. Auto simply means that the browser our visitor is using will automatically choose 
+  a value of his choice.
+
+. For the swap value, we don't have any kind of block period. Now what does this mean, block period and why don't we have
+  a block period right here for this swap value? Well to understand the block period, imagine the following situation: our
+  user is visiting our website so the content has to load, now as the fonts are not displayed immediately, we could have 
+  such a block period. In this block period, the space where our text would be displayed would be reserved with an 
+  invisible fallback font face and that's important. The font face will not be visible at the moment but the space for it 
+  would be reserved, this would be a block period, so we basically would have the styling or the general structure of all
+  our websites visible, so a box which would contain text already has almost the correct height and is visible but no text
+  would be displayed because the font is an invisible fallback, that will be a block period.
+
+  Now if we don't have such a block period which is the case for the swap, the fallback right here would be immediately 
+  visible, this means once our users browses our website, boom, the fallback will be there. After that, we have a swap 
+  period and the swap period as the name already indicates, simply is the period where the browser has the ability to 
+  change or to swap the fallback font style that was loaded with the actual fonts style that we have, for the swap value,
+  this period is infinite. This simply means no matter how long it takes, if our browser manages to load our custom font 
+  that we want to display, it will swap it with the fallback, if it cannot change it, the fallback will just stay there.
+
+. Well for block, we have a short block period, this means this invisible font is loaded, so there is no text displayed 
+  but we have a placeholder that is reserving the space and after that, the behavior actually follows the swap value. We 
+  load the fallback and once we can load it, the browser will change the fallback with the custom font that we created
+
+. The third value is the fallback, the fallback case a very short block period, so we have this invisible font family 
+  displayed but only for a really minimum amount of time, then we have the fallback and then now it gets interesting,
+  we only have a short swap period. So there is only a short window of time where the browser has the chance to load our 
+  custom font right here and to change it with our fallback. If the browser is able to do that within this swap period, 
+  this short swap period, he can change it with the custom font otherwise, the fallback will be displayed as long as our 
+  site is displayed for the visitor. So that's the difference.
+
+. For the fallback, there was only a short opportunity to change the fallback with the custom font, for swap and block,
+  the loading of the custom font or attempt to load the custom font lasts forever basically, as long as the user is on our
+  website.
+
+. Now optional is the last value that we have, for optional, we also have a very short block period and then this thing 
+  right here, then we don't have a swap period because the optional value simply allows the browser to choose what you 
+  should do and this basically depends on the internet connection speed. If the browser decides that our connection is good,
+  he might decide to immediately load the custom font. If we have a worse connection which is not fast enough, the browser
+  might decide to use the fallback and therefore, not load our custom font. This decision cannot be reversed, of course if
+  we reload the page, it can but as soon we stay on the website as a user, we will only see the fallback for example if the
+  internet connection is not good enough.
+
+. Now the last value, auto, lets the browser make the entire decision. At the moment, most browsers choose block then, so
+  if you don't set a font display, auto be applied and then it will use block, the one we saw right here as a second option.
+
+. Now the problem with this font display and this performance topic is that the fonts we are using right here load really 
+  fast, so to be honest, I cannot show you this in a real life example now.
+
+  @font-face {
+    font-family: "AnonymousPro";
+    src: url("AnonymousPro-Regular.ttf");
+    /* font-display: block; */
+    font-display: swap;
+  }

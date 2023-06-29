@@ -1,0 +1,129 @@
+******************************************************** Debouncing & Throttling ***************************************
+. Debouncing and Throttling both are used for optimizing and performance of a web app. and we do it by limiting the rate
+  of function call.
+
+eg 1: Inputting some string
+  Let's say we have search bar where we input some text to search, so the general approach would be to make an API call on
+  every keystroke and let's say we type a query of 10 charcater then there would be 10 API calls which will make our app
+  ineficient so here we can optimize this by reducing these many API calls for example we can wait for user to stop typing
+  and then send the request to backend. 
+
+  Generally user waits for some time before entering another s\string, so in debouncing, we only amke API call if let's
+  say, difference between two keypress event is more than 300ms, and in this way we can reduce the API calls.
+  So Let's user types "per" then waits for a moment then we make API calls for "sam", then user types "sist" then we make
+  API call for "persist" and so on.
+
+  Throttling:
+  In throttling, we make API call after certain times, let's say 300ms. In this time user types "pers" then make API call
+  for that. So here we say we are throttling API calls.
+
+eg 2: Button click
+  Let's say user is making Button click again and again continuously then in this scenario also we can limit the API call
+  We can make API call if there are difference of let's say 200ms between event.
+
+. Which one is better?
+  Well, It totally depends on scenario where we are applying these technique. So sometimes Debouncing is better and sometimes
+  throttling is better.
+
+. The concept of debouncing is pretty straightforward. It delays the function invocation by a defined period of time to 
+  avoid unnecessary invocations. So, the function will only be invoked if no event is triggered within that time. If the 
+  user triggers a new event during that time, the time will be reset.
+
+. Throttle is another technique to minimize unnecessary function invocations when using event listeners. However, throttle
+  works a bit differently from debouncing. Instead of delaying, it invokes the callback function at regular intervals as 
+  long as the event trigger is active.
+
+  For example, assume we have defined the delay as one second in a throttle function. First, it will invoke the callback 
+  function immediately. Then, it will use the delay time as the waiting time and invoke the callback function every second
+  until the event trigger becomes inactive.
+  
+******************************************************** localSrorage & sessionStorage **********************************
+. Web storage API is used by developer to store some data into web browser. and this data is in key-value pair.
+
+  There are two ways of storing data - localSrorage and sessionStorage
+
+  sessionStorage: When store data in sessionStorage then data is only persisted for particular session. So suppose user is
+  visiting a web app and as soon as he visits the web app, session is started. and data is the storedwill only be persisted
+  till he is on the web browser window. As soon as he closes the window or tab of the browser, data is lost.
+
+  It is more useful than cookies. Unlike cookies, sessionStorage data is not being sent to the server by making network 
+  request call. and sessionStorage has large capacity to hold data. In cooking we can only store 4000 bytes of data while
+  in sessionStorage we can store 5MB of data.
+
+  localSrorage: It is same as sessionStorage, but it does not clear the data itself. It does not comes with expiry. So it
+  can store data in the browser as long as required. localSrorage has more memory capacity than sessionStorage and it depends
+  on what type of device and browser is being used. around 5 MB even if we are using mobile phones.
+
+. We store user specific data in browser, so sometimes it's not very relavant to store some data on server side. sometimes
+  it is used for optimizing the perfomorance of web app because getting data from the localSrorage is very much faster than
+  web API. 
+  For example flipKart store some data in localSrorage such as browsed products, navigation menu, auto suggest history.
+
+. Same origin policy:
+  To access data, we follow same origin policy. and origin comprises of three things 
+  1. Protocol : http or https
+  2. Host/domain: flipKart.com or paytm.com
+  3. port: 8080 or 8081 wherever our website is hosted.
+
+  So when we say we are setting some data, we are setting data for that origin.
+
+  Methods: 
+    localSrorage.setItem(key, value)
+    localSrorage.getItem(key)
+    localSrorage.removeItem(key)
+    localSrorage.clear() : clears everything from localStorage
+
+. Problem faced during setting data:
+    const user = {name: "user"}
+    localSrorage.setItem("user", user); 
+    
+    // It stores data as [object object] becuase it will try to convert in string as it tires data in string format.
+    // we fix this problem as below:
+    
+    localSrorage.setItem("user", JSON.stringify(user)); // sets as {"name": "user"}
+
+    localSrorage.getItem("user") // After getting data we need to parse it
+
+    JSON.parse(localSrorage.getItem('user'))
+
+. cookies is a way to idetify the user. for example we see Remember me option in while logging and when we select it
+  then user's info is saved in browser. and when request is sent to server then sever generates a session id and stores
+  that into cookies. When User vists the page then request will be made to server along with data in cookies and server
+  will identify those users and user will see personalized conetnt.
+
+  cookies size: 4kb
+
+  We use session to maintain state between pages.
+
+************************************************************** Pure function *******************************************
+. Functional programming is constantly on the rise, and with functional programming comes pure functions. Pure functions 
+  are the base of what functional programming is built upon, but they are useful even outside of functional programming. 
+  
+  The idea of a pure function is a function that when given the same inputs always returns the same output. This function
+  also must have absolutely no side effects and rely on no other state besides the input variables. 
+  
+  It essentially works exactly the same as a math function. 2 + 2 always equals 4 no matter how many times you execute the
+  function. 2 + 2 also never effects anything else outside it. For example 2 + 2 never causes 3 to change to 7 or some 
+  other side effect.
+
+  Impure Function:
+
+  const arr = [1,2,3];
+  function addElementToAray(element) {
+    arr.push(element);
+  }
+
+  Converted above to pure function:
+
+  const arr = [1,2,3];
+  function addElementToAray(arr, element) { //BUt it has side effect because it is changing global array arr.
+    arr.push(element);
+  }
+
+  Now this is pure function because it doesn't have any side effect, i doesn't change the input.
+  function addElementToAray(arr, element) { 
+    return [...arr, element]
+  }
+
+  console.log(addElementToAray(arr, 4)); [1,2,3,4] //it always returns same out for same input.
+  console.log(addElementToAray(arr, 4)); [1,2,3,4]

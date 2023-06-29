@@ -1,0 +1,202 @@
+***************************************************** Module Introduction *********************************************
+. Module Content:
+          . What & Why?
+          . TypeScript Basics
+          . Combining React & TypeScript
+
+***************************************************** What & Why? *****************************************************
+. TypeScript is a so-called "superset" to JavaScript. It's a programming language which builds up on JavaScript.
+  Unlike React, TypeScript is not a library for JavaScript, so it doesn't use JavaScript features to build new features 
+  on top of them, to build functionalities around them. But instead it extends the core JavaScript syntax, and most 
+  importantly, it adds static typing to JavaScript. because JavaScript on its own is actually dynamically typed.
+
+. Now Let's say there is a add function which accept two parameter and add those and return the result. Now we can pass
+  2 number and we get the result. But in this function we can pass two string as well and we get concatination of 2 
+  strings. Due to dynamic typing, this fucntion accept any type of parameter.
+ 
+  But what if this function intend to work with number only. then if user passes strings and  don't get desired 
+  result. and hence this will be considered as error. So how to stop these type error. There is no way in JavaScript to 
+  stop such errors. That's why TypeScript comes into picture.
+
+  And that of course allows us to write better code in the end, because we can avoid such errors and we don't have to 
+  track them at runtime but we see such errors right, when we start writing code. And that's why using TypeScript could 
+  be worth a thought.
+
+***************************************************** Installing & Using TypeScript ***********************************
+. npm init -y -> to create package.json
+. npm install typescript
+
+. Now the important thing to note is that TypeScript code does not run in the browser though. So if you try to execute 
+  TypeScript in the browser, it will fail.
+
+  Therefore we need to compile TypeScript to JavaScript. And during that compilation process, all our type annotations 
+  will be removed because JavaScript doesn't know those annotations. But it's during this compilation step where we will 
+  be notified about errors.
+
+  In addition to the notification we get in the IDE already. So it's this compilation step which then will warn us of 
+  potential code problems if we haven't spotted them in the IDE before and then it's that compiled code which will run 
+  in the browser.
+
+. Now to invoke this compiler, we need to run this command here "npx tsc". Now you will notice that a with-typescript.js 
+  file was created nonetheless. That simply happens because by default even if you get an error during the compilation
+  it's still completes. It just warns you because of that error but it still gives you a JavaScript file.
+
+  And you'll see it's almost the same code just without the types and actually it's changed const to var because by 
+  default right now, it's still also compiles to code such that it runs in older browsers as well. That is something 
+  which can be overwritten with the TypeScript config file but we don't have such a config file yet.
+
+***************************************************** Exploring the Base type *****************************************
+. Refer basics.ts
+
+***************************************************** Working with Array & Object Types *******************************
+. Refer basics.ts
+
+***************************************************** Understanding Type Inference ************************************
+. When we assign a value while declaring any variable then we don't need to specify type explicitly because of type 
+  inference, here TypeScript automatically infer the type based on value assigned to variable and when we try to assign 
+  a different value later then we get error.
+
+. Refer basics.ts
+
+***************************************************** Using Union Types ***********************************************
+. We always had just one possible type that could be stored in a variable, just a number or just a string or just a 
+  boolean. And often that is what you need, but sometimes you want to allow multiple, different types.
+
+  Let's say here for the course we might be fine with storing a string in there but maybe storing a course ID as a 
+  number should also be correct. It really depends on what you're building. It's not unrealistic that we could have a 
+  variable where both a string, as well as a number should be allowed or that you have some variable which should allow 
+  two different kinds of objects.
+
+  And for this scenario, that you have more than one type which you want to allow you have a feature called union types.
+  A union type is a type definition that allows more than one type. Union types are a never key TypeScript feature
+  which allows you to define more flexible values and types.
+
+. Refer basics.ts
+
+***************************************************** Understanding Type Aliases ***************************************
+. You can define your own base type in which a more complex type definition is stored and then use that type alias 
+  instead of repeating the entire type definitions again and again.
+
+. Refer basics.ts
+
+***************************************************** Functions & Function Types ***************************************
+. Function infers the return type, so we don't need to explicitly define the return type. for axample if function returns
+  addition of two numbers then return type will be number.
+
+. If a function doesn't return anything then it has a special return type called void. Void is basically comparable to 
+  null and undefined, but it's only used in conjunction with functions and it means that this function never returns.
+
+. Refer basics.ts
+
+***************************************************** Diving Into Generics ********************************************
+. Generics helps you write functions, which are type safe yet flexible. They are flexible. They work with any type, but 
+  then once a certain type is used for that function, execution, that type is locked in and known. And that allows you 
+  to get the best of both worlds, flexibility and type safety.
+
+. Refer basics.ts
+
+***************************************************** A Closer look at Generics ****************************************
+. Generic Types ("Generics") can be tricky to wrap your head around. But indeed, we are working with them all the time - 
+  one of the most prominent examples is an array.
+
+  Consider this example array:
+                          let numbers = [1, 2, 3];
+
+  Here, the type is inferred, but if we would assign it explicitly, we could do it like this:
+                          let numbers: number[] = [1, 2, 3];
+
+  number[] is the TypeScript notation for saying "this is an array of numbers". But actually, number[] is just syntactic 
+  sugar! The actual type is Array. ALL arrays are of the Array type. BUT: Since an array type really only makes sense if 
+  we also describe the type of items in the array, Array actually is a generic type.
+
+  You could also write the above example liks this:
+                          let numbers: Array<number> = [1, 2, 3];
+
+  Here we have the angle brackets (<>) again! But this time NOT to create our own type (as we did it in the previous 
+  lecture) but instead to tell TypeScript which actual type should be used for the "generic type placeholder" (T in the 
+  previous lecture).
+
+  Just as shown in the last lecture, TypeScript would be able to infer this as well - we rely on that when we just write:
+                        let numbers = [1, 2, 3];
+
+  But if we want to explicitly set a type, we could do it like this:
+                        let numbers: Array<number> = [1, 2, 3];
+
+  Of course it can be a bit annoying to write this rather long and clunky type, that's why we have this alternative 
+  (syntactic sugar) for arrays:
+                        let numbers: number[] = [1, 2, 3];
+
+  If we take the example from the previous lecture, we could've also set the concrete type for our placeholder T 
+  explicitly:
+            const stringArray = insertAtBeginning<string>(['a', 'b', 'c'], 'd');
+
+  So we can not just use the angle brackets to define a generic type but also to USE a generic type and explicitly set 
+  the placeholder type that should be used - sometimes this is required if TypeScript is not able to infer the (correct) 
+  type. We'll see this later in this course section!
+
+***************************************************** Creatig a React + TypeScript Project ****************************
+. Instead of .js files, we have .tsx files in there. And that indicates that we're using TypeScript and it's .tsx 
+  instead of just .ts because we're using this JSX syntax in there. And if you are doing that to avoid unnecessary 
+  complaints by your IDE, you should be using .tsx as an extension if you're using JSX in those files.
+
+. Now, one important word about that dev server, which we started here again, this works as we're used to, but of course 
+  keep in mind that it's now doing one more thing behind the scenes. It's actually compiling our TypeScript code to 
+  JavaScript code, which then is taken an optimized furthor.
+
+  Before with just React and Vanilla JavaScript, we just had this dev server, which takes our JavaScript code, bundles 
+  all the files together, and provides certain optimization steps. Now we still have all of that, but in addition, we 
+  have that extra TypeScript to JavaScript compilation step, which also takes place behind the scenes. So we don't need 
+  to convert our TypeScript files manually to JavaScript here.
+
+************************************************ Working with component & TypeScript ***********************************
+. Created Todos.tsx and used in App.tsx
+
+************************************************ Working with Props & TypeScript **************************************
+. Now if we declare props and we don't use it then we get warning which we were not getting in vanila JavaScript. But if 
+  we set props type to any explicitly then we don't get that warning.
+
+. you build functional components with React and TypeScript by using this React.FC type here on your functional 
+  component constant here, and then you use those angle brackets. And between those angle brackets, you define your own 
+  props your own prop object type if your component gets some custom props.
+
+. Refer App.js, Todos.tsx
+
+***************************************************** Adding a data model *********************************************
+. Refer Todo.ts, Todos.tsx, App.tsx
+
+***************************************************** Time to Practice: Exercise Time! *******************************
+. Created TododItem and used in Todos.tsx
+
+. Refer Todos.tsx, TodoItem.tsx
+
+***************************************************** Form submissions in TypeScript projects ************************
+. Refer NewTodo.tsx
+
+***************************************************** Working with refs & useRef **************************************
+. Refer NewTodo.tsx
+
+***************************************************** Working with "Function Props" ***********************************
+. const NewTodo: React.FC<{ onAddTodo: (text: string) => void }> = (props) => {}
+  onAddTodo is props name which is a function and we need to define function type so here we define function type which 
+  accept string and returns void
+
+. Refer NewTodo.tsx
+
+
+***************************************************** Managing State & TypeScript ***********************************
+. Added attached css to components: Todos.tsx, TododItem.tsx, NewTodo.tsx
+
+***************************************************** Time to Practice: removing a Todo ******************************
+. Refer TododItem.tsx, Todos.tsx, App.tsx
+
+***************************************************** The Context API & TypeScript ************************************
+. Refer todos-context.txt, App.tsx, Todos.tsx, NewTodo.tsx
+
+
+***************************************************** Summary ********************************************************
+. Other Resources to learn TypeScript:
+            . Udemy course
+            . TypeScript documentation
+
+***************************************************** Bonus: Exploring tsconfig.json **********************************
+. Refer Video

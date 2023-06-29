@@ -1,0 +1,489 @@
+*********************************************** An High-level overview of JavaScript ***********************************
+. Refer pdf notes
+
+. JavaScript is a high-level, prototype-based object-oriented, multi-paradigm, interpreted or just-in-time compiled,
+  dynamic, single-threaded, garbage-collected programming language with first-class functions and a non-blocking event 
+  loop concurrency model.
+
+. High-Level : as you might already know, every program that runs on your computer needs some hardware resources, such 
+  as memory and the CPU to do its work. Now, there are low-level languages, such as C, where you have to manually manage 
+  these resources. For example, asking the computer for memory to create a new variable. 
+  
+  On the other side, you have high-level languages such as JavaScript and Python, where we do not have to manage 
+  resources at all because these languages have so-called abstractions that take all of that work away from us. This 
+  makes the language easier to learn and to use, but the downside is that programs will never be as fast or as optimized 
+  as for example, C programs.
+
+. Grabage-collected: Now, one of the powerful tools that takes memory management away from us developers is 
+  garbage-collection, which is basically an algorithm inside the JavaScript engine, which automatically removes old, 
+  unused objects from the computer memory in order not to clog it up with unnecessary stuff.
+
+  So it's a little bit like JavaScript has a cleaning guy who cleans our memory from time to time so that we don't have 
+  to do it manually in our code.
+
+. Prototype-based object-oriented : it is a prototype-based, object-oriented approach. Now, have you ever wondered why 
+  we can create an array and then use the push method on it, for example? Well, it's because of prototypal inheritance.
+  Basically, we create arrays from an array blueprint, which is like a template and this is called the prototype.
+
+  This prototype contains all the array methods and the arrays that we create in our code then inherit the methods from 
+  the blueprint so that we can use them on the arrays.
+
+*********************************************** The JavaScript engine and Runtime ***********************************
+. Refer pdf notes
+
+. A JavaScript engine is simply a computer program that executes JavaScript code. There are a lot of steps involved in 
+  doing that, but essentially executing JavaScript code is what an engine does.
+
+  Now every browser has its own JavaScript engine but probably the most well known engine is Google's V-8. The V-8 
+  engine powers Google Chrome, but also Node.js which is that JavaScript runtime. And of course all the other browsers
+  have their own JavaScript engines.
+
+. Any JavaScript engine always contains a call stack and a heap. The call stack is where our code is actually executed
+  using something called execution contexts. Then the heap is an unstructured memory pool which stores all the objects 
+  that our application needs.
+
+. we learned that the computer's processor only understands zeros and ones and that's therefore every single computer 
+  program ultimately needs to be converted into this machine code and this can happen using compilation or 
+  interpretation.
+
+  In compilation, the entire source code is converted into machine code at once. And this machine code is then written
+  into a portable file that can be executed on any computer. So we have two different steps here. First, the machine 
+  code is built and then it is executed in the CPU so in the processor. And the execution can happen way after the 
+  compilation of course. For example, any application that you're using on your computer right now has been compiled 
+  before and you're now executing it way after it's compilation.
+
+  Now, on the other hand in interpretation, there is an interpreter which runs through the source code and executes it 
+  line by line. So here we do not have the same two steps as before. Instead the code is read and executed all at the 
+  same time. Of course the source code still needs to be converted into machine code, but it simply happens right before 
+  it's executed and not ahead of time.
+
+. Now JavaScript used to be a purely interpreted language but the problem with interpreted languages is that they are 
+  much, much slower than compiled languages. This used to be okay for JavaScript, but now with modern JavaScript and 
+  fully fledged web applications that we built and use today, low performance is no longer acceptable.
+
+  Just imagine you were using Google maps in your browser and you were dragging the map and each time you dragged it 
+  would take one second for it to move. That would be completely unacceptable, right? Now many people still think
+  that JavaScript is an interpreted language but that's not really true anymore. 
+  
+  So instead of simple interpretation modern JavaScript engine now use a mix between compilation and interpretation 
+  which is called just-in-time compilation. This approach basically compiles the entire code into machine code at once 
+  and then executes it right away. 
+  
+  So we still have the two steps of regular ahead of time compilation but there is no portable file to execute. And the 
+  execution happens immediately after a compilation. And this is perfect for JavaScript as it's really a lot faster than 
+  just executing code line by line.
+
+. Process of JavaScript code execution: As a piece of JavaScript code enters the engine the first step is to "Parse" the 
+  code which essentially means to read the code. During the parsing process, the code is parsed into a data structure 
+  called the Abstract Syntax Tree or AST. This works by first splitting up each line of code into pieces that are 
+  meaningful to the language like the const or function keywords, and then saving all these pieces into the tree in a 
+  structured way.
+
+  This step also checks if there are any syntax errors and the resulting tree will later be used to generate the machine 
+  code. Now let's say we have a very simple program. All it does is to declare a variable like this, and this is what 
+  the AST for just this one line of code looks like.
+
+  The next step is compilation which takes the generated AST and compiles it into machine code just as we learned in the 
+  previous slide. This machine code then gets executed right away because remember modern JavaScript engine use 
+  just-in-time compilation. And remember execution happens in the JavaScript engines call stack.
+
+  We have our code running so we can finish here, Right? Well, not so fast because modern JavaScript engines actually 
+  have some pretty clever optimization strategies. What they do is to create a very unoptimized version of machine code 
+  in the beginning just so that it can start executing as fast as possible.
+
+  Then in the background, this code is being optimized and recompiled during the already running program execution. And 
+  this can be done most of the times and after each optimization the unoptimized code is simply swept for the new more 
+  optimized code without ever stopping execution of course. 
+  
+  And this process is what makes modern engines such as the V-Eight so fast and all this parsing, compilation and 
+  optimization happens in some special threads inside the engine that we cannot access from our code. So completely 
+  separate from the main thread that is basically running into call stack executing our own code.
+
+  Now different engines implements in slightly different ways, but in a nutshell this is what modern just-in-time 
+  compilation looks like for JavaScript.
+
+. JS Runtime: We can imagine a JavaScript runtime as a big box or a big container which includes all the things that we 
+  need in order to use JavaScript in this case, in the browser. And to heart of any JavaScript, runtime is always a 
+  JavaScript engine. That's why it makes sense to talk about engines and runtimes together. Without an engine there is 
+  no runtime and there is no JavaScript at all. 
+  
+  However the engine alone is not enough. In order to work properly, we also need access to the web APIs. Web APIs are 
+  functionalities provided to the engine, but which are actually not part of the JavaScript language itself. JavaScript 
+  simply gets access to these APIs through the global window object. But it still makes sense that the web APIs are also 
+  part of the runtime, because again a runtime is just like a box that contains all the JavaScript related stuff that we 
+  need.
+
+  Next a typical JavaScript runtime also includes a so called callback queue. This is a data structure that contains
+  all the callback functions that are ready to be executed. For example we attach event handler functions to DOM 
+  elements like a button to react to certain events, right? And these event handler functions are also called callback 
+  functions okay.
+
+  So as the event happens, for example a click, the callback function will be called. And here is how that actually 
+  works behind the scenes. So the first thing that actually happens after the event is that the callback function is put
+  into the callback queue. Then when the stack is empty the callback function is passed to the stack so that it can be 
+  executed.
+
+  And this happens by something called the event loop. So basically the event loop takes callback functions from the 
+  callback queue and puts them in the call stack so that they can be executed.
+
+*********************************************** Execution contexts and the call stack *********************************
+. Refer pdf notes
+
+. Let's start by supposing that our code was just finished compiling. Just in the way that we learned in the last 
+  lecture. So the code is now ready to be executed. What happens then, is that a so-called global execution context is 
+  created for the top-level code. And top-level code is basically code that is not inside any function. So again, in the 
+  beginning only the code that is outside of functions will be executed. And this makes sense, right? Functions should 
+  only be executed when they are called.
+
+. An execution context is an abstract concept. But I define it basically as an environment in which a piece of 
+  JavaScript is executed. It's like a box that stores all the necessary information for some code to be executed. Such 
+  as local variables or arguments passed into a function. So, JavaScript code always runs inside an execution context.
+
+  Now, in any JavaScript project, no matter how large it is, there is only ever one global execution context. It's 
+  always there as the default context, and it's where top-level code will execute. And speaking of execute, now that we 
+  have an environment where the top-level code can be executed, it finally is executed.
+
+  so the top-level of code is finished, functions finally start to execute as well. And here is how that works. For each 
+  and every function call, a new execution context will be created containing all the information that is necessary
+  to run exactly that function. And the same goes for methods, of course, because they're simply functions attached to 
+  objects. All these execution contexts together, make up the call stack.
+
+  Now, when all functions are done executing, the engine will basically keep waiting for callback functions to arrive
+  so that it can execute these. For example, a callback function associated with a click event. And remember, that it's 
+  the event loop who provides these new callback functions. 
+
+. Content of Execution context: The first thing that's inside any execution context is a so-called variable environment. 
+  In this environment, all our variables and function declarations are stored, and there is also a special arguments 
+  object, This object contains, as the name says all the arguments that were passed into the function that the current 
+  execution context belongs to. Because remember each function gets its own execution context as soon as the function is 
+  called.
+
+  However, a function can also access variables outside of the function. And this works because of something called the 
+  scope chain. the scope chain basically consists of references to variables that are located outside of the current 
+  function. And to keep track of the scope chain, it is stored in each execution context.
+
+  Finally, each context also gets a special variable called the this keyword.
+
+  Now, the content of the execution context, so variable environment, scope chain and this keyword is generated in a 
+  so-called creation phase. Which happens right before execution.
+
+  And now just one final but very important detail that we need to keep in mind, is that execution contexts belonging to 
+  arrow functions, do not get their own arguments keyword, nor do they get the this keyword, okay? So, basically arrow 
+  functions don't have the arguments object and the this keyword. Instead, they can use the arguments object, and the 
+  this keyword from their closest regular function parent. And this is an extremely important detail to remember about 
+  arrow functions.
+
+. Refer pdf notes for the execution context of given code.
+
+. How will the engine keep track of the order in which functions we're called? And how will it know where it currently is
+  in the execution? Well, that's where the call stack finally comes in. And remember that the call stack, together with 
+  the memory heap, makes up the JavaScript engine itself. But what actually is the call stack?
+
+  Well, it's basically a place where execution contexts get stacked on top of each other, in order to keep track of 
+  where we are in the programs execution. So the execution context that is on top of the stack, is the one that is 
+  currently running. And when it's finished running, it will be removed from the stack, and execution will go back
+  to the previous execution context.
+
+*********************************************** Scoping and the scope chain *********************************************
+. Refer pdf notes
+
+. Scoping controls how our program's variables are organized and accessed by the JavaScript engine. So basically scoping 
+  asks the question, where do variables live? Or where can we access a certain variable and where not?
+
+  Now in JavaScript, we have something called lexical scoping. And lexical scoping means that the way variables are 
+  organized and accessed is entirely controlled by the placement of functions and of blocks in the programs code.
+  For example, a function that is written inside another function has access to the variables of the parent function, 
+  okay? So again, variable scoping is influenced by where exactly we write our functions and code blocks.
+
+. Scope is the space or environment in which a certain variable is declared, simple as that. And in the case of 
+  functions, that's essentially the variable environment which is stored in the functions execution context. and scope 
+  of a variable is basically the entire region of our code, where a certain variable can be accessed.
+
+. Now in JavaScript, we have the global scope, function scope, and block scope.
+
+  the global scope is once more for top level code. So this is for variables that are declared outside of any function 
+  or block. These variables will be accessible everywhere in our program, in all functions and all blocks. So really, 
+  everywhere.
+
+  Next, each and every function creates a scope. And the variables declared inside that function scope are only 
+  accessible inside that function. This is also called a local scope.
+
+  Now traditionally, only functions used to create scopes in JavaScript. But starting in ES6, blocks also creates scopes 
+  now. And with blocks, we mean everything that is between curly braces, such as the block of an if statement or a for 
+  loop. So just like with functions, variables declared inside a block are only accessible inside that block and not 
+  outside of it.
+
+  Now, the big difference is that block scopes only apply to variables declared with let or const, okay? So again, only 
+  let and const variables are restricted to the block in which they were created. That's why we say that let and const 
+  variables are block scoped.
+
+  So if I declare a variable using var in this block, then that variable would actually still be accessible outside of 
+  the block, and would be scoped to the current function or to the global scope. And so we say that var is function 
+  scoped. So in ES5 and before, we only had global scope and function scope. And that's why ES5 variables declared with 
+  var, only care about functions, but not about blocks. They simply ignore them.
+
+  Finally, also starting in ES6, all functions are now also block scoped, at least in strict mode, which you should 
+  always be using anyway. And just like with let and const variables, this means that functions declared inside a block
+  are only accessible inside that block.
+
+******************************************************** Scoping in practice *****************************************
+. Refer script.js
+
+************************************************** Variable Environment: Hoisting and the TDZ ************************
+. Refer pdf notes
+
+. In JavaScript we have a mechanism called hoisting. And hoisting basically make some types of variables accessible,
+  or let's say usable in the code before they are actually declared in the code. Now, many people simply define hoisting
+  by saying that variables are magically lifted or moved to the top of their scope for example, to the top of a function.
+
+  And that is actually what hoisting looks like on the surface. But behind the scenes that's in fact not what happens.
+  Instead, behind the scenes the code is basically scanned for variable declarations before it is executed. So this 
+  happens during the so-called creation phase of the execution context.
+
+  Then for each variable that is found in the code, a new property is created in a variable environment object. And 
+  that's how hoisting really works. Now, hoisting does not work the same for all variable types.
+
+. Hoisting for Function declarations:
+  Function declarations are actually hoisted and the initial value in the variable environment is set to the actual 
+  function. So in practice, what this means is that we can use function declarations before they are actually declared 
+  in the code, again, because they are stored in the variable environment object, even before the code starts executing.
+
+. Hoisting for var:
+  Next, variables declared with var are also hoisted, but hoisting works in a different way here. So unlike functions,
+  when we try to access a var variable before it's declared in a code, we don't get the declared value but we get 
+  undefined. And actually this behavior is a common source of bugs in JavaScript. So this is one of the main reasons
+  why in modern JavaScript we almost never use var.
+
+. Hoisting for let and const:
+  Now on the other hand, let and const variables are not hoisted. I mean, technically they are actually hoisted but 
+  their value is basically set to un-initialized. So there is no value to work with at all. And so in practice, it is as 
+  if hoisting was not happening at all. Instead, we say that these variables are placed in a so-called Temporal Dead 
+  Zone or TDZ which makes it so that we can't access the variables between the beginning of the scope and to place where 
+  the variables are declared.
+
+  So as a consequence, if we attempt to use a let or const variable before it's declared, we get an error. Also keep in 
+  mind that let and const are block scoped. So they exist only in the block in which they were created. And all these 
+  factors together is basically the reason why let and const were first introduced into the language, and why we use 
+  them now instead of var in modern JavaScript.
+
+. Hoisting for Function Expressions and Arrow functions:
+  Well, it depends if they were created using var or const or let. Because keep in mind that these functions are simply 
+  variables. And so they behave the exact same way as variables in regard to hoisting. This means that a function 
+  expression or arrow function created with var is hoisted to undefined. But if created with let or const, it's not 
+  usable before it's declared in a code because of the Temporal Dead Zone so again, just like normal variables, right?
+
+  And this is actually the reason why I told you earlier that we cannot use function expressions before we write them in 
+  the code, unlike function declarations.
+
+. Temporal dead Zone: Refer pdf notes for example
+  It's basically the region of the scope in which the variable is defined, but can't be used in any way. So it is as if 
+  the variable didn't even exist. Now, if we still tried to access the variable while in the TDZ like we actually do in 
+  the first line of this if block, then we get a reference error telling us that we can't access job before 
+  initialization.
+
+  However, if we tried to access a variable that was actually never even created, like in the last line here where we 
+  want to log x, then we get a different error message saying that x is not defined at all. What this means is that job 
+  is in fact in the Temporal Dead Zone where it is still un-initialized, but the engine knows that it will eventually be 
+  initialized because it already read the code before and set the job variable in the variable environment to 
+  uninitialized.
+
+  Then when the execution reaches the line where the variable is declared, it is removed from the Temporal Dead Zone
+  and it's then safe to use.
+
+  So to recap, basically each and every let and const variable get their own Temporal Dead Zone that starts at the 
+  beginning of the scope until the line where it is defined. And the variable is only safe to use after the TDZ, so the 
+  Temporal Dead Zone.
+
+. Now what is actually the need for JavaScript to have a Temporal Dead Zone? 
+  Well, the main reason that the TDZ was introduced in ES6 is that the behavior I described before makes it way easier 
+  to avoid and catch errors. Because using a variable that is set to undefined before it's actually declared can cause 
+  serious bugs which might be hard to find. So accessing variables before declaration is bad practice and should be 
+  avoided. And the best way to avoid it is by simply getting an error when we attempt to do so. And that's exactly what 
+  a Temporal Dead Zone does. 
+  
+  A second and smaller reason why the TDZ exists is to make const variables actually work the way they are supposed to. 
+  So as you know, we can't reassign const variables. So it will not be possible to set them to undefined first and then 
+  assign their real value later. Const should never be reassigned. And so it's only assigned when execution actually 
+  reaches the declaration. And that makes it impossible to use the variable before.
+
+. Now, if hoisting creates so many problems, why does it exist in the first place?
+
+  So the creator of JavaScript basically implemented hoisting so that we can use function declarations before we use 
+  them. Because this is essential for some programming techniques, such as mutual recursion. Some people also think that 
+  it makes code a lot more readable.
+
+  Now, the fact that it also works for var declarations is because that was the only way hoisting could be implemented 
+  at the time. So the hoisting of var variables is basically just a byproduct of hoisting functions. And it probably 
+  seemed like a good idea to simply set variables to undefined, which in insight is not really that great.
+
+  But we need to remember that JavaScript was never intended to become the huge programming language that it is today.
+  Also, we can't remove this feature from the language now. And so we just use let and const to work around this.
+
+*************************************************** Hoisting and TDZ in practice ***************************************
+. If we define function expression using var and call it before definition then we get below error:
+  "TypeError: addExprWithVar is not a function"
+
+  Reason is var is hoisted with undefined value, so when function call is interpreted then it becomes 
+  "var addExprWithVar = undefined". so it's like calling undefined(2, 3) which is not a function.
+
+. Best practices:
+  . In order to write clean code, you should declare your variables at the top of each scope. That will just make your 
+    code at least look a little bit better.
+
+  . Finally, always declare all your functions first and use them only after the declaration. And this applies to all 
+    types of functions, even function declarations, which are hoisted. So you could use function declarations before you 
+    declare them, but still just don't do that it's just not clean.
+
+. variables declared with var, will create a property on the global window object. while let and const doesn't
+
+*************************************************** The this keyword **************************************************
+. Refer pdf notes
+
+. this keyword or this variable is basically a special variable that is created for every execution context and 
+  therefore any function. In fact,  it's one of the three components of any execution context, along with the variable 
+  environment and scope chain. Now, in general terms, the this keyword, will always take the value of the owner of the 
+  function in which, the this keyword is used. We also say, that it points to the owner of that function.
+
+. For now, what's very important to understand is that the value of the this keyword is not static. So it's not always 
+  the same. It depends on how the function is actually called. And its value is only assigned when the function is 
+  actually called.
+
+. this keyword in context of different function:
+  this in Method: 
+  the first way to call a function is as a method. So as a function attached to an object. So when we call a method, the 
+  this keyword inside that method will simply point to the object on which the method is called, or in other words, it 
+  points to the object that is calling the method.
+
+  this in function:
+  Another way we call functions is by simply calling them as normal functions. So not as a method and so not attached to 
+  any object. In this case, the this keyword, will simply be undefined. However, that is only valid for strict mode.
+  So if you're not in strict mode, this will actually point to the global object, which in case of the browser is the 
+  window object. And that can be very problematic and so, this is yet another very good reason to always use strict mode.
+
+  this in arrow function:
+  Next, we have arrow functions and while arrow functions are not exactly a way of calling functions. It's an important 
+  kind of function that we need to consider, because, remember, arrow functions do not get their own 'this keyword'.
+  Instead, if you use 'the this variable' in an arrow function, it will simply be the this keyword of the surrounding 
+  function. So of the parent function and in technical terms, this is called the 'lexical this keyword,' because it 
+  simply gets picked up from the outer lexical scope of the arrow function.
+
+  this in event listener:
+  And finally, if a function is called as an event listener, then the this keyword will always point to the DOM element
+  that the handler function is attached to.
+
+  It's also important to know what the, this keyword is not. So this will never point to the function in which we are 
+  using it. Also, the this keyword will never point to the variable environment of the function. And these are two 
+  pretty common misconceptions.
+
+*************************************************** The this in practice **********************************************
+. Refer script.js
+
+************************************************ Regular Functions vs. Arrow Functions ********************************
+. When we try to access a property that doesn't exist on a certain object, we do not get an error, but simply undefined.
+
+. It's a best practice that you should never ever use an arrow function as a method. Because it doesn't have it's own 
+  this keyword and this points to global window object and if we are accessing some property using this and that 
+  property is defined using var (then it will define in window object) then it could be really dangerous. and if not 
+  defined using var (then obiously, that property won't be in window object) and hecne will result into undefined.
+
+  Because if you have this rule of never using an arrow function as a method, then you never have to think about which 
+  type of function you should use. You will always just use a normal function expression, and like this, you will then 
+  prevent this kind of mistakes from happen.
+
+******************************************** primitive vs. Objects (Primitive vs. Reference Types) ********************
+. Refer pdf notes
+
+. Now, when we're talking about memory and memory management, it's usual to call primitives, primitive types and objects 
+  reference types because of the different way in which they are stored in memory.
+
+  Next, we need to remember about the JavaScript engine. So the engine has two components, the call stack, where 
+  functions are executed and to heap where objects are stored in memory. And that's right, all of objects, or in other 
+  words, reference types will get stored right in the memory heap. On the other hand, primitives or primitive types
+  are stored in the call stack. And with that, I mean that primitive types are stored in the execution contexts in which 
+  they are declared. because that's where execution context runs.
+
+. Analyzing the way both types are stored in memory: Refer pdf side by side
+
+  When we declare a variable like age equals 30, what actually happens inside the JavaScript engine and the computer's 
+  memory? Well, first JavaScript will create a so-called unique identifier with the variable name. Then a piece of 
+  memory will be allocated with a certain address, so 0001 in this example, and finally the value would be stored in 
+  memory at the specified address. and this all happens in stack where primitive types are stored. Now what's extremely 
+  important to understand here is that the identifier actually points to the address and not to the value itself. So we 
+  would say that the age variable is equal to 30, but in fact, age is equal to the memory address 0001, which holds the 
+  value of 30.
+
+  Now, in the next line, we declare oldAge to be equal to age. So knowing that a variable actually holds a memory 
+  address, what should old age look like? Well, it will simply point to the same memory address as the age variable.
+  And so it will look like old age, is simply 30 as well. Great, but now in the next line, we set eight to 31. So what 
+  will happen then?
+
+  The value at address 0001 will certainly not become 31 because that would change old age as well, since they both 
+  point to the same address. So that would make no sense at all. Also the value at a certain memory address is immutable,
+  or in other words, it cannot be changed. So instead what's going to happen here is that a new piece of memory is 
+  allocated. So it's created and the age identifier now simply points to the new address, which is holding the new value 
+  of 31.
+
+  And that's why when we log both or variables to the console in the end, they both return exactly values that we expect.
+
+. Now with reference values, things work a bit differently, Well, when a new object is created such as this Me object,
+  it is stored in the heap. And such as before there is a memory address and then the value itself. Now in the case of 
+  reference values like this Me object the Me identifier does actually not point directly to this newly created memory 
+  address in the heap. So in this example, D30F, instead, it will point to a new piece of memory that's created in the 
+  stack.
+
+  And this new piece of memory will then point to the object that's in the heap by using the memory address as its value.
+  In other words, the piece of memory in the call stack has a reference to the piece of memory in the heap, which holds 
+  or Me object. And that's the reason why we call objects reference types in this context.
+
+  So again, when we declare a variable as an object, an identifier is created, which points to a piece of memory in the 
+  stack, which in turn points to a piece of memory in the heap. And that is where the object is actually stored.
+  And it works this way because objects might be too large to be stored in the stack. Instead they are stored in the 
+  heap, which is like an almost unlimited memory pool. And the stack just keeps a reference to where the object is 
+  actually stored in the heap so that it can find it whenever necessary.
+
+  Now, moving on in the code, we create a new variable called Friend that we set equal to the Me object. So what will 
+  happen here? Well, just like with primitive values, the Friend identifier will point to the exact same memory address 
+  as the Me identifier. And again, that address contains the reference, which then points to the object itself.
+  And like this the Friend object is now essentially the exact same as the Me object. now we're actually gonna change a 
+  property in the Friend object by setting friend.age to 27. So what happens then is that the object is found in the 
+  heap, and the 30 is changed to 27.
+
+  And by the way, even though we defined the Friend variable as a constant, we can actually still manipulate the object
+  without problems. And when we think about that, it makes sense because we're actually not changing the value in memory 
+  for the Friend identifier, it is still D30F. So the reference to the object. All we did was to change the value in the 
+  heap, and that's not a problem. So it's a misconception that all variables declared with const are immutable.
+  In fact, that is only true for primitive values, but not for reference values.
+
+  So whenever we change something in this object, it will always be reflected in Friend and in Me. So in both these 
+  objects. So these are basically just two different identifiers pointing to the exact same value. And once again, that 
+  value is the memory address D30F which points to the reference in the memory heap. And one important implication of 
+  this is that whenever you think that you're copying an object, you're really just creating a new variable that points 
+  to the exact same object.
+
+
+******************************************************* primitive vs. Objects in practice *****************************
+. Object.assign() merges two object and returns a new object. It can be used for creating copy of existing object by
+  merging existing object with empty object and we wil have returned object as copied object.
+
+  However, using this technique of object.assign only works on the first level. Or in other words, if we have an object 
+  inside the object, then this inner object will actually still be the same. So, it will still point to the same place 
+  in memory. And that's why we say that this object.assign only creates a shallow copy and not a deep clone which is 
+  what we would like to have. So, again, a shallow copy will only copy the properties in the first level while a deep 
+  clone would copy everything. 
+
+
+****************************************************** Diff between var, let & const **********************************
+. Scope:
+    var is function scoped, whereas let & const are block scoped
+  
+. Hoisting:
+    var is hosited and initialised with undefined, so we can access it before it is defined. 
+    whereas let & const are hoisted but not initialised. They are not accessible before it's definition because let & const
+    are put into Temporal Dead Zone
+
+. Redeclartion:
+    var can be re-declared but let & const can't. and const can't even be re-assigned
+
+. window:
+    var is put into window object, if it is defined globally whereas let and const not
+  

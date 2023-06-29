@@ -1,0 +1,105 @@
+************************************************* Module Content *******************************************************
+. How do React Apps interact with databases?
+. Sending Http requests & using Responses
+. Handling errors & loading state
+
+******************************************* How to (not) connect to a database *****************************************
+. React apps, or in general browser-side apps, browser-side code, so JavaScript code running in the browsers should never
+  directly talk to a database. Because if you would directly connect to a database, if we leave a site that this will 
+  technically be challenging, but if you would do that, if you would directly connect to a database server from inside your
+  client-side, your browser-side JavaScript code, you would expose your database credentials in that code.
+
+. Because you must never forget that all JavaScript code running in the browser can be accessed and read, not just by the
+  browser, but also by the users of your website. In addition, directly connecting to a database could also bring other 
+  problems like performance issues but the security problem is the biggest problem of all. So, therefore, instead of 
+  directly talking to a database from inside your react code, you always take another route.
+
+. You have a Backend application running on another machine not running in the browser, but running on some server out 
+  there, maybe on the same server as the database, often on a different server, though. Now, this Backend application can
+  be written with any server-side language of your choice, NodejS, PHP, ASP.NET, everything is possible. And it's this 
+  Backend application which will do the talking to the database, because you can safely store and use database credentials
+  on the Backend application since that Backend code can't be viewed by your users.
+
+. It's on a different server and the users of your website will never see that code. And, therefore, the react will then 
+  talk to that Backend server, to that Backend API, typically, which is a server which exposes different URLs requests 
+  can be sent to and then you have a safe connection to the database.
+
+. https://academind.com/tutorials/hide-javascript-code
+
+************************************************* Using the Star Wars API ***********************************************
+. In the next lecture, you will be introduced to our demo backend that will be used in this course section: The Star Wars
+  API. I will use this page: https://swapi.dev/
+
+. Loading this page (and hence accessing this backend) might fail - if that is the case for you, you can use this 
+  alternative: https://swapi.py4e.com/
+
+************************************************* Our starting app & backend ***********************************************
+. Created fecth-movie project which is using DUMMY_MOVIES for now and we will get list of movies by sending http request to above API
+. https://academind.com/tutorials/rest-vs-graphql
+
+************************************************* Sending a GET request *************************************************
+. Added fetchMOvieHandler on button click where, movies are fetched using fetch().
+. Refer App.js
+
+************************************************ Using async / await ***************************************************
+. Changed fetchMOvieHandler() by using async await which looks good to write
+
+************************************************ Handling Loading & Data States *****************************************
+. We are fetching the movies whenever we click this button and that's great. Now we're not really showing any loading 
+  state. If I reload this app and I click fetch movies it takes a second or so for the movies to show up. In reality, you
+  typically want to show some loading spinner or at least some loading text in the meanwhile to signal to your user that 
+  data is on its way and you're doing some work.
+. Used isLoading state to handle this
+
+************************************************ Handling Http Errors **************************************************
+. Now, when sending HTTP requests, things can also go wrong, of course. You can encounter errors, both technical errors
+  because, for example, you have no network connection, or you do have a network connection and the request is sent
+  but you get back an error response code, something like 404 or 500 or 401 codes.
+
+. So we need to handle such http errors, handled using try catch since, we are using async await. Refer App.js
+
+************************************************ Using useEffect() for Requests *****************************************
+. Now, in a lot of applications you wanna fetch data as soon as a certain component loads, right? If a user visits the 
+  webpage you immediately wanna start fetching data and currently we're not doing that here. We're just fetching it on 
+  demand when the button is pressed. Now, to immediately fetch it we can use another concept we already learned about.
+  We can use the useEffect hook because sending this HTTP request is a side effect which ultimately changes our components
+  state.
+
+. When dependency is empty array which means function will be called for very first time, when component is loaded and
+  if this empty dependency also were not defined then function would be called each time when component is re-evaluated
+  and if we had added some dependency then fuction would be called only when dependencies ae changed.
+
+  But the best practice is to list all dependencies you use inside of the effect function here in the dependencies array.
+  and since we are using fetchMoviesHandler() here, we should add it as dependency. Because if this function changes this
+  effect should be re-executed and this function could change if we would be using some external state in here. We aren't
+  doing that in this example but in other examples we could be doing that.
+
+  The problem with that is that functions of course are objects and therefore these function will technically change
+  whenever this component re-renders. So, we will create an infinite loop if we add it as a dependency. One solution would 
+  be to omit it because here that would indeed achieve the result we want. But it could introduce subtle bugs if our 
+  function would be using some external state.
+
+  So, the better solution is to use the useCallback hook. and list any dependencies this function might have. This function
+  though has no external dependencies. The fetch API is a global browser API it's not a dependency and other than that
+  we are not using anything special in here.
+
+. Refer App.js
+
+****************************************** Preparing the projects for the next steps ************************************
+. Firebase is a service provided by Google and it's in the end, a backend which we can use, without writing any code.
+  Unlike the name implies, it's not some kind of database it's a backend that comes together with a database, but it also
+  gives us a full backend app, a complete rest API, to which we can send requests.
+
+. you need to go here to the Firebase console, after logging in with your Google account. Once you're logged in, you can 
+  add a new project and give it any name of your choice. Here I'll name it react-http, but the name is up to you.
+  Click continue. And this will now create our Firebase project.
+
+. Now again, Firebase is a service offered by Google. It consists of many products and services that make up the overall 
+  service, and we will only use a fraction of that. We're not going to build some complex Firebase app here. Now here I'm
+  in the Firebase console, and for us, the RealTime database is interesting. They actually have two databases. Cloud 
+  Firestore is the more powerful one but Realtime Database is the one which is easier to get started with, and since we 
+  just want a dummy backend, we'll use that. It also has the nicer REST API.
+
+****************************************** Sending a POST Request ******************************************************
+. Refer App.js
+

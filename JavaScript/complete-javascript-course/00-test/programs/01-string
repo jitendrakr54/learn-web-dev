@@ -1,0 +1,132 @@
+// ****************************************** Remove duplicate strings
+// Using sets
+function removeDuplicate1(arr) {
+  const arrCopy = [...arr];
+  const arrNew = [...new Set(arrCopy)];
+}
+
+const arr = ["Jonas", "Jitendra", "Rama", "Jonas", "Jitendra"];
+console.log(removeDuplicate1(arr));
+
+// Using Array
+function removeDuplicate2(arr) {
+  const arrCopy = [...arr];
+  const arrNews = [];
+  for (const [index, name] of arrCopy.entries()) {
+    if (!arrNews.includes(name)) {
+      arrNews.push(name);
+    }
+  }
+}
+
+// ****************************************** Keep only duplicate strings
+// Using array
+function keepOnlyDuplicate1(arr) {
+  const dupNames = new Set();
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] === arr[j]) {
+        dupNames.add(arr[i]);
+      }
+    }
+  }
+  return dupNames;
+}
+const nameArr = ["Jonas", "Jitendra", "Rama", "Jonas", "Jitendra"];
+console.log(keepOnlyDuplicate1(nameArr));
+
+// Using Sets
+function keepOnlyDuplicate2() {
+  const dupNames = [];
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] === arr[j]) {
+        if (!dupNames.includes(arr[i])) {
+          dupNames.push(arr[i]);
+        }
+        break;
+      }
+    }
+  }
+  return dupNames;
+}
+console.log(keepOnlyDuplicate2(nameArr));
+
+// ************************************ JavaScript Program to Check Whether a String is Palindrome or Not
+// A string is a palindrome if it is read the same from forward or backward. For example, dad reads the same either from
+// forward or backward. So the word dad is a palindrome. Similarly, madam is also a palindrome.
+
+function isPalindrome(str) {
+  const reversedString = str.split("").reverse().join("");
+  console.log(reversedString);
+  return reversedString === str;
+}
+console.log(isPalindrome("dad"));
+
+// *********************************** JavaScript Program to Check the Number of Occurrences of a Character in the String
+// Using map
+function countChars1(str) {
+  const charCount = new Map();
+  for (let i = 0; i < str.length; i++) {
+    if (charCount.has(str[i])) {
+      let count = charCount.get(str[i]);
+      charCount.set(str[i], ++count);
+    } else {
+      charCount.set(str[i], 1);
+    }
+  }
+  return charCount;
+}
+console.log(countChars1("rama"));
+
+// Using object
+function countChars2(str) {
+  const charCount = {};
+  for (let i = 0; i < str.length; i++) {
+    if (charCount[str[i]]) {
+      let count = charCount[str[i]];
+      charCount[str[i]] = ++count;
+    } else {
+      charCount[str[i]] = 1;
+    }
+  }
+  return charCount;
+}
+console.log(countChars2("rama"));
+
+// **************************************** JavaScript program to check if two strings are anagram.
+// Two strings are said to be anagrams if they make a meaningful word by rearranging or shuffling the letters of the string.
+// In other words, we can say that two strings are anagrams if they contain the same characters but in a different order.
+// Note that a letter has to be used only once.
+
+function isAnagram(str1, str2) {
+  if (str1.length !== str2.length) return false;
+
+  let flag = 0;
+  for (let i = 0; i < str1.length; i++) {
+    for (let j = 0; j < str1.length; j++) {
+      if (str1[i] === str2[j]) {
+        flag = 1;
+      }
+    }
+    if (flag === 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+console.log(isAnagram("HEART", "EARTH"));
+
+// ****************************************** Capitalize the first letter of every word in a sentence
+
+function capitalize(str) {
+  const strArr = str.split(" ");
+  const capitalize = [];
+  for (let word of strArr) {
+    // capitalize.push(word[0].toUpperCase() + word.slice(1));
+    capitalize.push(word.replace(word[0], word[0].toUpperCase()));
+  }
+  return capitalize.join(" ");
+}
+console.log(capitalize("my name is jitendra"));

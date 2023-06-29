@@ -1,0 +1,236 @@
+************************************************** Module Introduction ************************************************
+. Positioning allows us to change the position of elements on our website.
+
+. Module Content:
+      . Understanding the "Position" Property
+      . Fixed Navigation bars with "fixed"
+      . Positioning elements with "z-index"
+      . Using "absolute" and "relative" - Stand alone and combined
+      . "Sticky" Positioning
+      . The "Stacking Context"
+
+************************************************** Why Positioning will improve our website **************************
+. Making fixed navigation bar and adding badge to recommended plan on package page can improve our website
+
+************************************************** Understanding Positioning - The theory ****************************
+. Why do we have to position our elements or how does it work so far actually? Well, to understand this, we can imagine
+  the following HTML and body elements and inside this body element we have three divs for example, three block level 
+  elements in our case and as we know, the general behavior of these block level elements is the way it is displayed right
+  here, occupying the entire space available in the row where they are positioned and because of that, being displayed one
+  after another.
+
+  This basically is due to the fact that these are block level elements and that these elements are following the document
+  flow which is basically the flow of a normal HTML document that we have right here. Now the question is, is there already
+  some property applied automatically maybe which makes sure that this document flow is followed or will be followed by the
+  elements?
+
+  The answer is yes it is, the position property is applied automatically or by default in our HTML code, specifically a 
+  value for this position property of static is applied.
+
+. Now there might be situations where you want to change this normal document flow of your elements, what could that mean?
+  Well for example, it might be the case that you want to position this first div right here in the right upper part or 
+  right upper corner of the HTML element or you might want to position the second div in the left upper corner of the body
+  element.
+
+  basically you could want to position any element on more or less any position on your website. Now this is actually 
+  possible but not with this default value, for that you have to specify a position property with a value of absolute, 
+  relative, fixed or sticky.
+
+. Let's say that we apply the position property for this element with a value that is not equal to static, Now with that,
+  we basically told our element, hey come on move to another position and the element probably asked ok but where should 
+  I move to and for that, we have four different options. We have top and bottom and we have left and right. Now of course
+  we could also use this in a combination like top and left, bottom and right or maybe all of these depending on what you
+  want to achieve on the website, with these properties, you change the position of the elements in your document flow,
+  that's important.
+
+. But there is one other important concept that we have to understand because if we apply top: 20px now to our elements
+  right here, well what does this mean, what do these 20 pixels top refer to?
+
+  Well there are different options. One option will be that this declaration refers to the element itself. What does this
+  mean? Well basically it says please take the current position of my element and move it up by 20 pixels.
+
+  Another option could be though that the 20 pixels refer to a distance for example, so let's say it should be 20 pixels
+  from the top of our viewport or of our HTML element.
+  
+  The "viewport" simply is the visible part/area of your web page. You could translate it with "your browser window".
+
+  and all these options refer to the so-called positioning context. So this basically means, what does my positioning 
+  change that I want to achieve refer to?
+
+************************************************** Working with the "fixed" value *************************************
+. If we change postion of first div to top:100px but nothing happens because default position is set to static.
+  
+  So All the positioning changes we want to apply right now are only possible if you apply a value that is different from
+  static, so different from the default value.
+
+  However if we get rid of that top property now and change it to position fixed, well we can see that the behavior 
+  already changed. Actually we see two interesting things,
+
+  the first thing see is of course that the width of the element decreased significantly, it almost looks like an inline
+  element.
+
+  the second thing that we can see right here because the element now is now basically not existing for the other elements
+  anymore, as we can see it the second element, so our background image, that's what it's called element now overtook this
+  position the navigation bar element had. We can still see the navigation bar element right here but the background image
+  is exactly at the same position and this happens because by applying position fixed to this element, to the navigation
+  bar element, we took it out of the actual document flow.
+
+  This simply means that for all the other elements here, this navigation bar element is no longer existing because we 
+  applied this declaration to it.
+
+  Now what about the width now, did we create an inline element right here now? Well let's quickly find that out by going
+  back right here and maybe changing the width to let's say 400 pixels because as we learned throughout the course already,
+  for inline elements, changing the width has no impact. So if you do that and reload it, we can see that the width of our
+  element changed, therefore we did not create an inline element now, we basically have an element which behaves like an
+  inline block element actually.
+
+  Now if we set top:0 and also set margin: 0 then Navigation Bar moves to the top and when we scroll down the page, we can
+  see that this element now basically has the viewport as the position in context.
+
+  So basically, the position of this element only depends on the viewport. and we can prove this by changing top to bottom
+  and now Navigation Bar stick to the bottom. and you can apply this positioning property no matter if you have a block 
+  level element or an inline element.
+
+************************************************** Creating a Fixed Navigation Bar *************************************
+. When we add postion: fixed to main-header, Our naigation bar fixed to the top and it works fine but in last demo projecct,
+  it was not the case, we had to add top: 0, left: 0. that's because in demo project we had margin on html element and 
+  navigation bar but here we don't have any margin so it would work without top and left also.
+
+************************************************** Using "postion" to add a background image ***************************
+. When we add background image to package page, image doesn't come, even though if we set width and height to 100% then
+  image doesn't come but when we set width and height using pixels, we see some part of the image.
+
+  but as we can see, we have issues with the percentage values and the image is of course not being displayed completely
+  because of pixels we added and more importantly, we can see why the position fixed declaration might be helpful right
+  here because the image on the starting page was part of the actual document flow, it was positioned above the other
+  elements right here.
+
+  But on the packages page, the image should be positioned behind our actual content on the website, therefore doing it 
+  like this will not make us happy. Therefore let's go back and let's now add the position property with the fixed value
+  right here. If we do that and now reload the page, yes then we can see as expected hopefully that it kind of works.
+
+************************************************** Understanding the Z-Index *******************************************
+. Why is our background image not a real background image?
+
+  Well if we think back about what we did so far, we were able to position our elements along the x-axis with left and 
+  right and along the y-axis with top and bottom. Now as we can see right here, we also need a possibility to position our
+  elements along the z-axis.
+
+  Now the great thing is that we can do this in CSS and for that we need a new property, the so-called z-index. This
+  property has different values, by default every element on our website has a value of auto-applied for the z-index, the
+  auto value is equal to zero.
+
+  If we don't change anything else but this is what you normally can assume, auto is equal to zero and this zero now 
+  defines the starting point from a y-axis perspective for the elements on a website. This means if you want to position
+  an element above this package class, then you could simply apply a z-index of one, of two, of 10, of 100. it doesn't 
+  matter, if you want to position that element below this class, then you can add -1, -100 and so on,
+
+  But, here comes the but, adding z-index to elements which don't have any position property applied and by that, I mean
+  a position property with a value different from static, for these elements, the z-index doesn't have any impact.
+
+  Now the good news is that we have an element, actually two elements, with the position property applied and one will be
+  the background image right here. and now we add the z-index right here to our image. If we change the z-index: 1 then we
+  can see our background image is on top of our page.
+
+************************************************** Adding a Badge to our package *************************************
+. If we position package_badge using fixed then we have to do lot of stuff and even though it will get stuck to the 
+  viewport.
+
+  So We need to do using postion: absolute.
+
+  For absolutely positioned elements, the positioning context is defined based on two cases. If none of the ancestors, so
+  of the parent elements, has a position property applied, well then the positioning context of the element is simply the
+  HTML element. If we have the second case that we have any position ancestors, then the closest ancestor which has the
+  position property applied is the positioning context for this element.
+
+. Now to apply the absolute position to our badge, frst we need to add position: relative to it's ancestor element, 
+  which is package class.
+
+. So what have we seen so far? The fixed and the absolute value are quite comparable in general, both take the elements 
+  out of the document flow if you apply these values to these elements but for the fixed value, the positioning context 
+  always is the viewport. 
+  
+  For the absolute value, the positioning context depends. If you don't have any ancestors with a positioning property 
+  applied, then the positioning context is the HTML element. If you have ancestors with the position property applied, 
+  then the element, the absolutely positioned element, will be positioned in relation to the closest ancestor which has 
+  such a position property applied.
+
+*********************************** Styling & Positioning our badge with "absolute" and "relative" ********************
+. Refer .package__badge
+
+************************************************** Diving deeper into Relative positioning ****************************
+. When we add position: relative to any element, nothing changes to that element but if we add top: 50px and left: 50px
+  then element moves.
+
+  Well we saw for the fixed and absolute values that the elements are taken out of the document flow and then positioned
+  relatively to the viewport or as we saw it, to the HTML element or to the closest ancestor which has the position 
+  property applied. 
+  
+  For the relative value, this is different because the positioning context is the element itself and at the same time, 
+  the element is also not taken out of the document flow. So what basically happened right here with our element is that 
+  we moved it down from its initial position, which was right here by 50 pixels from the top and then 50 pixels from the
+  left.
+
+  For the fixed and absolute values, the top, left, bottom and right properties specify a distance to the parent element 
+  basically, so to the containing block but for the relative positioning, this simply defines how this element should move
+  from the current position. So with this, we can move the element basically wherever we want to. We can basically move 
+  the relative element right here out of the actual parent. 
+  
+  Now you might want this behavior but there are probably situations where you say yes I want to move my element a little
+  bit to the left, to the right, to the bottom, wherever but I want to make sure that it doesn't leave this parent or at
+  least that it's not visible anymore as soon as it leaves the parent element right here.
+
+. Refer demo/main.css : .parent .child-1
+
+********************************************** Working with "overflow" and Realtive positioning ************************
+. We saw how relative positioning works and we also saw that we can move our element out of the parent.
+
+  Now to avoid this behavior, we can simply go to our parent element with the class parent right here and now add overflow
+  hidden because this will exactly do what the property already indicates, it will hide the element once it's outside of 
+  our parent.
+
+. Now if we apply same thing to our parent element and apply overflow: hidden to parent of parent (body element) then
+  nothing happens.
+
+  Well this is due to a default behavior of CSS. If you apply the overflow hidden declaration to the body element, this 
+  will simply be passed onto the HTML element right here, so in our case to the HTML selector and the consequence of that
+  is, well you don't have the overflow hidden declaration on your body element, so you have overflow hidden on the HTML 
+  element but not on the body element and if we have a look at our page now, this is the consequence, you don't have any
+  impact of this declaration at all. This is just a default behavior of CSS.
+
+  What we can do though is we can simply take the chance and also add overflow hidden to our body element right here. If we
+  do that and reload the page, we can see that the overflow property is working again because right now, the overflow:hidden declaration is not passed onto the HTML element because it already has such
+  a declaration.
+
+  It would also work if you add overflow auto by the way here, as you can see, same behavior.
+
+********************************************** Introducing "sticky" positioning ****************************************
+. Well sticky is basically a hybrid or a combination of relative and fixed.
+
+. we can specify a distance(top: 20px) between our element and the viewport and as soon as we reach this distance, the 
+  element behaves as fixed, The interesting thing at the same time though is that the element simply stops being fixed as
+  soon as it reaches the end of the content of its parent element.
+
+. Refer demo1
+
+********************************************** Understanding the stacking context **************************************
+. Basically we aligned all our parent elements along the z-axis, that's what we know and by adding position fixed to these,
+  each element has its own stacking context. This means for the elements inside the headline element, the z-index will only
+  have an impact onto the order of these elements inside the headline element but the general order of the headline element
+  below contact us, this is defined by the z-index that we apply to the headline element right here.
+
+  What does this mean?
+
+  If I change the headline z-index again to let's say 200 which is above the 100 of contact us, then it will be displayed
+  above it including all of the children of course but if I change it back to a value below the z-index of contact us to 
+  99 for example, then it's displayed again below it and we can apply whatever z-index we want to the images because these 
+  are part of the stacking context of headline and therefore, the positioning of the parent elements has nothing to do with
+  these z-indices, for these parent elements, only the z-index of the parent elements itself has an impact.
+
+***************************************************** Useful Resources & Links *****************************************
+
+  Positioning theory: https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Positioning
+  More about the "position" property: https://developer.mozilla.org/en-US/docs/Web/CSS/position
+  The z-index: https://developer.mozilla.org/en-US/docs/Web/CSS/z-index
+  The Stacking Context: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context
+  The "sticky" value and current browser support: https://caniuse.com/#search=sticky

@@ -1,0 +1,153 @@
+**************************************************** Module Introducion ************************************************
+. Module Content:
+        . Understanding the "background" property
+        . Images & Backround Images
+        . Gradients
+        . Filters
+
+*********************************************** Understanding "background-size" ****************************************
+. We can set background-size to cover which is same as seting 100%. 
+
+  However covered does not exactly do that, cover finds out which part of your container, so width or height is the 
+  important one to be aligned to your image.
+
+  Put in other words, our image here actually has an aspect ratio where it's wider than it's hight, so it has landscape 
+  mode, the same is true for our container. So cover automatically finds out that it should set the width to 100% because
+  the height will then have some excess space because the image, just as the container, has a height that's less than the
+  width.
+
+  If you had a portrait mode container, the opposite would be the case. Put into other words which make this clear, cover
+  is a setting that will ensure that your image always fills the entire container, it will even zoom in if your image is 
+  smaller than the container. So cover is the best setting if you want to ensure that there never is any whitespace 
+  anywhere in your container.
+
+. An alternative to this is contain. Contain actually ensures that the full image is visible in the container because 
+  right now, the image is cropped, we don't see all the parts of the image, this becomes clear if we reload with the sizes
+  set to contain.
+
+  Now you see some additional rocks at the bottom of this image. We also see that now there is some super whitespace on 
+  the right because with contain, what happens is that the image actually doesn't fill the entire container because contain
+  does not make sure that the entire container is filled, like cover does, instead it ensures that the entire image is 
+  possible and if that means that there is some remaining space in the container, so be it.
+
+  So contain and cover are two very useful predefined settings which you use instead of manually setting the size
+
+*********************************************** Working with "background-position" *************************************
+. The first value defines the x-axis, it defines how the left edge of the image should be positioned relative to the left
+  edge of the surrounding container and if we set 20 pixels, this means the left edge of the image, so here where the image
+  ends should be positioned 20 pixels to the left edge of the container, so there is an empty space of 20 pixels. We can 
+  also define a second value of let's say 50 pixels, this is now the same for the top edge of the image and the top edge 
+  of the container. Now there is some whitespace at the top too.
+
+  we can set 10%, now the result might surprise you. If you reload, actually there's no whitespace on the left because this
+  now actually works a bit different, with the percentage values, you can define how much of the excess space, so of the 
+  parts of the image that do not make it into the container, how these parts should be distributed.
+
+  Now regarding the width, the full image is displayed in the container, it's not cropped on either the left or the right,
+  so we can enter whatever we want here for the first value, it will not change the way the image is displayed. So let's 
+  set it to 0% which means the left part of the excess space, of which we have none is perfectly aligned to the left edge
+  of the container, however this becomes clearer if we also set the top. 
+  
+  The second value now again refers to the y-axis and if we set 10% here, this means that 10% of our excess space should
+  actually go over the top. If we reload, this will actually lead to our image being pushed down because and that's 
+  something you have to know, the default if you only set one value, is 50%. So if I set 50 and I reload, we get the exact
+  same result as if we said no second value at all. 50% means of the parts of the image that do not fit into the container, 
+  so that are cropped of, 50% will be cropped at the bottom and 50% will be cropped at the top.
+
+  If we set this to 10%, only 10% will be cropped at the top which means that more parts are cropped at the bottom, so the
+  image is effectively pushed down in its container. If we set this to 100% on the other hand, all the content that has to
+  be cropped will be cropped at the top and nothing will be cropped at the bottom, so this results in the bottom edge of 
+  the image being perfectly aligned to the bottom edge of the container and everything is cropped at the top.
+
+  Now manually setting this is possible but there also is a predefined value, center, it's the same as if you set 50%, 
+  50%. So if you set center, it's perfectly centered because it means of the parts of the image that do not fit into the 
+  container, no matter if it's on the y or x-axis, 50% will be cropped on the left and right and top and bottom, so that
+  the center of the image is the center of the container.
+
+  You can also set this to left top for example, this means that the left part of the image, the left edge of the image is
+  positioned on the left edge of the container, so no cropping happens on the left and that the top of the image is aligned
+  to the top of the container, so no cropping at the top. This could be translated with 0% 0%.
+
+*********************************************** The "background" Shorthand - Theory ************************************
+. Refer pdf notes
+
+******************************************* Applying "background" Origin, Clip & Attachment ****************************
+. with background-clip, we define where the image actually should be clipped if necessary and if we set to padding-box
+  it's clipped after the padding
+
+. With background-attachment you can define how scrolling would behave in a container that has a background image but that
+  is not fixed itself.
+
+******************************************* Using the "background" Shorthand on our project ****************************
+.  background: url("freedom.jpg") left 20% bottom 60% / cover no-repeat border-box padding-box;
+
+*************************************************** Styling images ******************************************************
+. Now if we use logo image which is quite bigger so we can style this.
+
+  Height 100% on the image will again lead it to use its original height, not the height defined by the container. if we 
+  go to the image and we set width to 100% and then we reload, also nothing changes. So percentage values on the image 
+  don't help us here because they don't respect the surrounding container.
+
+  Now actually the reason for that simply is that our surrounding container is an inline element itself, it's just an 
+  anchor tag. If we set it to inline block instead and now we reload, now the image does respect this container style,
+  so it was not the image but the fact that the anchor tag was not a block or inline block element.
+
+. Refer .main-header__brand
+
+******************************************* Adding the customer page to our website *************************************
+. Added customer page. Refer customers folder
+
+************************************************ Working on the image layout ******************************************
+. Refer customers.css, testimonial__image-container
+
+************************************************ Understanding Linear Gradients ***************************************
+. The first important thing you've got to know is that gradients, both linear and radial ones are treated as images.
+  So if you were to use the subproperties and not the shorthand, you would add a gradient by targeting background image 
+  with it.
+
+. Now besides that, you could also define multiple colors, as many as you want basically. So you could now also add green,
+  yellow and orange here, of course you cannot just use color names, you can also use hex codes, for example for orange,
+  you could also use that hex code here and the same is true for rgb or hsl functions.
+
+. Refer main.css, #product-overview
+
+***************************************************** Applying radial Gradients ***************************************
+. The radial gradient function as the name suggests allows you to define a radial gradient, so not one that starts at one
+  edge and goes to another one but one that starts at a certain shape and then transitions to all the areas around it.
+
+. Refer main.css, #product-overview
+
+************************************************* Stacking multiple backgrounds ***************************************
+. we can set multiple backgrounds for one and the same element. This of course only make sense if the backgrounds have 
+  some form of transparency to them, be that images with the transparent parts or gradients with transparent colors,
+  otherwise you will only see the topmost background but you can add multiple backgrounds.
+
+. Important though, only one solid color can be used and it will always be the bottommost background. You can now use how 
+  many background images you want to use though, you are not limited regarding that, you can add multiple background images
+  and keep in mind, gradients count as images.
+
+. You separate your different layers with commas and the solid color is no exception from that rule and then you can set 
+  the other shorthand properties for that given background. So you can set and you would have to set different background
+  properties for the linear gradient because these ones here only apply to that image, so every comma separated list has 
+  its own set of background properties.
+
+. Refer main.css, #product-overview
+
+*************************************************** Understanding Filters *********************************************
+. they allow us to change the visual appearance of an element by applying a filter, like blurring, grayscale or changing
+  the contrast.
+
+. Refer package.css, .background
+
+*************************************************** Ading & Styling SVGs - The Basics **********************************
+. Refer hosting/index.html : <section id="key-features">
+  main.css : .key-feature__image
+
+***************************************************** Wrap Up *********************************************************
+. Refer pdf notes
+
+******************************************************* Useful Resources & Links **************************************
+The background  Property: https://developer.mozilla.org/en-US/docs/Web/CSS/background
+Styling Images: https://www.w3schools.com/css/css3_images.asp
+Filters: https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+Styling SVG: https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/SVG_and_CSS

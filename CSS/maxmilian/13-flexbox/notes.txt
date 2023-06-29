@@ -1,0 +1,183 @@
+*************************************************** Module Introduction ************************************************
+. Module Content:
+      . The flex-container 
+      . Main axis vs. Cross axis
+      . The flex items
+
+*************************************************** how we could improve our project ***********************************
+. By getting rid of inline-block, by getting rid of wierd calculation
+
+*************************************************** Understanding flexbox **********************************************
+. Flexbox allows us to change the way our elements are displayed and using flexbox is actually quite simple because to 
+  use flexbox, we simply have to add a specific property to our element, This property we need is the display property to
+  and value is flex, (display: flex). 
+  
+  If we apply display flex to an element, this element will be turned into a  so-called flex container. Now as the name 
+  indicates, a container has to contain things and that's exactly what happens right here because inside our flex 
+  container, we should have other nested elements and these elements are the so-called children and these children are 
+  also named flex items.
+
+. Now that's the first step, the second step is that once we turned our elements into such a flexbox construct, we can 
+  apply different properties to both, our parent, our flex container and our children, our flex items. For the parent,
+  we can apply the flex-flow property, the justify-content property, the align-content property and the align-items 
+  property.
+
+  The same thing is true for our flex items, for these, we can also apply properties. The properties right here we have 
+  are order, flex and align self.
+
+*************************************************** Creating a flex container *****************************************
+. To create flex container, we apply display: flex to container. and once we apply our content inside flex container,
+  diaplays in one row and height of container is adjusted as per the highest item in our flex container. Height of other
+  flex items will follow the hight of highest item if there is no height given for other flex item.
+    .flex-container {
+      background: white;
+      padding: 10px;
+      border: 5px solid black;
+
+      display: flex;
+    }
+. Refer flex-demo/main.css
+
+*************************************************** using "flex-direction" & "flex-wrap" *******************************
+. flex-wrap, If we change it to "wrap". the first thing is, as soon as the element would have to reduce its width below 
+  the defined value, so in this case 350 pixels for example, the element is wrapped and jumps into the second row.
+
+  The second interesting thing is that the height of the element also changed now because in the first row, it simply 
+  adapted to the height we had defined right here. So this was the maximum height, therefore all the other elements 
+  adapted to that. Now that the element is in the second row or the new row, it doesn't behave like that anymore and simply 
+  uses the height it needs to simply display the content. If we reduce that more further, you can see that all elements 
+  are wrapped one after another, like that and in the end, we have displayed it all like this in one column.
+
+. If we change the flex-direction to column, our elements now behave the way we would our block level elements expect to 
+  behave. We have the div right here for example which has no width specified, so it simply uses the entire space available
+  right here, the same thing is true for the third div right here but our other divs of course which have a specified
+  width only are displayed up to the point that is defined by this width, so right here for example, 250 pixels.
+
+  .flex-container {
+    background: white;
+    padding: 10px;
+    border: 5px solid black;
+
+    display: flex;
+    flex-direction: row;
+    /* flex-direction: row-reverse; */
+    /* flex-direction: column; */
+    /* flex-direction: column-reverse; */
+    flex-wrap: wrap;
+    /* flex-wrap: wrap-reverse; */
+  }
+
+*************************************** Understanding the importance of main axis & cross axis *************************
+. we had our flex container and we applied the flex direction property with a value of row. Now what happened then is, 
+  basically this is the default value as I said, is that our starting point for the main axis is the left top corner of our 
+  element basically or of our website. Now if the main axis goes from the top left to the top right, well then the cross
+  axis which, that's important, always has the same starting point as the main axis goes from the top left to the bottom 
+  left corner of course. So that's basically the default behavior, how our flex items are displayed then. They are 
+  displayed in a row, so along the main axis and from left to right.
+
+. So main-axis and cross-axis changes according to value given in flex-direction. See pdf
+
+*************************************** Working with "align-items" & "justify-content" *********************************
+. Shorthand for flex-direction and flex-wrap:
+   flex-flow: row wrap
+
+. default value for align-items: stretch. If we set to it to center then items will centered throgh cross-axis.
+  justify-content: center; this allows to align flex items along with main axis.
+    .flex-container {
+      display: flex;
+      flex-direction: column;
+      /* flex-direction: row-reverse; */
+      /* flex-direction: column; */
+      /* flex-direction: column-reverse; */
+      flex-wrap: wrap;
+      /* flex-wrap: wrap-reverse; */
+      /* align-items: flex-start; */
+      /* align-items: flex-end; */
+      /* align-items: baseline; */
+      align-items: center;
+      justify-content: center;
+    }
+. Refer pdf
+
+******************************************** And what about "align-content"? *******************************************
+. Align content allows us to align our items along the cross axis.
+
+****************************************** Improving the navigation bar with flexbox ***********************************
+. We can nest flex container, so a flex container can have another flex container as flex items.
+. use flex container instead of inline-block, so removed code related to inline-block.
+. Refer code related to navigation bar 
+
+****************************************** Your challenge - working on the mobile navigation bar ***********************
+. Refer code related to mobile navigation bar
+
+****************************************************** Improving the footer ********************************************
+. Refer code related to footer
+
+****************************************************** Flexbox and the Z-index *****************************************
+. In the position module we learned that adding the z-index  to an element only has an effect, if the position  property
+  with a value different from static  was applied to this element.
+
+  One exception from this behaviour is flexbox: Applying the z-index  to flex-items (so the elements inside of the 
+  flex-container) will change the order of these items even if no position  property was applied.
+
+  You will need the z-index  for flex-items in the following assignment, so keep that special behaviour in mind.
+
+****************************************************** assignment *****************************************************
+. Added flex to plans and key features, also used z-index to highlighted plan
+
+************************************************ Adding flexbox to the customer page **********************************
+. Refer Customer page
+
+************************************************ Using the "order" property for a flex item ***************************
+. It allows us to change the order of the elements that the elements initially have based on the code in HTML and by 
+  adding numbers, we simply say that the bigger number we apply to the order, the later the element will be positioned.
+  and if we change flex-direction to row-reverse then order will be applied in oppposite.
+
+. Refer flex-demo
+
+************************************************ Working with "align-self" *********************************************
+. It is used align individual flex items along with cross-axis.
+
+************************************************ Understanding "flex-grow" *********************************************
+. Default value for "flex-grow" is 0.
+. Refer flex-demo
+
+************************************************ Applying "flex-shrink" ************************************************
+. Default behavior of flex-items is that if we basically shrink the elements up to the point where the content requires 
+  the space.
+
+. Default value for "flex-shrink" is 1.
+
+. If we add flex-shrink: 0 to our item right here, this item will not become smaller than the defined width it has.
+
+************************************************ Comparing "flex-basis" vs "width" & "height" **************************
+. The flex basis simply defines the size of an element, and now it's really important, depending on the main axis. So flex
+  basis is not the width or the height, it can basically be both which is simply dependent on the flex direction.
+
+  Now with that, if I can now add a value of let's say 200 pixels to our fifth item right here, well then if the flex basis
+  refers to the main axis and defines the size of our element dependent on the main axis.
+
+  If we define the flex basis, it will overwrite, either the height if the main axis goes from top to bottom or the width 
+  if the main axis goes from left to right or right to left.
+
+. Using percentage values for the flex basis is also possible
+
+. The important thing is that the flex basis always refers to the main axis. If flex basis is set to auto, the fallback 
+  will either be the width if the main axis goes from left to right or right to left or the fallback will be the height 
+  in case the main axis goes from top to bottom or bottom to top. That's the first thing that we have to keep in mind.
+
+  The second thing we have to keep in mind is that the flex basis property and all these properties we saw right here can
+  only be applied to flex items. Therefore, we need a parent element which is a flex container and which has the display 
+  flex or inline flex value applied.
+
+********************************************************* Wrap Up ******************************************************
+. Refer pdf
+
+********************************************************* Useful resources & links **************************************
+. Dive Deeper into Selected Topics
+
+  Flexbox and browser compatibility: https://caniuse.com/#search=flexbox
+
+  The theory behind flexbox: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox
+  
+  The flex container: https://developer.mozilla.org/en-US/docs/Glossary/Flex_Container

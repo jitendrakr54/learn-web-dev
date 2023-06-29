@@ -1,0 +1,504 @@
+Building a Multi-Page SPA with React Router
+
+
+****************************************************** Module Introduction **********************************************
+. we built a lot of demo projects and example projects, and there's one thing which all these projects have in common.
+  They all basically take place on one single page. With which I mean, that their URL never changes. But on the other 
+  hand, you could argue that having a URL which never changes isn't ideal. Because after all, it's one of the greatest 
+  advantages of websites that you can directly link to a certain page or feature inside of a website. You can directly 
+  link to a specific article which is interesting, to a specific product on amazon.com, that's one of the key benefits of
+  the web, in the end.
+
+  And therefore, in this course section, we're going to dive into a concept called routing. And with that we're going to 
+  learn how we can add multiple pages or the illusion of having multiple pages with different URL's to the same single 
+  page application. So, we will still build a single page application where React and the browser is responsible for 
+  updating what the user sees, but we will still be able to change the URL and use multiple pages.
+
+. Module Content :
+    . What is Client-Side "Routing" ?
+    . Using React-Router
+    . Advanced Features: Dynamic & Nested Routes
+
+*************************************************** What is Routing & why? **********************************************
+. Refer pdf notes
+. At the moment all the React Apps we built in this course, have the disadvantage that they have the same URL no matter 
+  where in this app we are. And therefore if we wanna share a URL, a link to a certain feature of one of the websites 
+  we're building, we can only share a link to the starting page. And then users have to navigate to a specific feature 
+  manually.
+
+  Now in reality, you want websites where you have different paths, and those different paths in the URL load different 
+  pages so that when the URL changes, we change the visible content of the page. We load different pages for different 
+  paths and it's then the combination of all those pages with their own paths that make up the overall website. That is 
+  how the web works, and that is how our React App should work as well.
+
+. Now when we're not working with React, when we have a traditional Multi-Page App where we have some server which sends 
+  back different HTML files, we would typically build something like this by simply storing different HTML files on the 
+  server, or by generating those files dynamically on the server. And then for requests to different URLs, different HTML
+  pages are sent back to the client and these pages can then be rendered by the browser. 
+  
+  Now this approach works, but it's not the approached we used up to this point in the course. Because when we use 
+  different HTML pages, we don't have a Single Page App, and that means that whenever we change the URL, we leave our 
+  running client side app. We lose all the state there. We have to wait for, to request response cycle and we have to let 
+  the browser render this new page. And that's one of the reasons why we switched to React.
+
+  We don't wanna have this traditional flow. Instead we wanna load a client side application so a JavaScript web app, 
+  which runs in the browser, and we wanna utilize this application to change what's visible on the screen with JavaScript
+  so that we can provide this very instant reactive user experience, which we can do with JavaScript in the browser and 
+  fetching different HTML pages doesn't fit in there
+
+. And now the good news is that we can do that. We can continue building a Single Page Application and we therefore only 
+  have one HTML page, which is initially loaded when a user first visits our website and then thereafter we have 
+  JavaScript to take over. But the good thing is that we can also take a look at the URL and manipulate the URL and that 
+  path after our domain with JavaScript, and we can deal for also write or use some client site, some React code, which 
+  controls the URL and which changes, what we see on the screen, when that URL changes or when a link is clicked without 
+  fetching a new HTML file. we use a third-party package that does that.
+
+*************************************************** Installing React Router *********************************************
+. Routing is a process in which a user is directed to different pages based on their action or request. ReactJS Router 
+  is mainly used for developing Single Page Web Applications. React Router is used to define multiple routes in the 
+  application. When a user types a specific URL into the browser, and if this URL path matches any 'route' inside the 
+  router file, the user will be redirected to that particular route.
+
+. There is a very popular package that helps us with creating multi-page React applications, and that package is called 
+  React Router, which provides client-side routing. So routing functionalities in our client-side React app. And routing 
+  simply means that different URLs, different paths in the URL load different pages.
+
+. npm install react-router-dom@5
+
+************************************************** Defining & Using Routes **********************************************
+. The goal is that we're able to handle different paths on our page and load different components for the different 
+  paths.
+
+  our-domain.com/ => Component A
+  our-domain.com/products => Component B 
+
+  And when I say load, I really mean render these components. So it's basically like conditionally rendering a component.
+  Here we can import from react-router-dom and what I wanna import here is the Route component. So we import Route from 
+  react-router-dom and Route will actually be a component. It is a component that allows us to define a certain path and 
+  then the React component that should be loaded when that path becomes active in the URL.
+
+  Refer App.js
+
+. Now, the interesting thing is that this Route component will make sure that this Welcome component is only displayed 
+  on the screen if our URL path is /welcome. Otherwise, this will not be displayed.
+
+  eg:
+      <div>
+        <Route path="/welcome">
+          <Welcome />
+        </Route>
+        <Route path="/products">
+          <Products />
+        </Route>
+      </div>
+
+. Now, that's how we generally do register routes with React Router. And React Router will then make sure that it 
+  evaluates the URL and also renders the correct components based on that URL. However, to kind of activate React Router,
+  and to make those Route components and other React Router features work, we need to do something else in addition to 
+  defining those routes. We need to go to our root file here where we render App into some document element and here in 
+  this root file, we also wanna import something from react-router-dom and that something here is the BrowserRouter 
+  component, another component provided by react-router-dom. And we simply need to wrap the overall App, so this Route 
+  App component with this BrowserRouter component. That's all we have to do here but this will then activate this React 
+  Router and unlock these React Router features like defining routes.
+
+. Now, before we dive deeper, one last word about these two components, Welcome and Products, which we load for these 
+  different routes. These are regular React components. But since we use them as different pages in this application,
+  since we don't use them like all the other components we worked with before, it is quite common that you store them
+  in a folder named pages.
+
+*************************************************** Working with Links **************************************************
+. Created MainHeader.js which has links and import it in App.js
+
+. But this approach has a big flaw. And you can see this flaw. If you take a closer look at the top left corner here
+  whenever I click these links, you can see that does refresh icon turns to a cross. And that means that we actually 
+  load a new page. We send a new request. We can see this even better. If we opened the developer tools and we go to the
+  network tab. Whenever I click one of these items you see that new requests are sent brand new requests including a 
+  brand new request to a full HTML file. This HTML file here is loaded. Every time we click on one of these links.
+  So we do send a brand new request to the server. 
+
+  This works, we get the different pages, but it means that we leave the active single-page application. We start a new 
+  one. When we click one of these links we lose any application state that we might have in this application. And that is 
+  not ideal. That goes against the idea of building a single page application. If we would be managing some cart, some 
+  shopping cart for a user, and we would lose all that state. Whenever we navigate between pages this would be a 
+  sup-optimal user experience. 
+  
+  So it would be better if this browser default of sending a request and requesting a new HTML page would be prevented
+  Instead, there's another components which we can import from react, router Dom, and that is the link component. The 
+  Link component does what the name implies. It allows us to create a link. Now we can replace the anchor tag with this 
+  link component for both the opening and the closing tag like this.
+
+  And we then have to replace the ref attribute the ref prop here with the two prop because this link component wants a 
+  two prop which then holds the actual address we want to navigate to. This package we're using will actually listen to 
+  clicks on those links, prevent the browser default and instead manually update the URL for us so that it looks like if 
+  we switched the page and it will then also change what we see on the screen.
+
+*************************************************** Using NavLinks ******************************************************
+. Now to a highlight the active link, react router has an extra feature which helps us. Instead of using the regular 
+  link, which we used here we can use the NavLink component. We can use NavLink to replace the standard link and NavLink 
+  works basically like the standard link. It still creates an anchored tag catches the click prevents the browser default
+  but it does more than that.
+
+  NavLink also will set a CSS class on the active anchor item. We just need to tell NavLink, which class to add. And we
+  do this by adding the active class name prop. And here we can then define a CSS class named that should be added on 
+  this link element. So on this anchor tag if that link is active and here we could, for example, say that classes.active 
+  should be added as a CSS class. So one of the classes, one of the CSS classes defined in this main header module CSS 
+  file. And I'll set this on both NavLinks that if they are active if we are on the page, this link leads to then this 
+  special CSS class should be added.
+
+************************************************ Adding dynamic routes with params **************************************
+. The goal is when user clicks on different product from the list, selected product detail should be shown.
+. Dynamic route is added using colon :
+  eg: 
+      <Route path="/product-detail/:productId">
+        <ProductDetail />
+      </Route>
+  Now with this, if we enter anything followed by /product-detail/, it will navigate to ProductDetail page.
+
+************************************************ Extracting route params ************************************************
+. To really utilize this dynamic path feature, we need access to the concrete value entered in the URL inside of the 
+  loaded component. So here in the product detail component, I wanna find out what the product ID is for which this 
+  component whilst loaded so that then in this component, I could make a request to the back-end, to the API, to fetch 
+  the full data for that product. And getting that concrete value is again, thankfully, straightforward.
+
+  Again we can import from React Router DOM and from there, we import a special hook, a custom hook not created by us
+  but by the React Router team. We can use the UseParams hook. And if we call useParams(), this hook will return a 
+  params object, which we can store in a constant. And this object will have key value pairs where the keys are the 
+  dynamic segments leading to that page. In this case, we have one dynamic segment but we could have multiple segments 
+  if we needed.
+  Refer ProductDetail.js
+
+******************************************** Using "Switch" and "exact" for configuring routes **************************
+. We load to product detailed data but we loaded below this list. And why is that happening? I mean, it is working but 
+  we're not leaving the products page. That's happening because this is how React router works. We define our routes 
+  here, but by default these routes are not parsed, such that only one of them is loaded at the same time. But instead 
+  all routes that match the current path will be loaded.
+
+  Now you might say, okay, but still only this route the last route should be matching the current path. Because the 
+  current path is slash products slash some ID. And that's clearly not this path of the second route. And that is correct.
+  But matching in React routers world, means your path starts with the path defined here. And indeed, if we are on slash 
+  products slash p3, as I am here, then this path starts with slash products. It also starts with slash products slash 
+  some ID. That's that actually the entire path but it also starts with just slash products. And that's why both routes 
+  are active now. This is simply how React router works.
+
+  Now, sometimes that is what you want. You might want to show more details below that list here and then this is how you 
+  could make it work. But sometimes, you only want to have one active route at the same time. And to make this work,
+  you can utilize another component offered by React router, DOM, the switch component. The switch component, can be 
+  wrapped around your route components. So you add the opening and closing tags around all these routes. And then only 
+  one of these routes, will be active at the same time. And it will be the route which is matched first. So if I now save 
+  this, if I click these links we don't see the detail page anymore. That's not the desired result, but at least we don't
+  have multiple pages on the screen, simultaneously.
+
+  Switch is used to render only one active route at a time.
+
+  But why do we see the list here, instead of the detail page? After all the detailed pages is the more specific one.
+  Well, as of React router version five, it doesn't matter if a certain route is more specific. React router simply goes 
+  through your routes top to bottom. And when it finds a match, and keep in mind, that it matches the start of a path, 
+  not the entire path. If it finds a match, it will then stop because of switch, not look at the other routes, and 
+  rendered that one route for which it did find a match.
+
+  Now that is how it behaves. but we add another prop here on this route. The exact prop. This tells React router, that
+  this should only lead to a match if we have an exact match. So then it switches from matching the beginning of the path,
+  with this path to matching the full path.
+
+  Refer App.js
+******************************************** Working with Nested routes ************************************************
+. Depending on what you're building, you could have the requirement that you don't just have a couple of different main 
+  pages but that instead, also inside of a page, you want to have a route.
+
+  I want to have a separate conditional piece of content that should greet a new user. Because maybe I want to be able to
+  visit this welcome page with slash welcome, but also with slash welcome, slash new user,because maybe we had a link in 
+  a newsletter which users could click, and if they clicked it, they should be taken to this special welcome page and 
+  other users who come to our page from a different source should just visit slash welcome. For this, we can add a nested
+  route simply by again, using this route component from React Router DOM, inside of another component. So inside of this
+  welcome component.
+
+  Refer Welcome.js
+
+******************************************** Redirecting the User *******************************************************
+. In our App.js file, we defined routes for /welcome, /products and /products/productId. Now, what if I just visit my 
+  domain /nothing then I don't get an error, but I also don't see anything on the screen. Now, here, we might want to 
+  redirect the user to /welcome.
+
+  For this, we can to find another route where the path is /nothing and where we add exact so that this is not treated as
+  the start of a route. Otherwise it would match all routes because all the routes start with /nothing in the end.
+  Hence, we need exact here. And then inside of this route, I don't render JSX code. I don't render another of custom 
+  component. Instead, we render a component provided by React router Dom. 
+  
+  The redirect component. That is a component, which you can render like this. And if it gets rendered, it will do what 
+  the name implies. It redirects the user somewhere else. So here we can then redirect to /welcome, which means if we're 
+  just visiting /nothing, this will be rendered and this will then change the URL to /welcome. And then this route will 
+  become active. Hence exact is very important here because without it every route would be matched here and we would be 
+  redirecting all the time and we would create an infinite loop there for so exact matters.
+
+******************************************** Time to practice: Onwards to a New Project *********************************
+. Created new project
+. Created initial AllQuotes.js, QuoteDetail.js, NewQuote.js page
+
+******************************************** Practice Redirecting & Extracting Params **********************************
+. Added Redirect logic in App.js and extracted params in QuoteDetail.js
+
+*************************************************** Practicing Nested Routes ********************************************
+. Added nested routes for comments in QuoteDetail.js
+
+*************************************************** Adding a Layout wrapper component ***********************************
+. Added MainNavigation.js and Layout.js, used MainNavigation in Layout and wrapped App.js with Layout
+
+*************************************************** Adding dummy data & more content ************************************
+. Added DUMMY_QUOTES in AllQuotes.js, used QuoteList.js and passed dummy quotes to it.
+. Used QuoteForm in NewQuote.js.
+
+*************************************************** Outputting Data on the "Details" Page *******************************
+. Used DUMMY_QUOTES to and passed data to HighlightedQuote
+
+*************************************************** Adding a not found Page *********************************************
+. Added NotFound.js page
+. Now with that we have this not found page component to find but how do we now make sure that it is showing up if a 
+  user enters some unsupportive path?
+
+  For this we can go back to all our root route definition. 'Cause here we are defining all the routes our application 
+  supports. Now, if we go through that switch statement and we didn't have a single match of, for example, for a slash 
+  hello, we don't have a match here. Then we leave the switch statement without a match. And hence nothing shows up on 
+  the screen, therefore to show a fallback and not found page.
+
+  The approach typically is that we add one route here at the end, which is looked at if no other route matched where we 
+  match all incoming requests. So to say. So where we match all URLs and we do that by setting the path to a star This 
+  wild card character signals to react router that any path any URL should match this route. And therefore this route 
+  has to come last so that it does not consume one of the requests to one of the actual routes we have.
+
+  But if we didn't have any match up to this point then we want to match all URLs with this route. And then just 
+  rendered this not found page here. So here I'll now import not found from PageNotFound. And output does not found 
+  component here in this match all route here, which is only considered if no other route matched.
+
+*************************** Implementing Programmatic (Imperative) Navigation : useHistory() hook  **********************
+. What would we typically expect from an application from a website if we submitted a form. We typically expect either 
+  some success message, maybe a modal overlay, which opens up, or we expect that we navigate somewhere else. If I add a 
+  new quote and that request was sent to the server, I might expect that I'm automatically navigated away from this page,
+  maybe to the All Quotes page. And that is something which I do wanna implement here as well.
+
+. Now for that of course, we could convert our submit button here in the QuoteForm to a link so that it links to the All 
+  Quote page. But actually here we don't want the link, we want a button which submits the form. So using a link is not 
+  an option here.
+
+  Instead, what we need here is something called programmatic navigation. We wanna trigger a navigation action and 
+  navigate the user away programmatically in our code. So it's not a link which the user clicks to navigate away, but
+  it's some action triggered by our code, when some abreaction sending the entered data to a server finished.
+
+  And in the end we probably wanna trigger this navigation action from inside, the NewQuote page component here. Because 
+  here we do have this addQuoteHandler where we will later send the requests to the server, and therefore it's here 
+  where we also want to navigate away. But how can we now navigate programmatically? How can we tell React Router that 
+  we wanna switch pages? Well for this React Router again has a hook, which we can import. So we can import from 
+  react-router-dom, and we can import the useHistory hook.
+
+  The name might be a bit strange, but it's named like this because it allows us to change the browser history. So the 
+  history of pages we visited.
+
+  And we can navigate around with the push method here, which pushes a new page on the stack of pages, so a new page on 
+  our history of pages, or we can navigate with the replace method that replaces the current page. The difference is 
+  that with push, we can go back with the back button to the page we're coming from, with replace we can't. So replace 
+  is like a redirect where we changed occurred page, push adds a new page. And it's up to you what you want.
+
+  Refer NewQuote.js
+
+*************************** Peventing possibly unwanted route transitions with the "Prompt" component *******************
+. Now let's actually stay on this form page. If I'm the user of this page, and I started entering something like test 
+  and I started entering some text here, but then I accidentally swiped back or pressed the back button then I just go 
+  away and all my state is lost. Whatever I entered here is lost.
+
+  Now you might've noticed that on some web pages, where you can enter data in a form this is prevented by a prompt.
+  Which is shown to you asking you if you really wanna navigate away. So that as soon as you started working on that 
+  form, you can't accidentally leave it. And that's a behavior we also might want to implement.
+
+. To implemented, we can go to this QuoteForm component where we have this form and we wanna do two things. First, we 
+  wanna determine when the user starts working with this form, for example, when this form gains focus. Then as a second 
+  step, we wanna show a warning to the user, if he or she tries to leave the page after starting to work on that form.
+
+  For this, I managed one state for focus and Prompt component which prompt when user tries to leave page after he has 
+  started working on form. Refer QuoteForm.js
+
+***************************************** Working with Query parameters ************************************************
+. Query parameters are special parameters which you find on some URLs at the end of the URLs. On some URLs, you have a 
+  question mark. And then, thereafter you have parameter pairs, which basically pass extra data into the page that was 
+  loaded. The difference compared to regular route parameters, like our quoteId parameter, is that the regular 
+  parameters, like quoteId, are mandatory. 
+  
+  So, this QuoteDetail page is only loaded if we have an ID, if we have this segment. Whereas query parameters are 
+  optional. The question mark thing here does not change the route matching. It has no impact on which route is matched.
+  But whichever route is matched then has access to that query parameter data to, for example, change the behavior of 
+  the page that was loaded.
+
+  And what could be a changed behavior? Well, for example, here on this QuoteList page here, we might wanna implement 
+  sorting. So that our quotes are sorted in ascending or descending order by ID and therefore by age.
+
+. To do that we need to send query to query parameter and for that we use useHistory() hook. Now that's step number one.
+  Step number two is that we wanna read that query parameter value and act accordingly. And then change the sorting,
+  change the button label and so on. Now, reading query parameter values is also relatively straightforward, but we need 
+  to use yet another hook provided by React Router DOM, the useLocation hook.
+
+  Where useHistory gives us access to the history object, an object that allows us to change and manage the URL,
+  useLocation gives us access to a location object which has information about the currently loaded page, about the 
+  currently loaded URL.
+
+******************************************* Getting creating with nested routes *****************************************
+. At the moment we don't really have comments but we do have does nested route but currently we can only reach this route
+  by manually adding this comments path here at the end. Now we might want to give the user a link that loads to 
+  comments or something like this. And that is something which we can implement indeed.
+
+  Refer QuoteDetail.js
+
+******************************************* Writing more flexible routing code *****************************************
+. Now React Router can help us with nested routes, as we learned. It also helps us with constructing path like this
+  and with navigating to more complex URLs. Currently, we're always manually building strings like this, and that works.
+  But this approach has one downside. If we ever decide that we don't wanna show our quotes under slash quotes, but 
+  maybe just slash quote, then we have to change this here in the route definition, and we have to change all our links
+  and that is something we will have to do. But when we work with nested routes like here, we also have to change it 
+  here in these route definitions. So we have to change it in a lot of places.
+
+  Here, we could simply use the fact that React Router gives us certain Hooks that allow us to find out for which URL 
+  this Component was rendered, so that we don't need to repeat that URL that path in the URL here. And for that we can 
+  use another hook provided by react-router-dom, useRouteMatch is to hook name. It's kind of similar to use location
+  but it has more information about the currently loaded route. Not just about the URL but about some internally
+  managed data React Router is aware of.
+
+  Refer QuoteDetail.js and QuoteLis.js
+
+******************************************* Sending & getting Quote data via Http *************************************
+. Loaded quotes from via Http, removed DUMMY_QUOTES
+
+******************************************* Adding the "comments" Features **********************************************
+
+******************************************* Upgrading to React Router 6.4 **********************************************
+. npm install react-router-dom@6 / @latest
+. Created new react app from scratch as I was getting error from downloaded one
+
+. Now, with React Router version 6, Switch doesn't exist anymore. Instead, this now becomes Routes. So you replace 
+  Switch with Routes.
+
+. By the way, what hasn't changed is that you still import BrowserRouter from react-router-dom, and you wrap that around 
+  your app where you then plan to use routing. That's exactly the same syntax as you know it.
+
+. how we define our routes also changed. We still have the route component and it still takes a path prop, but the 
+  component that should be loaded when a given path becomes active, so in this case, the welcome component, for example,
+  is not longer a child of your route but instead, on Route, you add a new element prop, and then you pass a dynamic 
+  value to element and that dynamic value is that to be rendered component as JSX.
+  eg: <Route path="/welcome" element={<Welcome />} />
+
+. In addition to these changes, it's also worth noting that there were some internal changes with React Router version 6.
+  Specifically, the internal logic for evaluating these paths and then picking a route to load changed. With React 
+  Router version 5, we needed to add exact here because without exact, this would match if a path started with /products.
+  With version 6, this behavior is gone and hence, the exact prop is gone. It now always looks for exact matches if you 
+  define your paths like this. So we can remove exact with version 6, and we still get the same behavior as before.
+
+. If you want that old behavior of matching the start of a path only, you can still get that by adding /* after your 
+  path. Once you add that, this route will become active if a URL path starts with /products instead of being only 
+  /products.
+  eg: <Route path="/products/*" element={<Products />} />
+
+. Now, let's move from route definition to links. The first important thing to note is that you still have the Link 
+  component, which generally works as you learned it and you also still have the NavLink component. That did not change.
+  However, what did change is this activeClassName prop. 
+  
+  With React Router version 5, you could use that prop to apply 
+  some CSS class automatically to the link once it became active. With React Router version 6, this prop was removed.
+  Instead, if you want to apply a specific class once this is active, you have to manually find out whether this link is 
+  active or not. Doing that is very simple though because you can use the className prop or the style prop to apply 
+  dynamic styling. And both props work in a special way when applied to NavLink. className does not just take a class 
+  name, instead, it takes a function, which you can pass here, and this function will actually give you some information
+  about this link and the current state of navigation. So get some NavData here you could say. This argument is provided 
+  by React Router to this function when this function is executed. And this function will be executed by React Router
+  when it evaluates NavLink and whenever your navigation changes. Inside this navData object, which you get by React 
+  Router, you then find a isActive property. And that will be true if this link is active for the currently chosen path 
+  or not. So you can then use this to return a className dynamically that should be applied to NavLink. So here, I can 
+  get rid of those curly braces to use this short form of this arrow function syntax. I could then check if navData.
+  isActive is truthy. In which case, I can apply my active class here and otherwise, I apply no class. That's what I 
+  could do here. And I can do the same here for the other NavLink. It's a bit more verbose but it also gives you more 
+  customization possibilities and more control.
+
+. The ProductDetail page to be precise. There I'm getting this dynamic parameter, which is part of the URL. And with 
+  React Router version 5, we extracted that with the useParams hook that was provided by the react-router-dom package.
+  As you can tell, this code still seems to work because we had no problems extracting that dynamic parameter with React 
+  Router version 6 as well. So the code here stays the same.
+
+. Now, you can still redirect, of course. The only thing that changed is that now instead of redirect, it's Navigate.
+  That's a new component provided by React Router 6, and we can use this here to well, navigate. And, of course, we then 
+  also should use this element prop instead of passing it as a child between the opening and closing route tags. Though 
+  to be precise, if we just add it like this, what we will actually do is we will push a navigation to this page onto 
+  the navigation stack.
+
+  If we truly want to redirect, so replace the current page with the new page, then we would have to add the replace prop
+  to Navigate as well. And this would then be the full replacement for the old redirect component.
+  eg: <Route path="/" element={<Navigate replace to="/welcome" />} />
+
+. Now, here it's /welcome/new-user though, and therefore, this route isn't loaded. So to load it, we could change it to 
+  /new-user but that would not be the main idea here. We want to keep /welcome and only load this title if we visit 
+  just /welcome but then we want to be able to, in addition, load this content here, this paragraph if we have the 
+  /new-user part after welcome. To make this possible, we have to embrace this new syntax of adding /* here.
+
+  Now the welcome component will be loaded whenever our path starts with /welcome instead of having an exact full match.
+  So therefore with this, you now see if I visit /welcome/new-user, we have our title back. But we still don't see that 
+  paragraph in here. That's happening because of another change introduced by React Router version 6. When you're 
+  working with nested routes, so with this kind of matching and then routes defined inside of the loaded component,
+  as we have it here, then the paths of these nested routes actually are relative to the path of the parent route.
+  So that means that this route here only becomes active if our path starts with /welcome. Therefore, the path here 
+  already assumes that we have /welcome at the beginning.
+
+  Hence here, we only have to add the extra part, the extra elements in the path that are relevant for this route.
+  We don't need to repeat /welcome/ anymore, we can just have new-user here. And that then tells React Router that this 
+  should become active if this component is active, which will be the case for /welcome/ something. And then this 
+  paragraph should be shown if we have /welcome/new-user because this is relative.
+
+. And then you could also define nested routes right here in one and the same place. So here for the Welcome component
+  where we wanna have a nested route, we can now actually use opening and closing route component tags, and put our 
+  nested routes between those opening and closing tags as children. And that's also the reason why we have this new 
+  element prop where we point at the to below that component because the children of the route component, if we have 
+  any, are no longer the to below that components but instead, possible nested routes. And, of course, not every route 
+  will have a nested route.
+  
+  Here in this example, most routes don't have a nested route but if you do have a nested route, as we have it here,
+  then the advantage of defining it like this is that you have all your route definitions in one place. And it can 
+  simply be easier to see all supported routes and to work on this application if you have all your route definitions in 
+  one place instead of spreading them across multiple components as you did have to do it with React Router version 5.
+
+  Now, if you use this pattern though, you have to tell React Router where this nested content should be inserted into 
+  the DOM because it was clear when we had the route definition in the nested component, now that we have the route 
+  definition in App.js, it's not clear where exactly in Welcome.js this paragraph should be added. Should it be added 
+  here? Should it be added here after the link? How would React Router know? 
+  
+  To let React Router know where that nested content should be inserted, there is another new component, which you can 
+  import from react-router-dom. And that's the Outlet component. You can add it like this, and this simply is a 
+  placeholder telling React Router where nested content, nested route content should be inserted.
+
+. Sometimes you want to navigate when a certain action finishes, when a button was clicked, when an HTTP request was 
+  sent. And with React Router version 5, you could navigate by using the useHistory hook, and you could then execute 
+  this hook in your component, and that would give you a history object. And then on this history object, you could push 
+  a new route or replace a route to redirect. That's the version 5 syntax.
+  
+  With version 6, useHistory doesn't exist anymore. Instead now, we have a useNavigate hook. This gives us a navigate 
+  object and function if we execute useNavigate, and this navigate function can be executed to navigate somewhere else.
+  For example, if we would want to programmatically navigate to /welcome, this is how we could do it. And, of course, we 
+  would not do that right in a component like this typically. Instead, we would do that in a useEffect hook or when an 
+  HTTP request finished or anywhere else.
+
+  eg:
+    const navigate = useNavigate();
+    navigate('/welcome);
+
+. If you want to redirect, you can pass a second argument, which is an object with some options and there you could set 
+  replace to true, which will replace the current route with the new one, which will redirect instead of pushing the new 
+  route onto the navigation stack. Now, besides passing a path here to navigate, you can also pass in numbers like -1
+  to, for example, go back to the previous page or -2 to go to the page before the previous page. Or one to go forward 
+  again. So forward and backward navigation is also possible with this navigate function. You simply pass numbers to it
+  that tell React Router by how many pages you wanna go forward or backward. So that's programmatic or imperative 
+  navigation with React Router version 6.
+  eg:
+    const navigate = useNavigate();
+    navigate('/welcome, {replace: true});
+
+    navigate(-1);
+
+. I wanna talk about the prompt component, which is provided by React Router version 5. You could use this component
+  to prevent accidentally leaving a page if you have unsaved changes, for example. In React Router version 6, at least 
+  at this point of time when React Router version 6 was released, this component does not exist. So if you wanna prevent 
+  navigation in case of unsaved changes, you have to implement your own workaround for the moment. So for this reason, 
+  you might wanna stick to version 5 if this is a super important feature of your application, and you're not willing
+  to come up with your own logic on how you could prevent navigation. This component will probably come back in the 
+  future as it sounds but at the moment, it's not part of React Router.

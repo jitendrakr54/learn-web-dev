@@ -1,0 +1,766 @@
+****************************************************** Module Introduction **********************************************
+. There's one characteristic which all demo applications shared, everything happened on one single page in the end.
+  Sure, the user interface changed from time to time upon certain actions, but it was all on one page, and the URL 
+  therefore never changed.
+
+  It was always the same URL, no matter what happened on the screen. And indeed, that is one of the core ideas behind 
+  React.js that you can use it to build single page applications where client side JavaScript takes care about changing 
+  what the user sees, and it's technically always the same page.
+
+. Now that has its advantages, but it also has disadvantages. Most importantly, we lose one of the biggest advantages
+  of the web, the advantage that we can link to certain resources. Because the more complex your applications get,
+  the more you might want to be able to link to certain parts of your website and your web application. Instead of 
+  forcing users to always start on the start page and then navigate to different areas manually, it would be nice if 
+  users could be linked to certain pages, if you could provide a URL that loads a certain part of your website when 
+  visited. After all, that is how most websites work. And at the moment, in our React applications, we lost this 
+  behavior.
+
+  That's where single page application routing comes into play, and where this course section becomes important.
+
+********************************************* Routing: Multiple Pages in Single-Page Applications **********************
+. See pdf notes
+
+. what exactly Routing is and why it matters, and why we might want to add it to our website. And to understand Routing, 
+  it's important to keep in mind how the web generally works. When you visit websites you can typically append a path
+  after the domain name like, slash Welcome and that loads, for example, the welcome page of a website. And if you then 
+  type a different URL into the browser address bar, or if you click a link that changes the URL, for example, to slash 
+  Products, a different page gets loaded. So the visible content of the website changes. That's what Routing is all 
+  about. Different URL paths load different content on the screen.
+
+. Now, traditionally, you would implement Routing by simply loading different content, different HTML files for 
+  different paths, and that is how you would build a multi-page application which you typically would build without 
+  ReactJS.
+
+  Now, with that, you get different content for different paths, but the disadvantage is that you always have to fetch 
+  new content. A new HTTP request is sent and a new response is received and that can kind of break the user flow. It 
+  can introduce some lag and slow down your website and it can therefore lead to a suboptimal user experience.
+
+. when we're building more complex user interfaces. With those, you send only one initial HTML request and then this 
+  HTML file with a bunch of extra JavaScript is downloaded, and thereafter the extra JavaScript code that runs on the 
+  client will actually take care about adjusting what the user sees on the screen. That's how single page applications 
+  work.
+
+  However, that does not mean that we can't bring back the illusion of a Routing and that we can't support path changes 
+  in the URL and load different content based on the path. Instead, we can add client-side React code that basically 
+  watches the currently active URL and that triggers whenever the URL changes, and that then leads to different content
+  being displayed on the screen when the URL changes. So instead of loading new HTML files from the backend, we could 
+  add some client-side code that simply watches the URL and then loads a different React component when that URL changes.
+
+********************************************* Project Setup & Installing React Router **********************************
+. npm install react-rouer-dom
+
+. So with this package installed, we can now start adding Routing to our application. And this is actually a multi-step 
+  process. 
+  
+  The first step, is that we must define the routes we wanna support, so we must define which URLs, which paths we wanna 
+  support, and which components should be loaded for different paths. That's the first step.
+
+  The second step that is to activate our router and load the route definitions that we defined in the first step. 
+  
+  And the third step of course, is to make sure that we have all these components that we do wanna load and that we maybe
+  also provide some means of navigating between those pages so that our users can move smoothly between the different 
+  pages.
+
+***************************************************** Defining Routes **************************************************
+. refer App.js
+
+***************************************************** Adding a Second Route ********************************************
+. refer App.js
+
+***************************************************** Exploring an Alternative way of Defining Routes ******************
+. refer App.js
+
+***************************************************** Navigating between Pages with Links ******************************
+. At the moment, we always have to manually edit the URL if we wanna navigate from the starting page to the products 
+  page and vice versa. And it's, of course, not very realistic that we want our users to use this website like this
+  because how would users know which kind of paths are supported here? Of course, we typically wanna provide links on 
+  the page instead.
+
+. We can define links using anchor tag in HomePage.js,  And if we click it, we go to The Products Page. So that's 
+  working, right? Well, kind of. We have a problem with this approach. If you watch this refresh icon here, as I click 
+  on the link, you will see that it briefly flashes and turns to a cross and back to a refresh icon.
+
+  The reason for that is that technically, we're sending a new request to the server that's serving this website. Now, 
+  that server will serve back that single HTML page that makes up this single page application but what happens under 
+  the hood is that we, of course, load all the JavaScript code again, load the entire React application again and 
+  restart the React application.
+
+  That's a lot of unnecessary work under the hood that can also impact the site performance, which we typically wanna 
+  avoid because we already loaded all the JavaScript code. We don't wanna load it again and we don't wanna restart the 
+  React application. We would also lose any context or application-wide state if we do so. So we don't wanna switch the 
+  page by sending a new HTTP request to the server. With that, we lose all the benefits of single page applications 
+  after all.
+
+. Instead, we wanna have a link like this but under the hood, it should just change the URL and set it to the URL we're 
+  trying to navigate to but it should then prevent the default of sending a request and instead let React Router know 
+  about the new URL and ensure that React Router loads the appropriate element for that new URL.
+
+  And that can be implemented with another special component that can be imported from react-router-dom. The new 
+  component we wanna import from react-router-dom is called Link.
+
+. Refer MainNavigation.js
+
+***************************************************** Layouts & nested Routes ******************************************
+. I want to create a navigation bar which should be visible on all the pages. For that I created a RootLayout page which
+  will contain the Navigation bar and other pages. Refer App.js for nested Routes. and Root.js, MainNavigation.js
+
+***************************************************** Showing Error Pages with errorElement ****************************
+. Now of course, it's not unlikely, that over time visitors might accidentally, or, due to erroneous links provided by 
+  us, visit pages that they shouldn't visit, that simply don't exist. And therefore, you might want to prepare a default 
+  error page that's shown in situations like this.
+
+. Now we'll see situations where this page could throw an error later in this section, but at the moment, this page 
+  actually can't throw an error, but there's root path could throw an error, because actually when we enter a URL that 
+  doesn't exist, the react-router-dom package will generate an error, and that error will automatically bubble up to our 
+  root route definition.
+
+  So to the route that is defined for path slash nothing. Therefore, here on this special slash nothing route, we can 
+  add the error element property as well. And then say that for this page, for this route, we wanna render the error 
+  page as a fallback page.
+
+  Refer App.js and Error.js
+
+***************************************************** Working with Navigation Links (NavLink) **************************
+. At the moment you might notice that we got no real feedback when we're hovering over these links. And you might also 
+  of course see that we can't tell which link is currently active when we're on a page. Of course we can take a look at 
+  the URL, and of course the page content might help us understand which page this is but it's also quite common that 
+  the currently active link that led to the page that's active is highlighted somehow. And at the moment that's missing.
+
+. To support links that should show us whether they led to the currently active page or not, react-router-dom has an 
+  alternative to the link component, the NavLink component. Now NavLink is used just like link. You can use it as a 
+  replacement for link but NavLink has one special behavior.
+
+  If you add the class name prop to it, it's actually not the regular class name prop, which takes a string, but instead
+  it's a prop that takes a function. And that function should return the class name, the CSS class name that should be 
+  added to the anchor tag. Now that function also automatically receives an object from which we can de-structure the 
+  isActive property. And this object with the isActive property is provided by a react-router-dom and is active as a 
+  Boolean, that's true if this link is currently active.
+
+. NavLink actually checks whether the path of the currently active route starts with the path of one of those NavLinks.
+  And that NavLink is considered to be active if the currently active route starts with the path set on the link.
+  That behavior exists so that a link could be treated as active even if you're on some nested child route. That's nice 
+  to have but not what we want here for the slash route since every route starts with slash in the end. So this would 
+  always be active for all routes.
+
+  And that's why react-router-dom also gives us another prop we can set here and that's the end prop which we can set to 
+  true or false but we can also just add it like this to set it to true. This indicates that this link should only be 
+  considered active if the currently active route ends with this path after the URL. So now this link will only be 
+  considered active if we are on our domain slash nothing and not if we're on slash products. We don't have to add end 
+  to this other link because we have no other routes that would start with slash products.
+
+******************************************* Navigating Programmatically: useNavigate() ********************************
+. Imperative Routing : Right now, we allow users to navigate between our pages by providing links which can be clicked,
+  and I will say right away that this is the default way of providing navigation to users, but it's not the only way.
+
+  In some situations, for example, maybe because some form was submitted, or because some timer expired, you might want 
+  to trigger a navigation action from inside Code, and you can do this by using another special feature provided by 
+  react-router-dom. You can import the useNavigate() hook. 
+
+  Refer Home.js
+
+*********************************************** Defining & Using Dynamic Routes: useParams() ****************************
+. When we have n number of products like we have in Products.js page now, and if we click each product then a 
+  productDetail page should be loaded. So how do we define our routes in App.js?
+
+. But, we wanna load it for different paths. Now of course we could add multiple paths like this. Now we have three 
+  route definitions with slightly different paths. But that of course is not a realistic approach because the more 
+  products we have, the more paths must be added. And typically we don't even know in advance how many products we'll 
+  have.
+
+  And we also will add more products dynamically. After all, most websites are pretty dynamic and users and 
+  administrators might be able to add new products. We don't want to add it to code all the time. Just because a new 
+  product was added. So hard coding those different product Ids in the paths like this, is clearly not an option.
+  And that's why React Router DOM supports dynamic path segments or path parameters as it's also called.
+
+  You add a parameter to a path. So such dynamic path segment. By adding a colon and then any identifier of your choice
+  like Id or product Id. Again, this is totally up to you.
+
+. Now let's say, that on "Product Detail" page we of course wanna know for which exact product this page was loaded.
+  We wanna know which product Id was used so that we could, for example, reach out to backend API and a database to 
+  fetch the data for that specific product and display it on the screen. And of course, that's also a common scenario.
+  And therefore React Router DOM gives us another tool for getting hold of the actual value used instead of that 
+  placeholder. Instead of :product id.
+
+  And that tool which we get from React Router DOM is to useParams() hook. This hook gives us a parans object, if we call 
+  it like this. And this parans object is a simple JavaScript object which contains every dynamic path segment
+  we defined in our route definition as a property.
+
+***************************************************** Adding Links for Dynamic Routes **********************************
+. Now to conclude this introduction to Dynamic Path segments, there is one last thing I want to do here. I want to add 
+  some real links here to my products page. For that, we can of course again, use the link component from 
+  'react-router-dom'. 
+  
+  And here I'm using Link instead of NavLink because I don't wanna highlight those links as being active once they're 
+  clicked because we're actually leaving this page when clicking one of these links here anyways.
+
+***************************************************** Understanding Relative & Absolute Paths ***************************
+. Now actually, all the paths I'm defining here are absolute paths because they all start with a slash. This simply means
+  that they're always seen from after the domain name. Now, this is an important detail. If I would, for example, 
+  changed this wrapper path to /root, you will notice that if I reload, for /products, I don't see anything, but neither 
+  do I for /root/products.
+
+  If I type in just /root, I also don't see anything on the screen. And the reason for that is that if I open my 
+  developer tools, I got an error that I got the absolute route path slash nested under path /root. So the problem I'm 
+  having here is that, as mentioned, we have absolute paths here because they're starting with a slash, that's how you 
+  can tell that these are absolute paths. If a path starts with a slash, it is an absolute path.
+
+. We can remove those leading slashes here on the child routes and that turns these route definition paths to relative 
+  paths. So now we got three relative paths here instead of absolute paths. Now, when defining routes like this,
+  this simply means that these paths defined here are appended after the path of the wrapper route. So if we have a 
+  child route with a relative path, then React Router will take a look at the path of the parent route and append the 
+  child route path after the parent route path. So if you make those changes, this error goes away and for just /root we 
+  see the starting page and for /root/products we see the products page.
+
+  Refer App.js, productDetail.js
+
+***************************************************** Working with Index Routes ****************************************
+. there's one special property you can add to your route definitions, to some route definitions. And that is a special 
+  property that would, for example, apply to the homepage here. What's special about this homepage route definition?
+
+  Well, in the end, it doesn't have a path. Instead, the homepage should be loaded for the same path as we have it here 
+  on the parent route. We have two different routes because we want to have that wrapping layout, though. But it is 
+  quite common that you might have such a wrapping layout route, as we have it here. And then you have one child route
+  that should be loaded for the parent's route path.
+
+  Now, you could solve it like this by adding no path. But alternatively, you can add the special "index" property
+  and set this to true. This turns this route into a so-called index route, which simply means it's the default route
+  that should be displayed if the parent route's path is currently active. So it will not be loaded for products or 
+  products/productId.
+
+  But if we're on just /nothing in this case, this index route will be activated. feature called index routes, which 
+  allows you to define the default route that should be loaded if the parent routes path is active.
+
+***************************************************** Onwards to a new Project Setup ***********************************
+. Downloaded the project and started project as mentioned in how-to-use.txt
+
+***************************************************** Time to Practice: Problem ****************************************
+. Did exercise as mentioned in App.js
+
+***************************************************** Time to Practice: Solution ****************************************
+. Compared the solution
+
+***************************************************** Data Fetching with a loader() ************************************
+. In more complex applications this component(Events component) could be rather complex and it could also have a bunch 
+  of nested child components and having to render and evaluate all these components before we actually start sending 
+  that request for that data which we absolutely need, is suboptimal.
+
+  You could argue that it would be much nicer if React router would initiate the data fetching as soon as we start 
+  navigating to this page. So as soon as we start rendering this component, so to say or even before we render the 
+  component and we then render the component with the fetched data instead of first rendering the component without the 
+  fetched data with the loading state fallback instead and then fetching data after it has been rendered as it's 
+  currently happening.
+
+  It could be preferable to do it the other way around and first fetched the data and then render this component. And 
+  that's exactly what React router allows us to do.
+
+. Now we're currently talking about this events page. That's this page where we're fetching data, and in our route 
+  definitions we can add an extra property to that route definition of that page. We can add the extra loader property.
+  Now, loader is a property that wants a function as a value, a regular function or an error function that does not 
+  matter. 
+  
+  And this function will be executed by a React router whenever you are about to visit this route. So just before this 
+  route gets rendered, just before this JSX code gets rendered, this loader function will be triggered and executed by a 
+  React router. And it's in this loader function where you can therefore load and fetch your data.
+
+. And of course, we wanna get that data to that events page component because that's where we need the data. Well, the 
+  great thing is that when you define such a loader function, React router will automatically take any value you return 
+  in that function, for example, the response data and will make that data available in that page that's being rendered 
+  here as well as any other components where you need it.
+
+  Refer App.js and Events.js
+
+************************************* Using Data From A Loader In The Route component: useLoaderData() ****************
+. And now to get access to the data returned by the loader function for this page, we can import "useLoaderData" from 
+  React-router-dom. This is a special hook which we can execute to get access to the closest loader data. So here, I now 
+  get my data by calling "useLoaderData." 
+
+  And events here will really be that data returned by that loader. Now since I'm using async await, technically this 
+  loader function will return a promise. Any data returned in that function will be wrapped by a promise, that's how a 
+  async-await works. But React Router will actually check if a promise is returned and automatically get the resolved 
+  data from that promise for you.
+
+  And of course that's much less code than what we had before, and it's also not part of the component function, which 
+  makes the component function way leaner and easier to reason about
+
+  Refer App.js and Events.js
+
+****************************************************** More loader() data usage ***************************************
+. Used loader() data in EventLists instead of Events component
+
+. Now, one place where we can't get those events is in a higher level route. So for example, if you would go to the 
+  RootLayout here, which is part of my root route.
+
+  The reason for that is that I'm trying to get data from a route that's actually defined on a lower level.
+
+. That means: You can use useLoaderData() in the element that's assigned to a route and all components that might be 
+  used inside that element.
+
+****************************************************** Where should loader() code be stored? ****************************
+. So we added our loader in App.js. You could argue that whilst this did improve our component it actually made this app.
+  js file a bit more bloated. And especially if we would add more loaders to more and more routes this file would start 
+  doing a lot of things.
+
+  You could also argue that the logic for fetching data for the events page belongs to the events page and not to the 
+  app.js file. So you might want to put that code into the events page file and not into the app.js file. And for those 
+  reasons, common pattern and a recommendation if you wanna call it like that, is that you do actually put that loader 
+  code here into your component file where you need it.
+
+. And here we can simply export a function which we could name loader, though that name is up to you it does not have to 
+  be loader. And you put your code, your loader code into that function. I'll actually turn it into a async function here
+  because I'm using the async await keywords. And with that, that loader code is in that function. Now back in app.js, 
+  we can simply import that loader here and give it alias like eventsLoader.
+
+  And with that app.js is leaner again and doesn't contain the actual data fetching logic. And at the same time the 
+  events page component is also still lean because we outsource that code in a separate function which is now closer
+  to the component where it's actually needed though. And that is arguably the best of both worlds and how you should 
+  typically structure this.
+
+  Refer App.js, Events.js
+
+********************************************* When are loader() functions executed? *************************************
+. The loader for a page will be called right when we start navigating to that page. So not after the page component has 
+  been rendered, but before we actually go there.
+
+  Refer Backend/routes/events.js - setTimeout()
+
+. The advantage of this approach is that you can rely on the data being there once the events page component is being 
+  rendered. You don't need to worry about whether the data is there yet or not and therefore you don't need to render a 
+  loading state on this event's page component.
+
+  The downside, of course, is that we have this delay where it looks to the user as if nothing is happening. And we'll 
+  see how we can improve this user experience
+
+*********************************** Reflecting the current navigation state in the UI: useNavigation() ****************** 
+. Well, React Router gives us a special hook, which we can use to check the current route transitions state. So, to find 
+  out if a transition has been initiated and we're currently still waiting for data to arrive, or if we're done.
+
+  Now, we could go to the RootLayout component and there we can use the useNavigation() hook; which is a hook provided 
+  by React Router that lets us find out whether we're currently in an active transition, if we're loading data, or if we 
+  have no active transition going on.
+
+  We get a Navigation object when we call useNavigation and that Navigation object has a couple of properties; but for 
+  us, the state property is the most important one. This is simply a string which is either idle, loading, or submitting;
+  depending on whether we don't have any active route transition, if we're having an active transition and we're loading 
+  data, or if we're submitting data;
+
+. It's just important to recognize that the loading indicator won't be added on the page which you're transitioning to,
+  but instead on some page, or a component, which is already visible on the screen when the transition is started.
+
+. Refer Root.js
+
+****************************************************** Returning responses in loader()s *******************************
+. Now, one important aspect of a loader is to understand that you can return any kind of data in that loader. Here, I'm 
+  returning this events property, or the values stored in the events property of my response data, and in this case,
+  it will actually be an array that I return.
+
+  But we could return a number, some text, an object, whatever you want. And what you can also return is a response 
+  object.
+
+  Response object can be created by instantiating the built-in Response constructor function. Now, this response 
+  constructor also takes any data of your choice as a first argument and then you can configure it with greater detail
+  with help of an extra object that can be set as a second argument.
+
+. Now, whenever you return such a response in your loaders, the React Router package will automatically extract the data 
+  from your response when using useLoaderData. So the data returned by useLoaderData will still be the response data
+  that was part of the response you returned in your loader.
+
+  And this fetch function actually returns a promise that resolves to a response. Now, combined with React Router's 
+  support for these response objects and its automatic data extraction, that simply means that you can, in the end,
+  take that response, which you get here, so this response object, and return that in your loader. You don't need to 
+  manually extract the data from the response.
+
+****************************************************** Which kind of code goes into loader()s **************************
+. What you can't do in your loader function is, for example, use React Hooks like useState. That does not work because 
+  those Hooks are only available in React components and the loader function is not a React component. But that's the 
+  only limitation.
+
+  Any other default browser features can be used in loader functions.
+
+****************************************************** Error handling with custom erros ********************************
+. One way to handle error is we can return an object containing error and then use that where we use useLoader()
+
+. Another way, we can throw an error. Now, when an error gets thrown in a loader something special happens. React router 
+  will simply render the closest error element. The error element will be shown to the screen whenever an error is 
+  generated in any route related code, including loaders. So therefore we can add ErrorPage component and Now we can go 
+  back to App.js and add error element here on this Root route and render our error page like that.
+
+. With that, this page, this error page, will be displayed whenever we basically have any kind of error anywhere in our 
+  routes because even though I'm throwing an error here in the loader of the events page. So in this route here, which 
+  is a deeply nested route, errors will bubble up.
+
+  Refer App.js, ErrorPage.js
+
+******************************************* Extracting Error data & throwing responses: useRouteError()*****************
+. And for that React-Router-Dom gives you another special hook which we import from react-router-dom. And that's the 
+  useRouteError() hook. This gives us an error object. 
+
+  Refer Error.js
+
+****************************************************** The json() Utility function *************************************
+. Now, constructing responses manually like this is possible, but a bit annoying. That's why React router gives you a 
+  little helper, utility. Instead of creating your response like this and returning it like this, you can return the 
+  result of calling json, written like this. And json is a function that can be imported from react-router-dom.
+
+  Now json() is a function that creates a response object that includes data in the json format. To this json function, 
+  you simply pass your data that should be included in the response, in my case, my object, and you don't need to 
+  convert it to json manually. Instead, that will be done for you. And you can pass a second argument where you can set
+  that extra response metadata like this status.
+
+****************************************************** Dynamic Routes & loader()s *************************************
+. How do we get that event ID from url here in the loader?(EventDetail.js)
+
+  In the EventDetail page, we could use the useParams() hook, but we can't use this in the loader. As mentioned before, 
+  hooks can't be accessed there. But you still can get access to the route parameters that you need because react router,
+  which calls this loader function for you, actually passes an object to this loader function when executing it for you.
+
+  And that object contains two important pieces of data: A request property, which contains a request object, and a 
+  params property, which contains an object with all your route parameters. Now the request object here in a loader 
+  could be used to access the URL to, for example, extract query parameters or anything like that.
+
+  But here we don't need it. Instead it's the params object, which is interesting for us here. Because with that, we can 
+  get access to all the route parameter values as we could do it with help of useParams().
+
+  Refer EventDetail.js
+
+*********************************** The useRouteLoaderData() Hook & Accessing Data from other routes *******************
+. Of course, that event form should be prepopulated with the data for the event which we're trying to edit here.
+  Now to do that, we need to fetch that event detailed data not just on the event detail page but also here on the edit 
+  event page because that's where we need the data for the event form. So in this edit event page, we need to fetch the 
+  same data as we fetch here on the event detail page.
+
+  These are two different route definitions, event detail versus added event page and therefore two separate loaders 
+  would be needed. But actually thankfully we don't have to repeat our code here. Instead we can add a new route 
+  definition here where we set the path to colon event id. So the same path as we have it here, however this will be a 
+  route that does not render an element.
+
+  I will not add element here. Instead I just add children and the children of this route will be this route where I now 
+  set the path to an empty string or better I simply set index to true. And this route here where I remove this dynamic 
+  path segment at the beginning. This is also how you can use nested routes to construct a URL with the parent route URL 
+  and the child route URLs.
+
+  Now here we don't have element because I don't want to have any shared layout or anything like that. Instead, I'm 
+  using this approach because I want to add a loader here to this route. This event detail loader, I remove it from the 
+  event detail page route and add it to this wrapper route. So you can also use this nested routes feature not just to 
+  use a wrapper layout component but also to use a shared loader for example.
+
+. Now we actually want loader data from this route and to make sure that we use this loader's data instead. So the data 
+  from this parent route we should add a special ID property which we can add to our route definitions. And for example, 
+  name this event detail. This ID is totally up to you though.
+
+. And then instead of using useLoaderData() we use a slightly different hook which is called useRouteLoaderData(). This 
+  hook works almost like useLoaderData but it takes a route ID as an argument. In my case here, event dash detail
+  the ID I just assigned to my route. So this ID here. And I use the same hook here in edit event.
+
+*************************************************  Planning data submission *********************************************
+. Worked on NewEvent.js. Included form to get new event data. Now we can follow traditional approach and add submit 
+  handler and get data and then send http request to backend api.
+
+  But there is a better approach when using React Router. Just as we can add loaders to load data, we can also add 
+  actions to send data.
+
+*************************************************  Working with action() functions ************************************
+. So to add an action to this new route here we add the special action property here. And just like loader, action wants 
+  a function an arrow function, or a regular function that does not matter.
+
+  Now just as with loaders, we typically don't wanna add our action functions here in our route definitions file but 
+  instead we want to keep that code close to the components to which it belongs.
+
+. Now, the great thing about react-router is that it makes handling form submissions a brace and it helps with 
+  extracting data from that form. For that, you should go to that form and make sure that all your inputs have the name 
+  attribute because those names will later be used for extracting the data. So these names here must be set on all your 
+  inputs and text areas.
+
+  Next, you should replace the form element with the special form component which is provided by react-router-dom. So 
+  you should import form from react-router-dom
+
+. Now this form tag will make sure that the browser default of sending a request to the backend will be omitted but it 
+  will take that request that would've been sent and give it to your action. And that's pretty useful because that 
+  request will contain all the data that was submitted as part of the form.
+
+. just as a loader function the action function is executed by react-router and it receives an object that includes a 
+  couple of helpful properties. To be precise again, the request and params properties.
+
+  Now this time, we're not interested in the params because I have no params here when creating a new event but I am 
+  interested in the request object because that request object contains the form data.
+
+. And typically when submitting a form what you want to happen is that you navigate the user away to a different page 
+  after successfully submitting the form. To do that, we can go back to our action in new event JS and then return the 
+  result of calling Redirect. Redirect, like JSON is a special function you can import from react-router-dom and like 
+  JSON, Redirect creates a response object. However, it's a special response object that simply redirects the user to a 
+  different page.
+
+  Refer NewEvent.js, EditEvent.js, EditForm.js
+
+************************************************* Submitting data Programmatically: useSubmit() *************************
+. Now there is a different way of triggering such an action function. The typical and default way is to use this special
+  form component offered by React Router, that's the standard way you should use. This form will automatically trigger 
+  the action function of the currently active route, so the route for which this form was loaded.
+
+  Now you could send the request to a different route by adding the action prop here to this form component and setting 
+  this to any other path. Then in that case, the action of another path, of another route definition object, would be 
+  triggered. So if you had an action on some other route here, you could point at that action by simply setting the 
+  form's action prop value to the path of the route for which you wanna trigger the action, but if you wanna trigger the 
+  action of the currently active route, you don't need the action prop.
+
+  eg: <Form method="post" action="some-other-route" className={classes.form}>
+
+. In EventDetail.js, we added action function. And now since we're exporting this action here in App.js, we can import 
+  it as deleteEventAction, for example, and then assign this to the action property of this route. But how do we now 
+  trigger this action? 
+
+  We could theoretically go to EventItem, and wrap this button with a Form. We could add this Form component here, but 
+  in that case, we would not be prompted whether we want to proceed. We wouldn't see this confirmation prompt, and I 
+  wanna see that to give the user a chance of canceling the deletion process.
+
+. So we need to trigger that action, and submit some data, so to say, programmatically. And just as we can navigate 
+  programmatically, we can also submit data and trigger an action programmatically with the special useSubmit hook.
+  This hook is imported from react-router-dom.
+
+. The first argument is the data that we wanna submit, and that data will automatically be wrapped in a formData 
+  object, which we then could extract with this special formData method we saw when creating a NewEvent, so this 
+  method, the data we passed to the submit function would automatically be wrapped with such a form data object, but 
+  here I actually need no data, so we can set this to null.
+
+  The second argument then allows us to basically set the same values we could set on a form, for example the method 
+  which we can set to delete in this case, which would be an appropriate method for this client side request, which is 
+  handled on the client side, and which triggers this action function as you learned.
+
+  And we could set the action key to a different path if our action would be defined on a different route path. In this 
+  case, it's defined on the same route to which this component belongs in the end, or for which this component is 
+  rendered in the end, and therefore we don't need to set the action.
+
+. In EventDetail.js,  we could also dynamically extract the method from the submitted form, so to say, by using this 
+  request object, which we also get here in this data object that's provided to the action function by React Router.
+
+. Refer App.js, EventDetail.js, EventItem.js
+
+********************************************* Updating the UI State based on the submissions status *********************
+. In backend/events.js, we added some delay while adding event(In post method). Now I'm doing this because I wanna show 
+  you that if you add a new event, as I'm doing it here, the submission will now take a short while.
+
+  And just as before, when we navigate it to a different page, we don't get any feedback regarding that. And it would be 
+  nice to get some feedback and maybe also to disable the save button so that users don't try to submit the same form 
+  multiple times.
+
+. For that, I wanna use a hook that sounds familiar to useNavigate, but works totally different, the useNavigation hook.
+  And that's a hook we already saw in action before. It's provided by React Router and gives us access to a navigation 
+  object. And we can extract various pieces of information from that object.
+
+  For example, all the data that was submitted. But we can also find out what the current state of the currently active 
+  transition is. And we have a transition from one route to another if we click a link. But we also have a transition if 
+  we submit a form. And therefore, we also get information about the current data submission process and whether it 
+  completed already.
+
+. Refer EditForm.js
+
+************************************ Validating user input & Outputting validation errors: useActionData() *************
+. you should never rely on just client side validation, you should always have server side validation because client 
+  side validation can, for example be turned off and disabled with the dev tools, with the browser dev tools.
+
+  Nonetheless, it's good to have both to provide a good user experience. But I of course want to show the user any 
+  errors, any validation errors that I gathered on the back-end in case some validation errors were detected here.
+  For example, because the user did disable client side validation.
+
+. For example, because the user did disable client side validation. And to do that, I wanna leverage the fact that on 
+  the back-end I'm sending back an error response with status code 422 if I found some validation errors there. On the 
+  front-end, in the new event page component file here, for example, in this action where I do submit to the data,
+
+  I wanna react to such potential back-end validation errors. And I wanna react by not showing my default error page
+  so I don't want to throw an error response, but instead I wanna show such validation errors here right above this form 
+  because that makes more sense than showing an error page because that would discard all the values entered by the user 
+  and not really offer a good user experience. Therefore, I wanna stay on this page, but I wanna output some data.
+
+. For that, we can check response error code in NewEvent.js and return the response. Now what does returning a response
+  in an action due though?
+
+  Well, just as we can return responses in loaders and then use the response data in our components and pages, we can 
+  also use returned action data in our pages and components.
+
+. And in that EventForm component I can use another provided by a react-router-dom. And that's the useActionData hook,
+  which almost sounds like use loader data, which is no coincidence because it does basically the same thing. It gives 
+  us access to the data returned by our action, in this case, not by the loader, but by the action and it gives us 
+  access to the closest action. So I can use this in this component here even though it's not the page component because 
+  it's rendered by the page component for which this action was defined where I return that response.
+
+. Refer NewEvent.js, EventForm.js
+
+********************************************* Reusing actions via request methods **************************************
+. almost all functionalities except for editing. That's still not entirely working as it should or to be precise, we 
+  can't really submit this. We are rendering the EventForm there and the EventForm has a form component which tries to 
+  submit the form data, but we haven't registered an action for this EditEvent route.
+
+  Now actually, the action which I do wanna trigger here is almost the same as for the NewEvent route. We wanna send 
+  almost the same kind of request to just a slightly different URL with a different request method. So it would be great 
+  if we could reuse that action which we're using for creating a new event.
+
+  And we can, for that, I'll grab this code here where I define and export my action in NewEvent JS. And I'm adding it 
+  to EventForm.js but I could be adding it to any file. We could also create a brand new utility file that stores this 
+  action.
+
+  and I now wanna change it a little bit. I wanna make the code in this action a bit more dynamic to be able to send
+  both a request for adding a new event as well as for editing an existing event.
+
+  Refer App.js, EditEvent.js, NewEvent.js (added method), EventForm.js
+
+********************************************* Behind-the-scenes work with useFetcher() *********************************
+. we have this newsletter signup form, both on the newsletter page as well as on every other page because it is included 
+  here in the main navigation.
+
+  The problem with that is that of course we wanna trigger this action this newsletterAction whenever this newsletter 
+  form is submitted. And if we are on the newsletter page, if we are on this page, that would be quite straightforward 
+  to do. All we had to do is go to the newsletter signup component which is where we have this form and use React 
+  Router's Form component here
+
+. The problem is however, that this form is included on all routes because it's part of the main navigation. of the main 
+  navigation. Therefore, we would have to add the action to all routes and that would of course be a lot of code 
+  duplication and also clash with other actions that we might need for our routes.
+
+. Now this is such a common use case that React Router has a solution for it. There is a special hook which you can 
+  import from react-router-dom, and that is the useFetcher() hook. but this hook when executed gives you an object.
+  And this object includes a bunch of useful properties and methods.
+
+  For example, it gives you another form component which is different from that other form component we used before. It 
+  also gives you a submit function which is different from the submit function we got from useSubmit, which we used 
+  before.
+
+  But what is the difference between this form we get here and this submit function which we get here? Well, if we use 
+  this Fetcher Form component like this which we can then this will actually still trigger an action but it will not 
+  initialize a route transition.
+
+  So Fetcher should basically be used whenever you wanna trigger, an action, or also a loader with help of the load 
+  function without actually navigating to the page to which the loader belongs or the page to which the action belongs.
+
+. Refer NewsLetterSignup.js
+
+********************************************* Defering data fetching with defer() **************************************
+. If we add timeout for 2 seconds while getting data in backend/events. Now Events page takes 2sec to load the page
+  (until data is arrived from backend.)
+
+  But sometimes you wanna load this page before the data is there and show parts of the page already until all the data 
+  is there. For example, here it would make sense to show these buttons already, the all events and new event buttons,
+  even if the list of events hasn't been loaded yet. And that's where we can defer loading and tell React router
+  that we actually wanna render a component already even though the data is not fully there yet.
+
+. And in order to defer loading that, what we need to do here is we need to grab that code here and outsource it into a 
+  separate function, an async function, which I'll name load events. And then I put my code in there. So it's almost the 
+  same code as before. Just wrapped into a separate function.
+
+  I'm doing this because in the loader I now don't want to await this promise here. Instead here I can actually get rid 
+  of this async keyword and use a special function in this loader function. The defer function which should be imported
+  from react-router-dom.
+
+  Now defer is a function that must be executed and in defer we pass an object. Now in this object, we bundle all the 
+  different HTTP requests we might have going on on this page. In this case it's only one request though. The request 
+  for all my events.
+
+. Now this is not everything we have to do though. Instead now, as our next step, we have to go to the component where 
+  we want to use the deferred data and we still use useLoaderData() here. But this data will now actually be an object
+  that gives us access to these deferred value keys here. So to events, in my case.
+
+  And here in this component we now don't directly render the component or the JSX code that needs our data. Instead 
+  what we do in here is we return another component provided by react-router-dom and that's the Await component. So we 
+  render await here. And await has a special resolve prop which wants one of our deferred values as a value.
+
+. Now that await component will wait for that data to be there. And then between the opening and closing tags, we output 
+  a dynamic value which must be a function that will be executed by a React router once that data is there. So once that 
+  promise resolved.
+
+  Now, as a last step, we have to add another component that must be wrapped around the await component. And that's the 
+  Suspense component which is imported from React. The suspense component is a component which can be used in certain 
+  situations to show a fallback whilst we're waiting for other data to arrive.
+
+  Refer Events.js
+
+********************************************* Controlling which data should be deferred ********************************
+. Refer EventDetail.js, where we defer EventList and EventItem.
+
+
+
+******************************************************* Older
+      <Switch>
+        <Route path="/" exact>
+          <Redirect to="/quotes" />
+        </Route>
+        <Route path="/quotes" exact>
+          <AllQuotes />
+        </Route>
+        <Route path="/quotes/:quoteId">
+          <QuoteDetail />
+        </Route>
+        <Route path="/new-quote">
+          <NewQuote />
+        </Route>
+        <Route path="*">
+          <NotFound />
+        </Route>
+      </Switch>
+
+      <Link className="btn" to={`/quotes/${props.id}`}>
+
+      const params = useParams();
+      const { quoteId } = params;
+      sendRequest(quoteId);
+
+      // Programmatic (Imperative) Navigation
+      const history = useHistory();
+      history.push("/quotes");
+
+***************************************************** Newer
+
+  const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <HomePage /> },
+      {
+        path: "events",
+        element: <EventsRootLayout />,
+        children: [
+          {
+            index: true,
+            element: <EventsPage />,
+            loader: eventsLoader,
+          },
+          {
+            path: ":eventId",
+            id: "event-detail",
+            loader: eventDetailLoader,
+            children: [
+              {
+                index: true,
+                element: <EventDetailPage />,
+                action: deleteEventAction,
+              },
+              {
+                path: "edit",
+                element: <EditEventPage />,
+                action: manipulateEventAction,
+              },
+            ],
+          },
+          {
+            path: "new",
+            element: <NewEventPage />,
+            action: manipulateEventAction,
+          },
+        ],
+      },
+      {
+        path: "newsletter",
+        element: <NewsletterPage />,
+        action: newsletterAction,
+      },
+    ],
+  },
+]);
+
+  function App() {
+    return <RouterProvider router={router} />;
+  }
+
+  const navigate = useNavigate();
+  const navigateHanler = () => {
+    navigate("/products");
+  };

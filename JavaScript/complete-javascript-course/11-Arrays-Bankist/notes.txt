@@ -1,0 +1,166 @@
+**************************************************** Simple array methods *******************************************
+. slice(): 
+  with the slice method, we can extract part of any array, but without changing the original array. So essentially, we 
+  can take a slice of an array.
+  
+  We can use the slice method to simply create a shallow copy of any array. So to do that, we simply call it without any
+  arguments at all. And then indeed, we get here the exact same array. We can do same with spread operator as well but
+  slice() is helpful in method chaining.
+
+. splice():
+  It works same as slice() but splice() actually mutate original array. in practice, most of the time the value that the
+  splice method returns, doesn't even interest us. All we are usually interested in is to just delete one or more elements
+  from an array using splice.
+
+  One pretty common use case is to simply remove the last element of an array.
+
+  splice() method can be used to add new items to an array. The first parameter (2) defines the position where new
+  elements should be added (spliced in). The second parameter (0) defines how many elements should be removed. The
+  rest of the parameters ("Lemon" , "Kiwi") define the new elements to be added.
+
+. reverse():
+  Reverse the original array. mutates
+
+. concat():
+  it conacates 2 array, does not mutate any of the array
+
+. join():
+  It joins array element with specified character and returns string
+
+. Refer script.js
+
+************************************************ The new at Methods ************************************************
+. It gets the specified element from an array.
+. It is helpful in getting last elemnet when we don't know length of array.
+. It is also helpful in method chaining
+. It also works on strings
+. Refer script.js
+
+************************************************ Looping Arrays: forEach ********************************************
+. forEach is used loop over iterator(arrays, sets, maps). It is an higher order function, so it requires a callback
+  function in order to tell it what to do. So in each iteration forEach() calls this function.
+
+. Actually forEach() passes not only current element to callback function but it passes other param as well. forEach
+  passes the current element, the index and the entire array that we are looping. Now of course we can just use one,
+  like we have been doing, or we can just use two,or we can use all three together. the names here do not matter at
+  all, but what does matter is the order.
+  
+  So the first parameter always needs to be the current element, the second parameter always the current index
+  and the third one always the entire array that we are looping over.
+
+. when should you use forEach and when should you use the for of loop?
+  Well one fundamental difference between the two of them is that you cannot break out of a forEach loop. So the 
+  continue and break statements do not work in a forEach loop at all. So instead, forEach will always loop over the 
+  entire array.
+
+. Refer script.js
+
+*********************************************** forEach() on map and set ********************************************
+. Set doesn't have keys so here key contains values itself, so this  key here doesn't make sense at all. It wouldn't
+  even be there, JS developer should have ommited this but then this forEach() would have been different from the others.
+  so it would create confusion between developers, and therefore it was decided to keep the same signature.
+
+. Refer script.js
+
+********************************************* Data transformations: map, filter, reduce ******************************
+. Refer pdf notes
+. These are methods that we use to create new arrays based on transforming data from other arrays.
+
+. map is actually similar to the forEach method that we studied before but with the difference that map creates a brand 
+  new array based on the original array. So essentially the map method takes an array, loops over that array and in each
+  iteration, it applies a callback function that we specify on our code to the current array element.
+
+  We say that it maps the values of the original array to a new array and that's why this method is called map.
+
+  map returns a new array containing the results of applying an operation on all original array elements.
+
+. filter returns a new array containig the array elements that passed specified test condition.
+
+. reduce boils("reduces") all array elements down to one single value (eg. adding all elements together) 
+
+********************************************************** map *******************************************************
+. map returns a new array containing the results of applying an operation on all original array elements.
+
+********************************************************** filter ***************************************************
+. As the name says, is used to filter for elements in the original array which satisfy a certain condition.
+  So all the elements that pass the test that we specified will make it into a new filtered array.
+  
+  Or in other words elements for which the condition is true will be included in a new array that the filter method
+  returns. All other elements will get filtered out so they will not be included in the new array.
+
+********************************************************** reduce ***************************************************
+. It is used to boil down all the elements of the original array into one single value.
+
+. In the callback function of the reduce method, the first parameter is actually something called the accumulator.
+  this accumulator is essentially like a snowball that keeps accumulating the value that we ultimately want to return.
+  
+  So this callback function is the first argument of the reduce method, but the reduce method actually has a another,
+  so a second parameter, and that is the initial value of the accumulator.
+
+************************************************** Magic of chaining methods *****************************************
+. We can chain map, redue, filter as they return array.
+
+
+*************************************************** find() method ****************************************************
+. Find method can be used to retrieve one element of an array based on a condition.
+  
+  Unlike the Filter method, the Find method will actually not return a new array but it will only return the first
+  element in the array that satisfies this condition.
+
+. There are two fundamental differences -
+    First Filter returns all the elements that match the condition while the Find method only returns the first one.
+    Second Filter method returns a new array while Find only returns the element itself and not an array.
+
+*************************************************** findIndex() method ***********************************************
+. the findIndex method works almost the same way as find. But as the name says, findIndex returns the index of the found
+  element and not the element itself.
+
+. Refer account closing logic
+
+*************************************************** some and every ***************************************************
+. includes only test for equality but what if we want to test for some condition instead? And so that's where this some 
+  method comes into play.
+
+. some() method returns true if any of the element satisfy specific condition.
+
+. every() method returns true if all of the element satisfy specific condition.
+
+*************************************************** flat and flatMap: 2019 *******************************************
+. let's say that we have an array with some arrays in it. So essentially a nested array. but what if we wanted to take
+  all these elements in the separate and put all of these together in just one big array, which contains all the numbers
+  here from one to eight? Well, that's pretty simple, using the new flat method.
+
+  It flaten nested array into one. It doesn't take any callback function.
+
+  To flaten multi-level of nesting, we can pass level in argument.
+
+. flatMap essentially combines, a map and a flat method, into just one method, which is better for performance.
+
+  Now flatmap here, only goes one level deep and we cannot change it. So if you do need to go deeper than just one level,
+  you still need to use the flat method.
+
+*************************************************** Sorting Arrays ***************************************************
+. sort() method sort array based on string, and it mutates original array.
+
+  sort() doesn't sort numbers by default as it does sorting based on string. So basically, what it does is to convert 
+  everything to strings and then it does the sorting itself. 
+  
+  we can fix this by passing in a compare callback function into the sort method.
+
+. If we return something less than zero, then A will be before B. But on the other hand, if we return greater than zero,
+  then B will be before A.
+
+  If we return less than zero, then keep the order. and if we return greater than zero then switch the order.
+
+
+*************************************************** More ways of creating and filling arrays *************************
+. Refer script.js
+
+*************************************************** Summary: which array method to use? ******************************
+. We studied 23 differen arrays method. Now, the problem is that, choosing between 23 different methods, is not always 
+  easy.
+
+. See pdf notes for array method usage guide
+
+*************************************************** Array methods practice ******************************************
+. Refer script.js

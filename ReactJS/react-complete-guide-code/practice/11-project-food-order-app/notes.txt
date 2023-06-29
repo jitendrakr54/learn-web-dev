@@ -1,0 +1,8 @@
+**************************************************** Building food order app ******************************************
+. Importing CSS files or importing images is supported by this project setup which we're using here and behind the scenes
+  the import is simply transformed to include the image in the finished application which we could deploy to a server
+  and to generate a link to that image which is then dynamically inserted in the generators code.
+
+  import mealsImage from "../../assets/meals.jpg";
+  <img src={mealsImage} /> If image is available locally
+  <img src="https://some-url.com/to-some-image.jpg" /> If image is on server

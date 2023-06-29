@@ -1,0 +1,144 @@
+"use strict";
+
+//***************** JavaScript Program to Find the Largest Among Three Numbers
+
+function largestOfThree1(num1, num2, num3) {
+  return Math.max(num1, num2, num3);
+}
+console.log(largestOfThree1(2, 15, 89));
+
+function largestOfThree2(num1, num2, num3) {
+  let largest;
+  if (num1 >= num2 && num1 >= num3) {
+    largest = num1;
+  } else if (num2 >= num1 && num2 >= num3) {
+    largest = num2;
+  } else {
+    largest = num3;
+  }
+  return largest;
+}
+console.log(largestOfThree2(2, 15, 89));
+
+//***************** JavaScript Program to Print All Prime Numbers in an Interval
+// A prime number is a positive integer that is only divisible by 1 and itself. For example, 2, 3, 5, 7, 11 are the first
+//  few prime numbers.
+
+function getAllPrimes(start, end) {
+  const primeNums = [];
+  for (let i = start; i <= end; i++) {
+    let flag = 0;
+
+    for (let j = 2; j < i / 2; j++) {
+      if (i % j == 0) {
+        flag = 1;
+        break;
+      }
+    }
+
+    if (i > 1 && flag == 0) {
+      primeNums.push(i);
+    }
+  }
+}
+console.log(getAllPrimes(4, 33));
+
+//***************** JavaScript Program to Find the Factorial of a Number :
+// The factorial of a number is the product of all the numbers from 1 to that number
+
+function factorial(number) {
+  let factorial = 1;
+  for (let i = 1; i <= number; i++) {
+    factorial = factorial * i;
+  }
+  return factorial;
+}
+console.log(factorial(10));
+
+//***************** JavaScript Program to Print the Fibonacci Sequence
+// A fibonacci sequence is written as: 0, 1, 1, 2, 3, 5, 8, 13, 21, ...
+// The Fibonacci sequence is the integer sequence where the first two terms are 0 and 1. After that, the next term is
+//  defined as the sum of the previous two terms
+
+function fibonacci(terms) {
+  const arr = [];
+  arr[0] = 0;
+  arr[1] = 1;
+
+  for (let i = 2; i <= terms; i++) {
+    arr.push(arr[i - 2] + arr[i - 1]);
+  }
+  return arr;
+}
+console.log(fibonacci(10));
+
+//***************** JavaScript Program to Check Armstrong Number
+// A positive integer is called an Armstrong number (of order n) if : abcd... = an + bn + cn + dn + ...
+// where n is number of digits in a number
+// In the case of an Armstrong number of 3 digits, the sum of cubes of each digit is equal to the number itself.
+// For example, 153 is an Armstrong number because; 153 = 1*1*1 + 5*5*5 + 3*3*3
+
+function isArmstrong(number) {
+  const numOfDigits = number.toString().length;
+  let sumOfProd = 0;
+  let temp = number;
+  while (temp) {
+    let digit = temp % 10;
+    sumOfProd += digit ** numOfDigits;
+    temp = parseInt(temp / 10);
+  }
+  return sumOfProd === number;
+}
+console.log(isArmstrong(153));
+
+//***************** Armstrong Numbers Between Two Intervals
+
+function armstrongNumbers(start, end) {
+  const arr = [];
+  for (let num = start; num <= end; num++) {
+    const numOfDigits = num.toString().length;
+    let sumOfProd = 0;
+    let temp = num;
+    while (temp) {
+      let digit = temp % 10;
+      sumOfProd += digit ** numOfDigits;
+      temp = parseInt(temp / 10);
+    }
+
+    if (sumOfProd === num) {
+      arr.push(num);
+    }
+  }
+  return arr;
+}
+console.log(armstrongNumbers(100, 1000));
+
+let str = "Strinig";
+console.log(...new Set(str.split("")));
+
+// ***************** Palindrome number
+function isPalindromeNum(num) {
+  let temp = num;
+  let numToMatch = 0;
+  while (temp) {
+    let lastDigit = temp % 10;
+    numToMatch = numToMatch * 10 + lastDigit;
+    temp = parseInt(temp / 10);
+  }
+  // console.log(numToMatch);
+  return numToMatch === num;
+}
+console.log(isPalindromeNum(232));
+
+// ***************** next palindrome number
+function nextPalindromeNumber(num) {
+  let nextPalindrom = 0;
+  while (!nextPalindrom) {
+    let numToCheck = ++num;
+    if (isPalindromeNum(numToCheck)) {
+      nextPalindrom = numToCheck;
+    }
+  }
+  return nextPalindrom;
+}
+console.log(nextPalindromeNumber(292));

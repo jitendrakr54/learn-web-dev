@@ -1,0 +1,59 @@
+**************************************** A High-level overview of Web development ***************************************
+. Refer pdf notes
+
+. Let's say that we're trying to access a webpage in our browser at omnifood.dev. And by the way, this is actually the 
+  website that we're gonna develop throughout this course. Now, what happens as we try to access this page is that our 
+  browser will send a request to the server where this page is hosted on the internet. So each and every website is stored
+  on something called a server, which is basically a computer that is connected to the internet and is able to receive 
+  requests like this one.
+
+  So again, when we browse to a certain website our web browser will send a request to the server where the website is 
+  stored, so where it is hosted. Then when the server receives the request, it will take all the files that make up the 
+  website and send them back to the browser. And so we say that the server sends a response to the browser, which 
+  essentially contains all of these files that the website is made of.
+
+  Now, as you can see from these file extensions we have some HTML, CSS, and also JavaScript code here. And these are 
+  precisely the three languages that browsers can understand. All right, now, once the browser receives these HTML, CSS,
+  and JavaScript files from the service response, it will take the code and render the website that we were trying to 
+  access.
+
+  And that process of writing HTML, CSS and JavaScript code that the browser can understand is the process that we call 
+  front-end web development. So whenever you hear someone talking about front-end development, what they mean is 
+  developers writing the code that is displayed in a browser, which is basically the front-end of a website.
+
+. And so now let's take it one step further and talk about something called back-end development. So let's try another 
+  example here, and this time let's try to understand what would happen when we try to access a website like udemy.com.
+  So once again, the first step is that a request is sent to the web server where udemy.com is hosted.
+
+  Now, why is a website like udemy so different from something like the static omnifood website that I showed you earlier?
+  Well, a complex site like udemy.com is really completely different from a static site because there is a lot of content 
+  that is always changing all the time. Like on Udemy, there are always new courses and new reviews being added to the 
+  site. New ratings, and new course length are calculated for example, and really a bunch of other things like that are 
+  always happening. And so in order to make a system like this work udemy.com needs a whole application running on the 
+  server and they also need a big database, which basically contains all the courses, and all the reviews, all the users,
+  and really all the content that is being displayed on their website.
+
+  Now, to do all this, front-end technologies like HTML and CSS are simply not enough. So basically, with what you're 
+  gonna learn in this course, you are not going to be able to build something like udemy.com, all right? So to write 
+  applications that are actually executed on web servers, developers use some kind of back-end language like Node.js, 
+  PHP, or Python. So what these languages do is to take data out of a database and basically assemble that data into the 
+  final files that will then be sent to the browser as the response. And this whole process is called back-end development
+  because this is basically the invisible part of a website and so it's the website's back-end.
+
+. Now let's take a closer look at the three languages of the front-end, so HTML, CSS, and JavaScript. And starting with 
+  HTML, HTML is responsible for the content of the page. So that's the text, the images, the buttons, and really all the 
+  content that you see on a webpage is always written inside an HTML file. 
+  
+  Then the CSS, is responsible for the presentation of that content, so basically for styling and for laying out the 
+  elements on the webpage.
+
+  Now finally, JavaScript is the actual programming language of the front-end. So it allows us to add dynamic and 
+  interactive effects to webpages. We can also use it to manipulate the content or the CSS to load data from web servers
+  and even to build entire front-end applications, which we then call web applications. 
+  
+. Now, we can also use the analogy of nouns, adjectives, and verbs to make the separation of rolls here a little bit 
+  easier to understand. So in this analogy, HTML represents the nouns, for example, saying that the p element is a 
+  paragraph. So paragraph is the noun here. The CSS then is the adjective because it basically describes the noun, for 
+  example, like this piece of CSS saying that the paragraph text is red. And so red is the adjective describing the noun.
+  Finally, JavaScript is of course the verb, like saying, hide the paragraph. So we're actually doing something here
+  and so we have a verb, okay?

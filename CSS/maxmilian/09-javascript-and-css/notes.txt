@@ -1,0 +1,69 @@
+************************************************* Module Introduction **************************************************
+. You can interact with CSS with Javascript. You can change styles after the page was loaded and there are cases where you
+  actually need to do this, in our project too.
+
+. Module content:
+          . Manipulating styles via JavaScript
+          . Adding & Removing CSS classes via JavaScript
+
+**************************************************** Addinga a modal **************************************************
+. Now we want to open modal which is like popup in the page. It's an overlay over the other content of our page. Now we
+  have already added backdrop div which will be the background of the modal so that we can't click any other content on 
+  the page. and we want to open this modal when we click on buttons like "choose plan" button.
+
+. Added modal and backdrop
+
+********************************************** Selecting & Manipulating styles with JavaScript *************************
+. Our goal is to dynamically change the display property and for that, we need to understand how we can in general change
+  the style of elements with Javascript, why with Javascript? Because Javascript is the only tool we got which allows us
+  to run code after the page has been loaded and with this code.
+
+. First of all, we need to get access to a so-called DOM element, the DOM is essentially what the browser makes of our
+  HTML code, it parses the HTML code and then creates a virtual representation of it, the document object model or in 
+  short the DOM and we can essentially access the elements in the DOM via Javascript and then manipulate them.
+
+  We can manipulate their attributes, we can execute certain actions, we can listen to events on them, we can access their
+  styles, we can access their CSS classes, we can access their content, we can even add and remove elements.
+
+. document object gives us access to the parsed document. this gives us basically access to the document object model. On
+  the document, we can access a lot of properties and methods and the method we'll need to get access to an element is the
+  querySelector() method.
+
+. Now one thing that can be confusing, if you scroll down to set index for example, you actually see that it has no value
+  here, it's empty. Now if we inspect our CSS code for the backdrop though, in shared.css, you'll see that we actually have
+  a set index of 100. So why can't we see this here? Because of all the styles here are added as inline styles to the 
+  element and this element, as all our elements, got no inline styles. That's important, the style property allows you to 
+  access inline styles.
+
+. Refer shared.js
+
+************************************************* Adding an Event Listener *********************************************
+. Refer shared.js
+
+************************************************* Adding a side Navigation Bar *****************************************
+. I want to prepare our project to become real responsive by adding a side navigation, essentially a side navigation bar 
+  that should open when we click a to be added button here in our main toolbar at the top that should open whenever we 
+  click this button to allow us to navigate to packages, customers and so on from there. Because later, we'll start 
+  turning our page into a responsive web page, so that it looks good on mobile devices too.
+
+. Refer index.html, shared.css
+
+********************************************** Opening and closing the Hanburger Menu **********************************
+. Refer shared.js
+
+************************************************* Manipulating element classes *****************************************
+. Refer shared.js
+
+************************************************* Understanding property notations *************************************
+. css properties are converted in camel case
+
+. backdrop.style['background-image'] = '';
+  backdrop.style.backgroundImage = '';
+
+***************************************************** Cleaning up our code *********************************************
+. Added sidenav for package and customer page
+
+************************************************ Useful Resources & Links **********************************************
+. JavaScript Basics: https://academind.com/learn/javascript
+. JavaScript CSS Styles: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style
+. classList : https://developer.mozilla.org/en-US/docs/Web/API/Element/classList

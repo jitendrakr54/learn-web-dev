@@ -1,0 +1,5 @@
+npm init --yes
+
+It creates package.json with default setting.
+
+Install redux ad it is required : npm install redux

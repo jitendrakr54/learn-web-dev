@@ -1,0 +1,245 @@
+******************************************************* Module Introduction ********************************************
+. A technology which allows us to create highly customizable, more complex page layouts.
+. Module Content:
+          . What is "CSS Grid"?
+          . Grid, Grid, Grid...
+          . Grid vs Flexbox
+
+******************************************************* What is the "CSS Grid?" *****************************************
+. It allows you to define such a grid of rows and columns and to then specify which element should be positioned where and
+  it's really flexible.
+
+******************************************************* Getting Started ************************************************
+. Copy demo project
+
+******************************************************* Turning a container into gird **********************************
+. display: grid
+
+******************************************************* Defining column & rows *****************************************
+. template columns property: This allows us to overwrite of only having one column and to add multiple columns to the grid.
+
+. Now another unit we can use in a grid, a special unit is fraction, we can also add a fourth column with one fraction, 
+  fr and this will split up the remaining space which is 100% - 20% - 200 pixels - 150 pixels, it will take the remaining
+  space and if we had more than one column with the fraction unit, it would split the remaining space between all columns
+  with fraction and the number indicates the relation.
+
+  So if I replace 150 pixels with two fraction, then the remaining space, so 100% - 20% - 200 pixels, the remaining space
+  would be split up between column 2 and column 4 and column 2 would receive twice as much space as column 4 does.
+
+********************************************* Positioning child elements in a grid **************************************
+. Now it would be nice if we could overwrite that default positioning and let's say element three should actually take the
+  last two cells in the first row, so it should take the cell where element four is in too. We can overwrite this by going
+  to the child selector now.
+
+  .el3 {
+    background: rgba(0, 128, 0, 0.5);
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 3;
+  }
+
+********************************************* Using "element-sizing", "repeat" & "minimax" ******************************
+. Now you also got cases where you have a couple of absolute or relative non-fraction units and you simply want to ensure
+  that the last column or row takes the available remaining space. Now obviously, you could take one fraction as a value
+  for that but there also is auto.
+
+. if we want our grid column to have equal in width then we can write for example 25% four times. But There is a helper 
+  method you can use which is called repeat, it's a CSS function and it takes two arguments. The second argument is the
+  pattern it should repeat and the first argument is how often it should repeat it.
+
+. minmax() is another helpful function if you want to ensure that a certain cell should have a minimum width or height but
+  shouldn't become bigger than a certain maximum.
+
+************************************************** Advanced element Positioning ****************************************
+. Currently for element 3, we are saying start with column 3 and end to column 5. But there is another option which is span
+  to number of cells.
+
+  grid-column-end: span 2;
+
+. Now sometimes we want our element to span over entire row, so for this we can start with column 1 and then end with -1
+  You can define negative line numbers too and what this will lead to is simply that it starts counting from the end of 
+  the grid.
+
+  If grid element overlaps then order will be as per DOM but we can override by z-index.
+  
+  .el2 {
+    background: rgba(255, 0, 0, 0.5);
+    grid-column-start: 1;
+    grid-column-end: -1;
+    grid-row-start: 2;
+    grid-row-end: span 1;
+    z-index: 10;
+  }
+
+*************************************************** Working with named lines *******************************************
+. Now working with the line numbers of course is an option but not the only one we got, it would also be nice to give our 
+  columns and rows names or to give our column and row lines names to be precise.
+
+  Naming rows:  
+  grid-template-rows: [row-1-start] 5rem [row-1-end rw-2-start] minmax(10px, auto) [row-2-end row-3-start] 100px [row-3-end];
+
+  Using that named row:
+    grid-row-start: row-2-start;
+
+*************************************************** Assignment *********************************************************
+. Refer grid-assignment
+
+*************************************************** Understanding column & row shorthands ******************************
+. Shorthand for column:
+    /* grid-column-start: 1;
+      grid-column-end: -1; */
+      grid-column: 1 / -1;
+
+. Shorthand for row:
+      /* grid-row-start: row-2-start;
+          grid-row-end: span 1; */
+          grid-row: row-2-start / span 1;
+
+. Shorthand for column and row both:
+      /* grid-column-start: 2;
+        grid-column-end: span 3;
+        grid-row-start: row-1-start;
+        grid-row-end: row-2-end; */
+        grid-area: row-1-start / 2 / row-2-end / span 3;
+
+*************************************************** Working with gaps **************************************************
+. /* grid-column-gap: 20px;
+  grid-row-gap: 10px; */
+  grid-gap: 10px 20px;
+
+. Refer grid-assignment
+
+*************************************************** Adding named template areas ****************************************
+. Refer grid-assignment
+
+********************************************** Creating automatically generated grid areas *****************************
+
+********************************************** Using the Grid on our project *******************************************
+. Elements which are not part of the document flow, so fixed and absolute elements are not part of the grid and hence, are
+  not considered for the rows and that is fine actually because here, we don't want that to be part of the grid, I want to 
+  control the rest with my grid. So our layout will actually not contain a header because the header is detached from the
+  document flow, it will just contain our main area.
+
+. Refer shared.css
+
+**************************************************** Working with "fit-content" ****************************************
+. fit-content takes an argument which is a default size you can assign, like 8rem, which will be used in case the content
+  is smaller or requires less place, less space than that. If the content requires more space than that, it will get this
+  size though but only as much as needed by the content.
+
+  Used for rendering footer correctly:
+    grid-template-rows: 3.5rem auto fit-content(8rem);
+
+**************************************************** Positioning Grid Elements ****************************************
+.
+    justify-items: stretch;
+    align-items: stretch;
+
+**************************************************** Positioning the entire grid content *******************************
+. justify-content: center, this positions the entire grid on the x-axis
+  align-content: center, now the grid is centered vertically in its container
+
+**************************************************** Positioning elements Individually *********************************
+. now sometimes you want to position one element in a certain way that differs from the other elements.
+
+  .main {
+    grid-area: main;
+    justify-self: center;
+    align-self: center;
+  }
+
+**************************************************** Understanding responsive grids ***********************************
+. @media (max-width: 40rem) {
+    body {
+      grid-template-rows: 5rem auto auto 5rem;
+
+      grid-template-areas:
+        "header header"
+        "side side"
+        "main main"
+        "footer footer";
+    }
+  }
+
+. Refer grid-assignment
+
+**************************************************** Applying Autoflow *************************************************
+. For grid-demo2, we have created grid with 2 columns and we didn't created any rows butstill we see multiple rows are
+  created automatically. Now the reason for the existence of these rows is that by default of this module, if you add 
+  display grid to any element, it will put all its child elements, its direct child elements into new rows, it will create
+  new rows dynamically.
+
+  This of course is a good behavior because it ensures that we can create dynamic grids, so if we happen to have a page 
+  where we don't know how many rows we need, for example because the user can create them with the help of some Javascript.
+  function that adds elements to the DOM, anything like that, so whenever we don't know how many rows we need, we can rely
+  on the grid automatically creating them.
+
+. However, thus far we didn't really have a look at how we can control the size of these rows for example. As it looks, 
+  the default size is auto because each cell here essentially is just as big as its content requires it to be or its 
+  neighbor column here as in the case of this element here. The content wouldn't require it to have such a big cell
+  but of course the neighbor element has the requirement of having such a big cell and since it's in the same row, the row
+  height is adjusted and the other element also gets the same row height.
+
+  But we can of course overwrite this default, we can add grid auto rows here as a property. This allows us to create the
+  style of automatically generated rows. The default here is auto which means the size will be auto, we can overwrite the
+  size for example to 30rem.
+
+. grid auto flow allows you to define where new elements should be added, as a row which is the default,
+
+**************************************************** Comparing the explicit & implicit Grid *****************************
+. It's really important to understand that you can consider or that you can think of the grid as an implicit and explicit
+  grid. The explicit grid is always the part you define with grid template columns and grid template rows and sometimes, 
+  you define the entire grid like in our project where you defined header, main and footer, that was everything we have on
+  the page but sometimes you only define parts of the grid or nothing at all and the parts you didn't define explicitly
+  are then managed with the implicit grid which you can in turn control with the grid auto settings here.
+
+**************************************************** Understanding "auto-fill" & "auto-fit" *****************************
+. However, we can create columns on our own here, the downside is that we need to know how many columns we need and we 
+  don't know. Now we could try figuring this out with a couple of media queries and then simply overwrite this property
+  and change the amount of columns we create but there is a convenient helper value we can enter, auto-fill.
+
+  Now let me reduce the size to maybe 10rem and what auto-fill will do is it will ensure that it fills the current row
+  with as many items as possible and then it will wrap and enter a new row basically.
+
+. "auto-fit": Now you see, the items are obviously not enough to fill the entire line because or the entire row because
+  we only have three items but now we can use an alternative value, so not auto-fill but auto-fit. Auto-fit will behave 
+  almost equal to auto-fill but if I reload with auto-fit, you see it also centers this automatically, it will still 
+  however put this into a new line if the space is not enough.
+
+  So auto-fit is a nice alternative to auto-fill for cases where you might end up with a layout where you don't have 
+  enough items for an entire row.
+
+**************************************************** Creating a Dense Grid *********************************************
+. Refer video
+
+**************************************************** Styling the project form with grid *********************************
+. What I want to do precisely is on bigger screens like this one, so on not mobile modes, I want to position my labels and
+  the form inputs next to each other. On mobile screens, I essentially want to position them as they currently are 
+  positioned. Now for that, I'll use the grid
+
+. The body holds the main element as one element, so this is added to one row of the body grid and the main grid on the 
+  other hand holds the form grid and that is absolutely fine, you can nest grids into each other just as you can add flex
+  containers into a grid and the other way around.
+
+**************************************************** Comparing Grid & Flexbox *******************************************
+. Refer pdf
+
+. The grid is all about two-dimensional positioning, you have rows and columns, that's what it's all about, that is what 
+  we used all the time. Flexbox is one-dimensional, in flexbox you dont have rows and columns. Sure you can use flex wrap
+  to wrap items if your viewport is too small for example but in the end, you always just have flex direction row or column 
+  and you either position them horizontally or vertically.
+
+  So flexbox is always a decent choice if you just have a row or a column of items, you can use flex wrap to still ensure
+  that your row of items wraps itself, in case that your viewport is becoming too small but then you still might have the
+  issue that the positioning of the items to each other is a bit harder in flexbox than with the grid and the grid is 
+  especially a great choice if you have a real layout with multiple dimensions or for example with the form in our course
+  project where you want to position items next to each other in like, a grid.
+
+******************************************************** Next Steps ****************************************************
+. Practice, Practice and Practice grid
+
+******************************************************** Wrap Up *******************************************************
+. Refer pdf
+
+******************************************************** Useful Resources & links **************************************

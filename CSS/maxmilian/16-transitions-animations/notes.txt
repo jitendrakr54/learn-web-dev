@@ -1,0 +1,207 @@
+***************************************************** Transitions & Animations *****************************************
+. In this module, we'll dive into transitions and animations and you'll learn what the difference is and when to use which.
+
+. Module Content:
+          . Transitions
+          . Animations
+
+************************************************* Understanding and applying transitions ********************************
+. Refer pdf notes
+
+. Transitions are a kind of built-in animation you could say. Transitions are added by adding one property, transition and
+  specifying which other property, like the opacity or the position of an element should be watched and should be animated
+  if it changes.
+
+. So here's an example; we got a box and we actually want to move that towards us with transform and translate set let's 
+  say, then we could animate that change. We tell the transition property, and we'll apply it in practice in a second,
+  which properties to change, if there should be a delay, how should animate it, so over which time and how fast it should 
+  move through that time. So should we start fast and end slow, start slow and end fast, these are all things we can define.
+
+. On main page, we have modal with display none, let's actually change this and let's make sure we don't show it by adding
+  opacity zero instead, opacity zero simply makes it invisible, the difference is it's now still part of the document flow
+  and opacity, unlike display, is a property we can watch with a so-called transition.
+
+. Now the transition property is able to take a couple of values, to be precise, you can define up to four values here, a 
+  list of four values. The first one is absolutely required and that is, which property do you want to watch?
+
+  You can watch all with the all keyword, then the transition will be played whenever a transitionable property changes
+
+. Refer modal related code in uHost
+
+************************************************* CSS "transition" Property Deep Dive **********************************
+
+. transition: WHAT DURATION DELAY TIMING-FUNCTION; 
+  
+  Example: transition: opacity 200ms 1s ease-out; 
+
+  Can be translated to: "Animate any changes in the opacity  property (for the element to which the transition  property is
+  applied) over a duration of 200ms. Start fast and end slow, also make sure to wait 1s before you start". 
+  
+  Instead of this shorthand, you can also specify the four individual properties:
+
+  1) transition-property  (https://developer.mozilla.org/en-US/docs/Web/CSS/transition-property => 
+                            transition-property: opacity; 
+
+  2) transition-duration  (https://developer.mozilla.org/en-US/docs/Web/CSS/transition-duration) => 
+                            transition-duration: 200ms; 
+
+  3) transition-timing-function  (https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function) => 
+                                    transition-timing-function: ease-out; 
+
+  Possible timing function values are: ease-out , ease-in , linear , cubic-bezier()  and a couple of others. See the above
+  link as well as the next lecture for more details.
+
+  4) transition-delay  (https://developer.mozilla.org/en-US/docs/Web/CSS/transition-delay) => transition-delay: 1s; 
+    You can read the official MDN article on CSS transitions here: 
+    https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions
+
+************************************************* Working with timing function ****************************************
+
+****************************************************** Transitions & "display" ****************************************
+. Refer backdrop related code, shared.js
+
+****************************************************** Assignment *****************************************************
+. Added animation for sidebar
+
+****************************************************** Using CSS Animation *********************************************
+. now let's have a look at CSS animations. We can think of them as CSS Transitions++, so it's still about animating things
+  but with way more control over the animation. So if we have a block and we want to move to a bigger block, maybe with a
+  different color, we can of course use a transition but if we want more control, like some in-between step, CSS animations
+  are really what we're looking for.
+
+  In CSS animations, we define so-called keyframes and we got full control what the style of an element is at a given
+  point of time, You define keyframes in a CSS file by using @keyframes, so just as you used @media and so on before, 
+  @keyframes is a special expression. You define a set of keyframes here, which you can later use in a CSS animation and 
+  you have to give that set a name, the name is totally up to you, can be wiggle for example.
+
+  Now important, you can of course use any CSS property here, not just transforme, you can also change the text color with
+  color or the background or whatever you want to do, not every property is animatable but you can still change it.
+
+  @keyframes wiggle {
+    from {
+      transform: rotateZ(0deg);
+    }
+    to {
+      transform: rotateZ(10deg);
+    }
+  }
+
+  .main-nav__item--cta {
+    /* animation: wiggle 200ms 3s 8 alternate; */
+    animation: wiggle 200ms 3s 8 forwards;
+  }
+
+****************************************************** CSS "animation" Property Deep Dive ******************************
+. The animation  property is used as see in the previous video:
+    animation: NAME DURATION DELAY TIMING-FUNCTION ITERATION DIRECTION FILL-MODE PLAY-STATE; 
+
+  Example:
+    animation: wiggle 200ms 1s ease-out 8 alternate forwards running; 
+
+  Can be translated to: "Play the wiggle keyframe set (animation) over a duration of 200ms. Between two keyframes start 
+  fast and end slow, also make sure to wait 1s before you start. Play 8 animations and alternate after each animation. 
+  Once you're done, keep the final value applied to the element. Oh, and you should be playing the animation - not pausing."
+
+  Instead of this shorthand, you can also specify the individual properties:
+
+  1) animation-name  (https://developer.mozilla.org/en-US/docs/Web/CSS/animation-name => animation-name: wiggle; 
+
+  2) animation-duration  (https://developer.mozilla.org/en-US/docs/Web/CSS/animation-duration) => animation-duration: 200ms; 
+
+  3) animation-timing-function  (https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function) => animation-timing-function: ease-out; 
+
+  Possible timing function values are: ease-out , ease-in , linear , cubic-bezier()  and a couple of others. See the above link for more details.
+
+  4) animation-delay  (https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay) => animation-delay: 1s; 
+
+  5) animation-iteration-count  (https://developer.mozilla.org/en-US/docs/Web/CSS/animation-iteration-count) => animation-iteration-count: 8; 
+
+  6) animation-direction  (https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction) => animation-direction: alternate; 
+
+  7) animation-fill-mode  (https://developer.mozilla.org/en-US/docs/Web/CSS/animation-fill-mode) => animation-fill-mode: forwards; 
+
+  8) animation-play-state  (https://developer.mozilla.org/en-US/docs/Web/CSS/animation-play-state) => animation-play-state: running; 
+
+  You can read the official MDN article on CSS animations here: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Using_CSS_animations
+
+***************************************************** Adding multiple keyframes *****************************************
+. we can also use percentage values here. We have 0% and 100% then, that's the same as from and to but now we can add as 
+  many in-between steps as we want simply by adding another block, for example with 50% but you can also use 10, 15, 
+  whatever you need and now you can define which state your animation should have when it's halfway done.
+
+  @keyframes wiggle {
+    0% {
+      transform: rotateZ(0deg);
+    }
+    50% {
+      transform: rotateZ(-10deg);
+    }
+    100% {
+      transform: rotateZ(10deg);
+    }
+  }
+  .main-nav__item--cta {
+    /* animation: wiggle 200ms 3s 8 alternate; */
+    animation: wiggle 400ms 3s 8 forwards;
+  }
+
+************************************************* Adding animations to our customers page ******************************
+. Added animation on customer page
+
+  @keyframes flip-customer {
+    0% {
+      transform: rotateY(0) skew(20deg);
+    }
+    50% {
+      transform: rotateY(160deg) skew(20deg);
+    }
+    100% {
+      transform: rotateY(360deg) skew(20deg);
+    }
+  }
+
+  #customer-1:hover .testimonial__image-container {
+    animation: flip-customer 1s ease-out forwards;
+  }
+
+********************************************************* Assignment ***************************************************
+. Added animation on packages page
+
+  @keyframes push-up {
+    0% {
+      transform: translateY(0);
+    }
+    33% {
+      transform: translateY(-1.5rem);
+    }
+    100% {
+      transform: translateY(-1rem);
+    }
+  }
+
+  .package:hover{
+    animation: push-up 1s ease-out forwards;
+  }
+
+************************************************** Using JavaScript animation event listeners **************************
+  . ctaButton.addEventListener("animationstart", function (event) {
+      console.log("Animation started", event);
+    });
+
+  ctaButton.addEventListener("animationend", function (event) {
+    console.log("Animation ended", event);
+  });
+
+  ctaButton.addEventListener("animationiteration", function (event) {
+    console.log("Animation iteration", event);
+  });
+
+********************************************************** Wrap up *****************************************************
+. Refer pdf note
+
+******************************************************* Useful resources & links ***************************************
+. CSS Transitions: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions
+
+. CSS Animations: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Using_CSS_animations
+
+. List of "transitionable" Properties: https://www.w3.org/TR/css-transitions-1/#animatable-properties

@@ -1,0 +1,181 @@
+**************************************************** Activating strict mode ********************************************
+. Strict mode is a special mode that we can activate in JavaScript, which makes it easier for us to write a secure 
+  JavaScript code. And all we have to do to activate strict mode is to write this string at the beginning of the script
+  so "use strict" and that's it.
+
+  So with this, we activated strict mode for the entire script. So if we have any code before this then strict mode will 
+  not be activated.
+
+. And when secure, I mean that strict mode makes it easier for us developers to avoid accidental errors. So basically it 
+  helps us introduce the bugs into our code and that's because of 2 reasons. First, strict mode forbids us to do certain 
+  things and second, it will actually create visible errors for us in certain situations in which without strict mode
+  JavaScript will simply fail silently without letting us know that we did a mistake.
+
+. With strict mode on, we can not use variable which is not defined, gives error.
+
+. Now another thing that strict mode does is to introduce a short list of variable names that are reserved for features
+  that might be added to the language a bit later.
+
+**************************************************** Functions ********************************************************
+. Function is simply a piece of code that we can reuse over and over again in our code. So it's a little bit like a 
+  variable but for whole chunks of code. So remember a variable holds value but a function can hold one or more complete 
+  lines of code.
+
+. So usually when we write functions we also pass data into a function and additionally, a function can also return data 
+  as well which means to give us data back that we can then use for something else in the program. So a function cannot 
+  only reuse a piece of code like we did here but it can also receive data and return data back
+
+. Parameters of the function gets defined when they are executed.
+
+**************************************************** Function declarations vs expressions ******************************
+. Now in JavaScript, there are different ways of writing functions. And each type of function, works in a slightly 
+  different way. So the function that is below (or in previous lecture) is called function declarations because we 
+  simply use the function keyword to declare a function a bit like we declare a variable.
+
+    function calcAge1(birthYear) {
+      return 2022 - birthYear;
+    }
+
+. Parameter is the kind of placeholder in the function and the argument is then the actual value that we use to fill in 
+  that placeholder.
+
+. In function expressions, we write funtion as an expressions, so it becomes anonymous function and the store that 
+  expression in a value.
+
+    const calcAge2 = function (birthYear) {
+      return 2022 - birthYear;
+    };
+
+. In JavaScript, function is just a value. and when it's a value we can store in a variable.
+
+. The main practical difference is that we can actually call function declarations before they are defined in the code.
+  But if we attempt to do the same with the expression, then that should not work. and internally this happens because 
+  of a process called hoisting.
+
+. All right, now another question that you might have in your mind is which of the two types of functions should I use
+  when I write my own functions? And well, the answer is that oftentimes it's really just a matter of personal 
+  preference. and so different developers prefer different formats.
+
+  Personally, I prefer to use function expressions because this then forces me into a nice structure where I have to 
+  define all the functions first at the top of the code and only then I can call them. So this makes the code a little 
+  bit nicer and more structured.
+
+  I also like to have everything stored in variables, so both values and functions, but again, that is just my own 
+  personal preference.
+
+**************************************************** Arrow Functions **************************************************
+. There is actually a third type of function that was added to JavaScript in ES6 and that's the arrow function. And an 
+  arrow function is simply a special form of function expression that is shorter and therefore faster to write.
+
+. this is a special form of a function expression because it still is a function expression actually. So it's a value, 
+  all of this, that we assign to this variable
+
+    const calcAge3 = (birthYear) => 2022 - birthYear;
+
+. When arrow function contain more that one line then curly brace is required and now we need to add return keyword as 
+  well.
+
+. So now you might ask the same question as before. What type of function should I use? Should I use arrow functions for 
+  everything since they're so easy to write? And well, the answer is no. But it's also complicated. That's because there 
+  is another fundamental difference between the arrow function and more traditional functions. So function declarations 
+  and function expressions. It's the fact that arrow function do not get a so-called this keyword.
+
+**************************************************** Function calling other functions **********************************
+. Refer pdf notes
+
+**************************************************** Reviewing functions **********************************************
+. Refer pdf notes
+
+. these are three different ways of writing functions, but they all work in a similar way. So all of them can receive 
+  input data, they transform data, and then they can output data. It's all optional, but usually that's the things that 
+  functions do. And no matter which type of function we use, we can always do these three things.
+
+**************************************************** Introduction to Arrays *******************************************
+. we can actually mutate Arrays even though they were declared with const.
+  const friends = ["Michael", "Steven", "Peter"];
+  friends[2] = "Jay";
+
+  Now what we can not do is to actually replace the entire Array.
+    friends = ["Bob", "Alice"]; // not allowed
+
+  Array can actually hold values with different types all at the same time.
+    const firsName = "Jonas";
+    const jonas = [firsName, "Schemdmann", 2037 - 1991, "teacher", friends];
+
+**************************************************** Basic array operations (Methods) **********************************
+. push() adds element to the end of the array. It returns the length of the new array.
+
+. pop() removes the last element of the array. It reurns the removed element.
+
+. unshift() adds element to the start of the array. It also returns the length of the new array.
+
+. shift() removes the first element of the array. It reurns the removed element.
+
+. indexOf() returns the index of the element.
+
+. include() checks whether element is in the array or not. returns true/false. ES6 method. It used strict equallity for 
+  checks.
+
+**************************************************** Introduction to Objects *******************************************
+. Following array is basically a data structure which combines multiple values which all belong to this Jonas entity.
+  Now we know intuitively that this first element here of the array should be called the first name. And this one is the 
+  last name. This one could be called age, this one could be called job, and this one could be called the friends.
+
+  But in arrays, there is no way of giving these elements a name. And so we can't reference them by name, but only by 
+  their order number in which they appear in the array. And so to solve that problem, we have another data structure in 
+  JavaScript, which is objects.
+
+    const jonasArray = [
+      "Jonas",
+      "Schmedtmann",
+      2037 - 1991,
+      "teacher",
+      ["Michael", "Peter", "Steven"],
+    ];
+
+. In objects, we actually define key value pairs. And so then we can give each of these values here, a name. So Object 
+  is used when we want to store data about an entity in key-value pair. Problem with array is when we have some 
+  data in array, we would not know, which element represents what, there is no way of recognizing that. and In object, we
+  can represent that using key.
+
+. Creating object using curly braces is known as object literal because we are literally writing down the entire object 
+  content. There are multiple other ways to create object as well.
+
+. So to recap, just like arrays, we use objects to essentially group together different variables that really belong 
+  together such as the properties of Jonas that we've been working with.
+
+  Now, the big difference between objects and arrays, is that in objects, the order of these values does not matter at 
+  all when we want to retrieve them.
+
+  But in arrays, the order in which we specify the elements matters a lot because that's how we access these elements, 
+  right? So we can only access array elements using their order number.
+
+  This means that we should use arrays for more order data, and objects for more unstructured data.
+
+**************************************************** Dot vs. bracket notation *****************************************
+. Object's properties can be accessed using dot and bracket. Now, the big difference between these two here is that in 
+  the bracket notation here, we can actually put any expression that we'd like, so we don't have to explicitly write the 
+  string here, but instead we can compute it from some operation. while in dot notation, We have to use the real final 
+  property name and not a computed property name.
+
+. undefined is what we get when we try to access a property on an object that does not exist.
+
+
+**************************************************** Object Methods ****************************************************
+. this keyword or the this variable is basically equal to the object on which the method is called, or in other words,
+  it is equal to the object calling the method.
+
+. Refer index.js
+
+**************************************************** Iteration: The for loop *******************************************
+. Refer index.js
+
+**************************************************** Looping arrays, breaking and continuing ***************************
+. continue is to exit the current iteration of the loop and continue to the next one. On the other hand, break is used
+  to completely terminate the whole loop.
+
+**************************************************** Looping backward and loops in loops *******************************
+. Refer index.js
+
+**************************************************** The while loop ***************************************************
+. While loop runs while condition is true

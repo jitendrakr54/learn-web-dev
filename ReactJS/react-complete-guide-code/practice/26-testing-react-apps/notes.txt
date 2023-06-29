@@ -1,0 +1,211 @@
+************************************************* Module Intorduction *************************************************
+. Module Content:
+      . What is "Testing"? And Why?
+      . Undersatnding Unit Tests
+      . Testing React Components & Building Blocks
+
+************************************************* What & Why? ********************************************************
+. Refer pdf notes
+
+. what actually is testing? Well, we did test a lot in this course already, we did a lot of manual testing. So that 
+  means that we, as a developer, write some code to implement a certain feature or fix a certain issue and then of 
+  course, we preview that application in the browser and we test it there.
+
+  That's what we do all the time as developers, it's super important because we see what our users will see and we 
+  definitely wanna polish that and make sure that this works, and that this is not going to go away.
+
+. But, testing the app manually is also error-prone, at least if it's the only kind of testing you do. Simply because 
+  it's hard to test all possible combinations and scenarios. If you have a very complex React app with a lot of 
+  different pages and features, and you then add a new feature, or you change an aspect of an existing feature,
+  you will probably test that change or that new feature, but you're not going to test all the other parts of your 
+  application all the time.
+
+  And therefore, you might change something which breaks some other feature in your app and since you're not testing 
+  everything all the time, that breaking change, that bug, might slip through and maybe you eventually catch it later,
+  but that's not guaranteed and you might catch it too late and it might then cause some extra work.
+
+  And that's where automated testing steps in. This is not a replacement for manual testing, manual testing will always 
+  be super important, but it's an addition. With automated testing, you write extra code that runs and tests your other 
+  code, your main application code.
+
+  And this might sound super weird, but this is a standard procedure, a standard thing to do in modern development.
+  And the good thing about that is, that since you write code that tests your entire application automatically, you can 
+  always test everything no matter what you changed because you will automatically then test your entire application,
+  it doesn't cost you a lot of time to do that.
+
+  And therefore, you typically write such tests, such automated tests that test the different individual building blocks 
+  of your app, but where you then test all those building blocks together, whenever you make changes to your code 
+  basically. Instead of testing only parts of your app from time to time. 
+  
+  And that's therefore very technical, but it allows you to test everything all the time and combined with manual 
+  testing, that allows you to catch errors way earlier and it allows you to write and ship better code in applications.
+
+************************************************* Undersatnding different kind of tests *******************************
+. Refer pdf notes
+
+. Now, when we speak about automated testing, it is important to understand that there are different kinds of automated 
+  tests which you can have a look at. For example, there are unit tests and I can already say that those will be super 
+  important. But you also have so-called integration tests and end to end tests.
+
+  Now, these are the three main categories of tests which you can write. Unit tests are all about writing tests for the 
+  smallest possible units of your application. So for functions, individual functions that you use in your application.
+  Or in case of React apps, testing some components independently from the other components in your app.
+
+  And therefore projects typically contain a lot of unit tests, since you basically wanna test all the units, all the 
+  functions and components that make up your application. And hence this is the most common and important kind of test.
+  And the idea simply is that if you test all the individual units on themselves, the overall application will also work.
+
+. But to verify that the overall application really works if you put together all those units, we have integration tests.
+  Here, we test the combination of multiple building blocks. For example, multiple components working together. And 
+  projects typically contain a couple of such integration tests, but not as many as you have unit tests.
+
+  it's not always that easy to differentiate between unit and integration tests when testing React apps, since very 
+  often, you wanna test a component that also uses some other component.
+
+. And then we also have end to end tests. These are all about testing entire workflows in your application, you could 
+  say. Entire scenarios, like logging a user in and then going to a certain page. So these aim to really reproduce what 
+  a real human would do with your website. Basically what you would also do with manual testing, just automated.
+
+  Now, whilst this might sound like the most important test it definitely is important and you therefore typically do 
+  write some end to end tests but not as many as you have unit and integration tests, because if your a unit and 
+  integration tests work, you can be pretty sure that your overall application works. And then those unit and 
+  integration tests are simply easier to test.
+
+************************************************* What to test & How to test *****************************************
+. Refer pdf notes
+
+. Now, when you start writing tests, there are two super important questions you have to answer, relatively early. And, 
+  these questions are what you should test, and how you should test that.
+
+  And, I don't mean how you should technically test that. So, how you make sure that you have some code that is then 
+  executed by some other tool. but I mean, which kind of code should you put into your testing code?
+
+. Now, when it comes to what to test, then, as mentioned for unit tests, you wanna test the different building blocks
+  that make up your application, and you really wanna test small building blocks, so that you have small, focused tests,
+  that only test one main thing each.
+
+  Now regarding the "how", you wanna test success and error cases, that could occur, if a user interacts with your 
+  application. And, you also, of course, wanna test some rare, but possible scenarios and results.
+
+***************************************** Undersatnding the technical setup & involved tools ***************************
+. Refer pdf notes
+
+. we now have have a rough idea of why we need tests and we know that tests are code that then tests our other code,
+  but where do we write this code and how do we execute this testing code?
+
+  For this, we need some extra tools and an extra setup. And specifically we need a tool for running our testing code
+  and for asserting the results. So for determining whether some result can be seen as a success, or if a test failed 
+  with a given result, we need a tool that does that. And then in our react app, we also need a way of simulating of 
+  rendering our react app and components for those automated tests to then interact with them. So we need to simulate 
+  the browser, so to say. 
+  
+  Now, for the first part for running our testing code and asserting the results, we typically use Jest. It's not the 
+  only tool for this job but it's very popular, especially for react and it's easy to use. Now for simulating and 
+  rendering our components and the react app, we typically use the react testing library these days. And both these 
+  tools are already installed and set up for you, when you work in a project created with create react app.
+
+******************************************************** Running a First Test *************************************
+. Now I didn't really change the component code too much. I just cleaned up the index.JS file a little bit and I did not 
+  delete the App.test.js file, which we did not use up to this point in the course, and the setup test JS file because 
+  we will need those files now.
+
+  Now setupTests.js, as the name implies, just does some setup work and we don't need to do anything else in this file.
+  But the App.test.js file is quite interesting. This is a file that contains some testing code.
+
+. This is a file which is there to test this app component because the convention is to name your testing files like 
+  your component files, just with the word test in the file name. So .test.js as an extension to be precise. 
+  
+  And in this App.test.js file. We have this test function which we execute here, which takes two arguments. The first 
+  argument is a description of the test. This is up to you. It helps you identify this test in the testing output
+
+  The second argument is a function an anonymous function, which is the point here which contains the actual test and 
+  code. So that's the code which will be executed once we run our test.
+
+. To run the test, we need to run "npm test" and it asks for input. press "a" to run all the test. So basically it will 
+  automatically look for files the end with .test.js and then run all the tests that are defined in there with that test 
+  function. 
+
+*************************************************** Writing our first test ********************************************
+. Refer pdf notes
+
+. Now in here, we typically wanna do three things when we write a test. We wanna write a test by using the three A's.
+
+  The first A stands for arrange. We wanna set up our tests. For example, we wanna render the component which we wanna 
+  test. We can also do additional setup work if it's required. 
+  
+  Then we wanna act. So we wanna do the thing, which we wanna actually test. For example, if we wanna simulate a button 
+  click, we want to do that as a second step. It's not something we do here but it is something that you often will do 
+  in some tests, and it is something which we also will do later.
+
+  Last but not least, we want to assert the results. So we wanna have a look at the output that's visible in the 
+  browser, for example and then see if that matches our expectations. So these are our three A's.
+
+. And since I want to test whether hello world is rendered as a text, I want to select an element by that text. And if 
+  we find such an element we know that the test succeeded. If we don't find it, we know that the test failed. For this, 
+  we can import screen, which gives us access to this, a virtual screen to this virtual Dom, which was rendered and we 
+  can use that screen to then find elements on that screen.
+
+*************************************************** Grouping Tests together with Test Suits ****************************
+. As your application grows, you typically will have dozens or maybe hundreds or thousands of tests and to organize and 
+  group those different tests, you often organize them into different testing suites. For example, all the tests, 
+  belonging to one feature, or one component of your application, could be grouped into one testing suite, and you 
+  create such a testing suite, by using the global "describe" function.
+
+. You also give these two arguments, where the first argument is a description and this is a description of this category
+  to which your different tests will then belong, and here it could be "Greeting," like this, or "Greeting component"
+  to make it clear that we're talking about the tests, belonging to the "Greeting component." Then you have a second 
+  argument, which also is an anonymous function here.
+
+  But in this function you don't write the testing code itself, but you put your different tests in there. So we kept 
+  this test and added in this function. And now we've got one suite with one test and we can have multiple suites and we 
+  can also have multiple tests per suite.
+
+. Refer Greeting.test.js
+
+************************************************ Testing user interaction & State **************************************
+. Refer Greeting.test.js
+
+************************************************ Testing connected components ****************************************
+. The nice thing which we'll notice is that the tests simply continue to work. So that's the good thing about render
+  which we use to render the greeting component. It really renders this entire component tree that is required here.
+  So it renders not just greeting and ignores other components used in that JSX code but it renders the content of those
+  components like in this case, the output component as well. And technically we could therefore call this an integration
+  test because now more than one unit, more than one component is involved. But especially when dealing with such a wrapper 
+  component.
+  
+. Refer Output.js
+
+************************************************ Testing asynchronous code ********************************************
+. With getAllByRole test will fail, because getAllByRole() will look for listitem immediately but listitem is dependent 
+  on fetch which is async call, so lisitem won't be available in DOM, hence it fails.
+
+  Instead we should use findAllByRole() which wait for the data to be rendered. and test will run with this. But this is 
+  still not ideal.
+
+. Refer Async.js, Async.test.js
+
+************************************************ Working with mocks ***************************************************
+. Because we are sending a Http request here. And in this case we are fetching some data from some API. However, when we 
+  run our tests which we typically do a lot during development, we generally don't wanna send Http requests to our 
+  servers.
+
+  We don't wanna send requests because A, that will cause a lot of network traffic, it will hammer our servers with 
+  requests. Especially if you have a lot of tests with a lot of requests. And B, if you are not fetching data but you 
+  have some Component that sends a POST request to a server, your tests might start inserting data into a database
+  or they might start changing things on the server because of course you also wanna test Components and scenarios where 
+  such kind of requests are being sent. And that's definitely not something you wanna do during testing.
+
+. So therefore what we generally wanna do when we write tests is, we either don't even wanna send a real request or we 
+  wanna send it to some fake server, some testing server.
+
+. there's one super important thing to note, when you write a test you don't wanna test code, which you haven't written.
+  So in this case, I don't wanna test whether this fetch function works correctly and sends a request.
+
+  I instead wanna test if my Component behaves correctly depending on the different outcomes of sending a request. And 
+  therefore we wanna replace this fetch function which is built into the browser with a so called mock function with a 
+  dummy function that overrides the build in function. A dummy that does what we want and that does not send a real 
+  request.
+
+  For this, in our test file, we override window.fetch() function with jest.fn()
+
+. Refer Async.test.js

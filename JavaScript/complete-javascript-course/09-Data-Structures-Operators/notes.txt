@@ -1,0 +1,268 @@
+************************************************* Destructuring Arrays ************************************************
+. Destructuring is an ES6 feature and it's basically a way of unpacking values from an array or an object into
+  separate variables. In other words destructuring is to break a complex data structure down into a smaller data structure like a variable.
+. For arrays we use destructuring to retrieve elements from the array and store them into variables in a very easy way.
+. Refer script.js
+
+************************************************* Destructuring Objects ************************************************
+. we use the curly braces to destructure objects. Because this is also how we create objects. Then all we have to do is 
+  to provide the variable names that exactly match the property names that we want to retrieve from the object.
+
+  Now, since in an object, the order of elements does not matter, we don't need to manually skip elements like we did in 
+  an array. So we can simply write name. 
+  
+  Destructuring is an extremely useful addition to the language. Especially when we deal with the result of an API call, 
+  which basically means to get data from another web application, like weather data or data about movies or something 
+  like that. And this data usually comes in the form of objects basically. And then destructuring is really a lifesaver.
+  It allows us to write a lot less code.
+
+. Refer script.js
+
+************************************************* Spread operator ****************************************************
+. We use the spread operator to basically expand an array into all its elements. So basically unpacking all the array
+  elements at one.
+
+. Basically it take all the values out of this arr. array, and then write them individually as if we wrote seven, eight, 
+  nine here manually.
+
+. Spread operator is actually a bit similar to destructuring, because it also helps us get elements out of arrays.
+
+. Now, the big difference is that the spread operator takes all the elements from the array and it also doesn't create 
+  new variables. And as a consequence, we can only use it in places where we would otherwise write values separated by 
+  commas.
+
+. Spread operator works on all so-called iterables. iterables are things like all arrays, strings, maps, or sets, but 
+  not objects.
+
+. since ES 2018, the spread operator actually also works on objects, even though objects are not iterables.
+
+. Use cases of Spread operator:
+    1. build new arrays - const menu = [...restaurant.starterMenu, ...restaurant.mainMenu]
+    2. pass multiple values into a function - restaurant.orderPasta(...ingredients)
+       In both cases, we use the spread operator to expand an array into individual elements.
+
+. Refer script.js
+
+**************************************************** Rest pattern ****************************************************
+. The rest pattern uses the exact same syntax however, to collect multiple elements and condense them into an array.
+. so that's really the opposite of spread The spread operator is to unpack an array while rest is to pack elements
+  into an array.
+. rest is used on the left hand side of assignment operator - const [a, b, ...others] = [1, 2, 3, 4, 5];
+. rest pattern always must be the last in the destructuring assignment because otherwise how will JavaScript know
+  until when it should collect the rest of the array.
+
+. Refer script.js
+
+*************************************************** Short Circuiting *************************************************
+. Short-circuiting is the evaluation of an expression from left to right with || and && operators. If the condition is met
+  and the rest of the conditions won't affect the already evaluated result, the expression will short-circuit and return 
+  that result (value).
+
+. Three properties of logical operators -
+  1. They can use any data type.
+  2. They can return any data type
+  3. and they do something called short circuiting
+
+. logical OR (||)
+ . In the case of the OR operator, short circuiting means that if the first value is a truthy value, it will immediately 
+   return that first value.
+   eg: console.log(3 || 'Jonas') output: 3
+ . OR operator will return the first truthy value of all the operands, or simply the last value if all of them are falsy.
+
+. logical AND (&&)
+ . AND operator will return the first falsy value or the last value if all of them are truthy.
+
+. For practical applications, we can use the OR operator to set default values, if the first one is falsy value
+  and we can use the AND operator to execute code in the second operand if the first one is true.
+
+. Refer script.js
+
+***************************************************** Nullish coalescing operator (??) *********************************
+. Introduced in ES2020
+. the nullish coalescing operator works with the idea or with the concept of nullish values instead of falsy values.
+  nullish values are null and undefined. It does not include a zero or the empty string.
+
+  So basically, for the nullish coalescing operator, it is as if the zero and the empty string were not falsy values
+  and were instead truthy values as well.
+
+  So only if first value is null or undefined then the second operand would be executed.
+
+. Refer scripts.js
+
+***************************************************** Logical assignment operator *************************************
+. Refer script.js
+
+***************************************************** Looping Arrays: The for-of Loop *********************************
+. for-of loop will automatically loop over the entire array and in each iteration, it will give us access to the current
+  array element. In this loop we don't need to specify indexes.
+
+. If we need index of array then we can get it using entries() method. entries() method of array returns array where 
+  each element of array contains another array which is basically index of orignal array and the element itself.
+
+***************************************************** Enhanced Object Literals ***************************************
+. Now ES6 introduced three ways, which make it easier to write object literals.
+  . Using objects inside another object. eg: Using openingHours inside restaurant object
+
+  . Creating method inside object literals: So in ES6 we no longer have to create a property, and then set it to a 
+    function expression. So in ES6 we no longer have to create a property, But again, now we no longer need to do that
+    we can write it in an easier way which is to get rid of this function keyword.
+
+  . And finally, the third enhancement is that we can now actually compute property names instead of having to write 
+    them out manually and literally.
+
+. Refer script.js
+
+***************************************************** Optional chaining **********************************************
+. With optional chaining, if a certain property does not exist, then undefined is returned immediately.
+
+. Let's say if data comes from an API where we don't know if certain property exist or not and we try to access those
+  property then we get error.
+
+  for example: restaurant.openingHours.mon.open
+
+  Here we are trying to access Monday which doesn't exist then we get error and further we are trying to access open then
+  we get error. Because it will result into undefined.open so in such scenario optional chaining could be useful 
+  otherwise we have to write it with if satement, if certain property exist then access further properties.
+
+. Optional chaining operator and the nullish coalescing operator working together(Refer script.js). And in fact, they 
+  were introduced into the language at the same time in ES2020 because they were really designed to work well with each 
+  other. So again, both of them rely on this new concept of nullish and so nullish values are null and undefined.
+
+. Optional chaining does indeed also work for calling methods. So, essentially we can check if a method actually exists 
+  before we call it.
+
+. And finally, optional chaining even works on arrays. So basically we can use it to check if an array is empty.
+
+. Refer script.js
+
+*************************************************** Looping Objects: Object Keys, Values, and Entries ****************
+. We can also loop over objects, which are not Iterable, but in an indirect way. Now we have different options here, 
+  depending on what exactly we want to loop over. So do we want to loop over the objects, property names over the 
+  values or both together.
+
+. ultimately we will still have to use the for-of loop to loop over the array, but again, we're going to do that
+  in an indirect way. So we're not actually looping over the object itself. Instead, we're going to loop over, an 
+  array.
+
+. So basically Object.keys(), Object.values() return an array of property, values, which we can loop using for-of.
+
+. We can get entire object using Object.entries() which raturns array of arrays of objects.
+
+. Refer script.js
+
+******************************************************* Sets: ES6 feature ********************************************
+. Set is basically just a collection of unique values. So that means that a set can never have any duplicates. And 
+  that property makes them useful in certain situations. To create a new set, we write new set and then here, we need 
+  to pass in an iterable. And the most common iterable here is an array.
+
+. just like arrays, sets are also iterables. set is still very different from an array -
+    . first, because its elements are unique.
+    . second, because the order of elements in the set is irrelevant.
+
+. Accesing element from set using index doesn't work, it gives us undefined, no matter what number we put here. And 
+  that is because in sets there are actually no indexes. And in fact, there is no way of getting values out of a set. 
+  And if we think about this, then it makes sense. So there's really no need for getting data out of a set. That's 
+  because if all values are unique, and if their order does not matter, then there is no point of retrieving values out 
+  of a set.
+
+  All we need to know is whether a certain value is in the set or not. And that's why we have the has() method. If your 
+  goal is to actually store values in order and then retrieve it, then the best use case, is to just use an array. You 
+  wouldn't use a set for that. And so again, there's no need for getting values out of a set, because if you need it, 
+  then you will just use an array.
+
+ . Main use case of sets is actually to remove duplicate values of arrays.
+
+. Consclusion, sets are not intended to replace arrays at all. So whenever you need to store values in order, and that 
+  might contain duplicates, always just use arrays. That's also true when you need to really manipulate data, because 
+  arrays have access to a lot of great array methods.
+
+. Methods: add(), has(), delete(), clear()
+
+. Refer script.js
+
+******************************************************* Maps: ES6 feature ********************************************
+. Map is a data structure that we can use to map values to keys. So, just like an object data is stored in key value 
+  pairs in maps. 
+  
+  Now, the big difference between objects and maps is that in maps, the keys can have any type and this can be huge.
+  So, in objects, the keys are basically always strings. But in maps, we can have any type of key. It could even be 
+  objects, or arrays, or other maps.
+
+. the easiest way to create a map is to actually create an empty map without passing anything in. And then, to fill up 
+  the map using set() method. set() method actually returns the updated map allows us to chain the set() method.
+
+. Methods: set(), get(), delete(), clear()
+
+. Refer script.js
+
+******************************************************* Maps: Iteration ********************************************
+. Refer script.js
+
+******************************************************* Summary: Which data structure to use? ************************
+. Now we have four data structures from which we can choose.
+
+. There are essentially three sources of data. First, the data can be written within the program source code itself like 
+  status messages that will be displayed on a webpage based on user actions. Second, data can come from the user 
+  interface. So from the webpage, it can either be data that the user inputs into some form or data test already written 
+  somehow in the DOM. For example, this can be the users tasks in a todo app or expenses in a budget app or anything 
+  like that. Finally, data can come from external sources which is usually a web API.
+
+  API stands for Application Programming Interface and we can basically use a web API to get data from other web 
+  applications. For example we can use a web API to get the current weather in any city or data about movies or currency 
+  conversion rates and really every kind of data that you can imagine.
+
+. So no matter where the data comes from and what kind of data it is, we usually always have collections of data that we 
+  then need to store somewhere. And so where do we store collections of data? That's right, we use data structures, but 
+  as you know there are four built-in data structures in JavaScript. And so now we need a way of deciding between them.
+
+  So the first decision is this do we just need a simple list of values? If so, then we're gonna use an array or a set.
+  But on the other hand if we need key value pairs, then we need an object or a map. So the big difference here is that 
+  with a key value pair we have a way of describing the values, so by using the key. On the other hand, in a list like 
+  an array or a set, we simply have the values without any description.
+
+. Refer pdf notes
+
+. Well objects have been the traditional key value data structure simply because we didn't have maps before ES6, but 
+  using objects simply as key value stores has a couple of technical disadvantages. And that's why some people say
+  that we've been abusing objects for this. Now maps on the other hand are way better suited for simple key value stores
+  because they offer better performance(10 times faster than object) in fact. Also map keys can have any data type and 
+  they're also easy to iterate and it's easy to compute the size of a map.
+
+  However, the biggest advantage of objects is probably how easy it is to write them and to access data by simply using 
+  the dot or the brackets operator. Also most developers are already super used to objects. And so they simply keep 
+  using them for simple key value stores.
+
+  Anyway, as a conclusion you should use maps when you simply need to map keys to values and also when you need keys 
+  that are not strings.
+
+  Now, if you need functions as values then you should absolutely use an object for that. So in objects, these functions 
+  are then called methods and you can use the this keyword to access properties of the same object, which is impossible 
+  in maps.
+
+  Also, when working with JSON data, as we saw in the previous slide you will probably be using objects for that as well
+  unless you then want to convert the objects to maps, but that's usually not something that we do. So in fact, we still 
+  use objects all the time but maps are also a very important data structure right now and way more important than sets.
+
+******************************************************* Working with Strings - Part 1 ********************************
+. One good use case of index is to extract part of a string using the slice method and a slice method needs indexes
+  as arguments. And so therefore sometimes it can be very useful to first figure out the index of part of a string to then
+  extract that.
+
+. Question: strings are just primitives. So why do they have methods?
+  Whenever we call a method on a string, JavaScript will automatically behind the scenes convert that string primitive 
+  to a string object with the same content. And then it's on that object where the methods are called. and this process 
+  is called boxing because it basically takes our string and puts it into a box which is the object.
+
+. All string methods return primitives. Even if called on a string object.
+
+. Methods: indexOf(), lastIndexOf(), slice()
+
+******************************************************* Working with Strings - Part 2 ********************************
+. To write regular expression we need to write in slash // instead of quotes.
+
+. Methods: toLowerCase(), toUpperCase(), trim(), replace(), replaceAll(), includes(), startsWith()
+
+******************************************************* Working with Strings - Part 3 ********************************
+. Methods: split(), join(), padStart(), padEnd(), repeat()
+
+******************************************************* String method practice ***************************************

@@ -1,0 +1,22 @@
+**************************************************** Explore the React Ecosystem ****************************************
+. Other react libraries/framework to explore:
+. Gatsby: Gatsby is another library for React, so which builds up on React, which acts as a static site generator using 
+  React. And you can learn more about Gatsby on their official page of course, but in the end Gatsby allows you to 
+  leverage your React knowledge to then produce static websites which only consists of HTML, CSS, and JavaScript, but 
+  which are pre-rendered in advance so that search engines see what your users will see before JavaScript code is 
+  executed in the browser and therefore Gatsby can help you offer a better user experience, it can help you with search 
+  engine optimization, and it can act as a nice alternative to Next.js
+
+. Now Preact, in the end, is React with a way smaller footprint. It has the same API, so the same functionalities React 
+  offers, for example, it has all those React hooks, but it's way smaller. Now this of course sounds like magic and it 
+  sounds like you should always use Preact, but of course, it achieves this very small size by stripping out internal 
+  functionality React has built-in, functionality that might offer a smoother user experience once your app is up and 
+  running. but that is something you'll have to find out on your own. Diving into Preact and playing around with it,
+  might definitely worth a thought because you might not be building an application that needs all those built-in 
+  optimizations React has to offer, and in that case, Preact might be a great alternative
+
+. Now React Native is a framework for React also built by Facebook, so by the same company that's responsible for React,
+  that actually allows you to build mobile apps for iOS and Android with React. And that's of course super amazing,
+  because that means that you can use the knowledge you already have and you cannot just build websites and web apps 
+  with it, but you can also build mobile apps with it. And you don't need to learn Android or iOS development or 
+  programming languages for those devices, you can really just use what you already know, JavaScript and React.

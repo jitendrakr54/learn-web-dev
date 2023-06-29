@@ -1,0 +1,160 @@
+******************************************* Module Introduction, content ************************************************
+. What's complex about forms?
+. Handling inputs & forms with react
+. simplifications
+
+*********************************************** Our starting setup ******************************************************
+. Created project
+
+**************************************** What's so complex about forms? ************************************************
+. Refer pdf
+. Forms might seem simple and trivial, but they are not. Forms can actually be complex from a developer's point of view
+  because forms and their inputs can assume a broad variety of different states. One or more inputs could be invalid or 
+  valid. And these are only two states it's even possible that you could have forms where the state is unknown because 
+  maybe you have some asynchronous validation where you need to send the request to a server behind the scenes to check 
+  something to find out if a certain value is available.
+
+  Let's say an email address to then find out whether the input is valid or not. So it could be even more complex than 
+  shown here but even here we have two states and you must not forget that these states valid and invalid, don't just 
+  apply to the overall form, but to every individual input in the form and extend a some of the states of those inputs 
+  that make up the overall form state.
+
+******************************** Dealing with form submission & getting user input values *******************************
+. let's come back to this SimpleInput component, and let's start with getting the user input here. And let's then also 
+  validate that input and potentially show an error message to the user. And then we're going to explore the different 
+  ways of validating. So the different triggers for validating, to find out where the differences are, and how we might 
+  best be able to combine everything. 
+  
+. Here we are getting entered value using useState on every key stroke and useRef. Now, in reality, you, of course,   
+  wouldn't do both. You would do one of the two approaches, either every keystroke logging with the state, or something 
+  similar, or you use a ref to read the value when you need it. Now, how do you decide which one to use?
+
+  It depends what you plan to do with the entered value. If you are only interested in it once when the form is 
+  submitted, a ref might be better because logging and updating the state value with every keystroke is a bit overkill 
+  then. You don't need to do that if you only want the value once. However, if you of course need the value, the entered 
+  value after every keystroke, for example, for instant validation, then using the state is better because with a ref 
+  you can't really do that.
+
+  Another reason for using a state instead of a ref could be, if you want to reset the entered input. Let's say here at 
+  the end of the form submission handler. There we can reset the entered name by calling setEnteredName and setting 
+  this to an empty string. And all we now need to do is bind the entered value back to the input through the value prop.
+  The enteredName is now bound to the value prop on input. And hence, if we update the enteredName, that will be 
+  reflected here. This works great when using state, but it's not really possible with refs, at least not as elegant.
+
+  With refs, you could also use your ref and access the input element which is stored in that ref, and set value equal 
+  to an empty string. But this is not an ideal way of doing it. It works, if I comment out this, it works as you can 
+  tell, but it's not ideal because we are directly manipulating the dom here, we're using some vanilla JavaScript code
+  to directly reach out to the dom and change something there. And that is typically not something you should do.
+
+********************************************* Adding basic validation ***************************************************
+. Let's add basic validation in form - prevent user to submit empty form. Refer SimpleInput.js
+
+********************************************* Providing validation feedback *********************************************
+. Added basic validation. Refer SimpleInput.js
+
+****************************************** Handling the "was touched State" *********************************************
+. One downside of the validation we added thus far is our code. Specifically, this line we have this enteredNameIsValid 
+  state. And we start with true here, which implies that initially we treat this as valid and it turns out that that's not really the case. We just set it to true to not show that error state here ahead of time.
+
+  But actually we're cheating a bit here. We're setting this state to avail you. That's not correct because we know that 
+  we're not going to really need that state for anything else. Then outputting, whether it is this valid or not.
+  Now, why could this be a problem?
+
+  Well, imagine you had some useEffect call in there where you do something. Whenever enteredNameIsValid changes and 
+  specifically you do something. If enteredNameIsValid is true. So if it's true, you wanna do something  in this case, 
+  log name input is valid in a real application. You might want to send an HTTP request here. In log, we can see, "name 
+  is valid" at the beginning. we incorrectly set this state here to true and it isn't valid at the beginning. That's 
+  just not correct.
+
+  I think it makes more sense to set this to false initially because the input is invalid initially, hence, we might 
+  want to add a third state here. The enteredNameTouched state maybe and And this this state is false initially because 
+  initially this input field is untouched. Now set this state to true when form is submitted, that's when we consider, 
+  form is touched.
+
+************************************************ React to lost focus ****************************************************
+. Now up to this point we're still on the left side of this slide(See pdf notes). We are always validating when a form 
+  is submitted. We're not validating when an input lost focus or on every keystroke.
+
+  That might not be the best possible user experience. I think it's better to show the user this error when the user had 
+  a chance of working on this. So if I click in there and click out of there and I leave it empty, error should be shown.
+
+  Handling onBlur event. refer SimpleInput.js
+
+********************************************** Refactoring & Deriving states ********************************************
+. We handled scenario where we remove error when user starts typing and now form is behaving perfectly fine but our code
+  is not good, we have added a lot of code just to handle one input. we have code duplicacy, let's start working on that.
+
+  Refer SimpleInput.js
+
+********************************************** Managing the overall form validity ***************************************
+. This is one input of an overall form. And in this case, of course, it's the only input, but often you would have more 
+  than one input as we're also soon going to see in the BasicForm JavaScript file. And for such scenarios, of course, it 
+  would be good if we also could find out if the overall form is valid.
+
+  And for that we could again use useEffect. And in this useEffect call here, I want to set the overall form validity.
+  For this I'm interested in the validity of my form inputs and hence I'll add all the form input validities I have in 
+  this form here. So for example, the enteredNameIsValid constant. If we had two form inputs here, we would have another 
+  constant. For example, for the enteredAgeIsValid. And then I would enter enteredAgeIsValid
+
+  Now, if we take a closer look at this useEffect function here though, we don't even need useEffect. We're not 
+  performing any side effect in there. We're doing nothing that would be a problem if we would do it without using 
+  useEffect. All we're doing is deriving a new value. So we're basically doing the same here just for deriving the 
+  overall form validity. And of course there is no reason to use useEffect here for that.
+
+  We can, but it really doesn't add anything it just adds extra component re-evaluation cycles. And that's of course not 
+  an advantage. Instead, we can get rid of that formIsValid state and we can get rid of useEffect and just check if 
+  enteredNameIsValid and any other properties we might have here like entered age if we have that. And then we simply 
+  add a new variable here, form is valid which by default is false let's say. Which we then set to true here in this if 
+  case and which we set to false here in the else case. And actually we don't even need the else case now because that 
+  is our default and we only override this with true if all our input states are valid. So this again allows us to slim 
+  this down even further.
+
+********************************************** Assignment **************************************************************
+. Add email field and validation for that
+
+********************************************** Adding a custom input hook ***********************************************
+. we have a working code here but we have a lot of duplication. We're not duplicating the exact same words. These 
+  constants are named differently. This logic here is different, but the overall logic, the overall structure is of 
+  course exactly the same. And if we think about a more complex form like this one which actually isn't too complex
+  but which has at least three inputs then we would be repeating that same structure, that same code in the end three 
+  times. And that's not what we wanna do. So instead we typically want to outsource some logic somewhere. We don't want 
+  to retype and repeat it all the time. And how can we best do that?
+
+  You could consider creating a separate input Component so that you will replace this code down there with the input 
+  Component. And inside of that input Component you then have that logic for validating it, for checking its touch 
+  status and so on. And that would probably work. That is something you could do. The only thing that could become a bit 
+  more tricky then or where you would need to find a solution would be for managing the overall form validity.
+
+  But there always is another approach which I tend to prefer here. And that would be a custom hook. We can use a custom 
+  hook to manage all that state logic in there.
+
+********************************************** Re-using the custom hook ************************************************
+. Used useInput() custom hook for email
+
+********************************************** A challenge for you! ****************************************************
+. Try form validation for BasicForm
+
+******************************************* Applying our ok & knowledge to a new form ***********************************
+. compare challenge with this code
+
+******************************************************* Summary *********************************************************
+. Go through article : https://academind.com/tutorials/reactjs-a-custom-useform-hook
+. In addition, there also are third-party libraries that could be interesting to you. For example, Formik. Formik is a 
+  very popular third-party library for working with forms and you can dive into the official docs to learn more about it.
+  It's not really using hooks that much, it's more using components and patterns we know from older versions of React,
+  Formik then just has more use cases and outsources even more Logic, or allows us to outsource even more Logic to it.
+  So that might definitely be worth a look.
+
+**********************************************Bonus: Using useReducer() *************************************************
+. we can also practice working with useReducer again because what did we learn about useReducer? When does it shine or 
+  when is it worth considering using it? We learned that it's great to use useReducer or that it's worth a thought to 
+  use useReducer if we need more power. So if you have a lot of different possible state values and a lot of complex 
+  state updating logic but also if we have related pieces of state which are managed in individual states especially if 
+  those states depend on each other.
+
+  Now, arguably, that's not really the case here. We never have a lot of different state values nor a very complex state 
+  updating logic here. And in addition we do have multiple states that kind of belong together the value and the touch 
+  state. They both kind of represent the state of the input element but they don't really depend on each other. That 
+  would not really be true to state this nonetheless to practice working with useReducer again.
+
+  So let's practice useReducer by taking input value and touched state. Refer user-input.js

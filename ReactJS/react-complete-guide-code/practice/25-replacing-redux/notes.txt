@@ -1,0 +1,195 @@
+****************************************************** Module Introduction ********************************************
+. Replacing Redux with Context + Hooks
+. A totally optional of reducing your dependencies
+
+****************************************************** React 18 & This Section ***************************************
+. You can update the project to React 18 with these two steps:
+
+  1) npm install --save react@latest react-dom@latest
+
+  2) Update index.js:
+
+    Replace
+          ReactDOM.render(<App />, document.getElementById('root'));
+    with
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(<App />);
+
+********************************************** Starting project & why you would replace Redux **************************
+. The first important thing I really want to emphasize is that there's nothing wrong with that approach. You don't need 
+  to switch away from Redux at all. But maybe you want to. And why would you?
+
+  Well, maybe you want to stay in the react-only world, so that you don't need to learn Redux. Arguably it's not that 
+  hard to learn Redux, but still, maybe you want to use only the tools react gives you. Maybe you also simply don't want 
+  to add that extra Redux and react-redux library to your project.
+
+  Hence, you would end up with a smaller bundle, because if you don't have these extra libraries included, obviously you 
+  ship less code when you deploy your application. And that could be a good argument because you can certainly shrink 
+  your bundle a bit.
+
+  Though I will also say, if you have a really large application, it might not matter that much if it's included or not.
+  Yet, that could be a reason for why you don't want to use Redux.
+
+  Or you simply want to explore how you can manage your state globally without passing everything through props, but 
+  still without using Redux. And that's why, in this module, I will now show you two different approaches of managing 
+  your state with react-only tools. One of those approaches is a good one, the other one is not that great, at least, 
+  not for all use-cases.
+
+********************************************** Alternative: using the Context API *************************************
+. An approach that is sometimes the right choice, but not always. In this approach we'll use the context API. For this, 
+  I'll add a new folder to this project, and I'll name it context, but you can of course name this whatever you want.
+
+  You can manage this wherever you want. In this context folder I'll create a new file, and I'll name it 
+  products-context.js,
+
+. Refer conetxt/product-context.js, index.js, container/Products.js, ProductItem.js, Favorite.js
+
+********************************************** Toggling favourites with the Context API ********************************
+. Refer conetxt/product-context.js, ProductItem.js
+
+********************************* Context API Summary (and why NOT to use it instead of Redux) *************************
+. The statement here is clear, the context is great for low-frequency updates but not for high-frequency ones. That 
+  means if you have something which changes rarely, let's say the user authentication status or just the example I used 
+  in the React Hooks module, that is fine to be covered with the context API because this will not change all the time, 
+  not that often.
+
+  The same would be the case if you have something like theme-ing on a page, or something which doesn't change all the 
+  time.
+
+. The way the react context API works is such that whenever something changes in your context it has no way of cleverly 
+  figuring out which component that uses this context really is concerned and which component is not. Which means that 
+  every component that uses useContext will rebuild, will re-render when you switch something in that context. No matter 
+  if it's directly effected or not.
+
+  And in general the react context API is simply not optimized and not meant to be your Global State Management tool in 
+  your app. It's meant for some states, like authentication status, like the theme but not for all your states because 
+  of these missing optimizations and all of this missing intent behind the context API.
+
+  Hence it is great for some things like authentication which I mentioned a couple of times but not for all use cases 
+  not for all scenarios and something like your products and the favorite status is probably not what you want to manage
+  with the context API in larger projects.
+
+**************************************** Getting started with a Custom Hook as a Store ********************************
+. Now I will build my own global state management store and solution with just JavaScript react and react hooks and 
+  nothing else and also not the context API. For that we will create hooks-store/store.js file.
+
+. So let's say we're using that file to manage our global state. And I'm deliberately using a very generic name here
+  because we'll be able to use this store for all kinds of states, not just for our products. Global state could be an 
+  object.
+
+  Now we also want to have a couple of places in the app where we can listen to changes in that state. So all that a 
+  variable listeners here, that's an array. Please note that both these things are normal variables in this file.
+
+  Block scoped so not globally available variables but only available in that file, but they're not tied to any class or 
+  anything like that. They're just in that file. They're also not exported. So we got listeners, we got the state we'll 
+  also need a couple of actions which can be dispatched.
+
+. Now let's create a custom hook named as useStore. Now in this custom hook we can use other React hooks. So let's import
+  useState(). Because my goal here now is that I have some mechanism that could lead to other components to re render, 
+  and useState has such a mechanism. useState allows us to manage a state and whenever we update that state any component
+  that uses useState will re render.
+
+. if a component uses a custom hook, and that custom hook uses useState, the component that uses the custom hook will re 
+  render when you state in that custom hook will trigger a re render. And that's what I will take advantage of here.
+  So I want to have some state here, in my custom hook. And that state will actually be my global state. So I am using 
+  the variable which is defined outside of my hook, and that's important.
+
+  It's defined outside of my hook. So it's global. It's not recreated when we call useStore. It's not created separately 
+  for every component that consumes my custom hook. Instead it will be created once when this file is first imported, 
+  basically.
+
+  And there after any other file that imports from the same file will all use that same state. And that's one important 
+  idea here we'll share data between all files that import from it. And that's not something we did before with custom 
+  hooks. There, the idea was the opposite that we could share logic but not data now will share logic and data by 
+  managing the data outside of the hook because inside of the hook it would not be shared.
+
+  It would be inclusive to each component. Each component would get it's own data. But managing it outside of the hook 
+  every file imports this file or something from that file gets the same shared data.
+
+. Refer hooks-store/store.js
+
+************************************************ Finishing the Store hook **********************************************
+. Refer hooks-store/store.js
+
+************************************************ Creating a Concrete Store *******************************************
+. Refer hooks-store/product-store.js
+
+************************************************ using the Custom Store ***********************************************
+. Refer index.js, container/Products.js, ProductItem.js, Favorite.js
+
+************************************************ Custom hook stor Summary *********************************************
+. So what we built here in the end is our custom Redux like store implementation. We're having some variables which are 
+  not global, not registered on the window object but which do exist in this file here and they only exist once in our 
+  application lifetime. So they're shared in the entire application.
+
+  Every modules or every other file which imports from the store.js file will use the same values which are stored here.
+  Then in the same file we create our own custom hook. These variables are defined outside of the hook though and that's 
+  an important thing because if they were defined inside of the hook then every component that used this hook would use 
+  its own values. Since they're defined outside of the hook, very component that uses our custom hook uses the same 
+  values.
+
+  So now we're not just sharing the hook logic but also some shared data and sometimes you don't want this, here we 
+  absolutely do want this because this allows us to globally manage some state, some actions and listeners, which are 
+  interested in state changes which in turn are triggered by actions.
+
+  In our useStore hook we're managing all of that. We're having our dispatch function in there which makes sure that 
+  whenever we call this patch we update our globalState and we call our listeners, where our listeners are in the end 
+  just setState calls where we abuse, in quotes because it's not really a hack, but we're simply using that feature
+  that when you call that state updating function useState gives you, any component that uses this hook will re-render.
+
+  That's what we want here. We're register one listener per component with the help of useEffect and we un-register it 
+  when that component is destroyed and we then also have a way of initializing our store which you can call multiple 
+  times because we're not replacing our globalState or replacing our actions instead we're always taking the current 
+  globalState and the current actions map to merge in new data.
+
+  We're doing this so that you can create concurrent store and slices, just as we're doing it with Redux with multiple 
+  reducers, where is one slice you manage your products, maybe in another slice you manage the user authentication 
+  status. Of course you have to make sure you avoid name clashes but that's all.
+
+  So here I'm then setting up some actions for example, one action of course only here and then we call initStore to 
+  pass our actions here and our initial state for this slice of the globalState. So that will be merged in our 
+  globalState and in our global actions map and then from anywhere in our project we can use that store and then either 
+  tap into or state or use the dispatch function to dispatch an action. That's the idea here.
+
+  That's roughly, kind of all the idea how Redux works behind the scenes but now we rebuilt it totally without Redux
+  saving that extra dependency and using react and hooks only.
+
+. Refer hooks-store/store.js, product-strore.js 
+
+************************************************ Optimizing the custom hook store **************************************
+. There's one additional thing we can do, a little optimization we can put into place now that we have our own 
+  management system. In the ProductItem.js, there I can add a console log statement where I say rendering. So that we 
+  can see whenever this gets rerendered.
+
+  If you go to products, this gets rerendered four times because I have four products. Let me clear that and click 
+  favorite you see now does all the rendered four times actually should only render one time because this item here 
+  changed, we're updating the button look and so on, so therefore this definitely should rerender that makes sense.
+
+  But the other three items shouldn't really rerender they weren't touched. So to avoid that these items rerender
+  you could of course say, yeah, sure, let's wrap them in react memo, right. React memo around design and should make 
+  sure they don't rerender if their props didn't change and the prompts for the other items, certainly didn't change.
+
+  They have the same title, the same favorite status ends on. You'll notice if we do that, they still rerender. The 
+  reason for that is our custom hook. In each product item I'm using useStore, so I use my custom hook and in that 
+  custom hook we use useState. So whenever setState is called here, the component that uses this hook will be rerendered.
+
+  Make sense it's the intended behavior, it's the default behavior. While we can fix this or improve this.
+
+********************************************************** Wrap Up ************************************************
+. You saw this project with Redux, with the context API and with this custom hooks store thing.
+
+  Now what should you use?
+
+  You can definitely stick to Redux the overhead of having an extra library is probably not that bad especially in 
+  bigger projects and if you learn how you use it well then using it is of course pretty straight forward, and all the 
+  heavy lifting is done for you.
+  
+  now you can still switch away if you wanna try something new or you really wanna save every byte you possibly can so 
+  you don't wanna add that extra third party dependancy or maybe you don't want that dependency to be well independent 
+  from the development of that package and then you can use the Context API for low frequency updates so you can use it 
+  for things like authentication or themes but probably not for this usecase with products and favorites
+
+  but there you could look into a solution like this and attached you actually find The NPM package which basically
+  follows a similar idea which you could simply import into your project so that you again have a third party dependency 
+  of course but one which then in turn only uses REACT and REACT HOOKS to basically give you that code out of the box so 
+  that you don't have to write it on your own.

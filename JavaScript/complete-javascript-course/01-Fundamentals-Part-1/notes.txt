@@ -1,0 +1,215 @@
+*********************************************** Hello World! ***********************************************************
+. Wrote hello world in console.
+
+*********************************************** A Brief Introduction to JavaScript **************************************
+. Refer pdf notes
+
+. JavaScript is a high-level, onject-oriented, multi-paradigm programming language.
+
+  High-level : We don't have to wory about complex stuff like memory management
+  Object-oriented : Language is mostly based on the concepts of objects for storing most kinds of data.
+  Multi-paradigm: It's so flexible and versatile, that we can use all kinds of different programming styles such as
+                  imperative and declarative programming.
+
+. Anyway, now that we know what JavaScript actually is, at least kind of, what is the role that it plays in web 
+  development, or in other words, what do we actually use it for?
+
+  And to answer that question, let's actually look at a three core technologies of the web, HTML, CSS and of course, 
+  JavaScript. So these three technologies all work together to create beautiful, interactive and dynamic websites or web 
+  applications.
+
+  Now the HTML is responsible for the content of the page. So the text, the images, the buttons, and all the contents 
+  that you see on the webpage is always written in HTML. 
+  
+  Then the CSS is responsible for the presentation of that content. So basically for styling and for laying out the 
+  elements on a webpage.
+
+  And then, finally, JavaScript is the real programming language of the internet. And it allows developers to add dynamic
+  and interactive effects to any webpage. We also use it to manipulate the content or the CSS, load data from remote 
+  servers and really build entire applications in the browser, which we then call web applications.
+
+. Now, we can also use the analogy of nouns, adjectives, and verbs to make this separation of roles a bit easier to 
+  understand. So in this analogy, HTML represents the nouns. For example, saying that the P element is a paragraph.
+  And so paragraph is the noun here.
+
+  The CSS then, is the adjective, because it describes the noun. Like this piece of CSS saying the paragraph text is red.
+  And so here, red is the adjective describing the noun.
+
+  And finally JavaScript is, of course, the verb, like saying hide the paragraph. And so here we are doing something and 
+  so we have a verb.
+
+*********************************************** Linking to a JavaScript file ********************************************
+. Wrote JS code in script tag in head, refer index.html
+. Wrote same Js code in script.js and linked that in index.html
+
+*********************************************** Values & variables ******************************************************
+. A value is basically a piece of data. So it's the most fundamental unit of information that we have in programming.
+  For example, this text, Jonas, is a value.
+
+. Now, one extremely useful thing that we can do with values is to store them into variables. And so this way we can 
+  reuse them over and over again. And so what we did here is called declaring a variable. And so this will actually 
+  create a real variable in your computer's memory and we'll store this value inside of that variable.
+
+. it's kind of a standard in JavaScript to write variable names in camelCase.
+
+  underscore and dollar sign is the only two symbols that are allowed besides letters and numbers.
+
+  Now another convention is that we should not start a variable name with an uppercase letter, so we should not do.
+
+  On the same note variables that are all in uppercase are reserved for constants that we know will never change. For 
+  example, the number PI which is like 3.1415, and so on and so forth.
+
+  Make sure that our variable names are descriptive and that's very important to write cleaner code. So when you name 
+  your variables it should be really easy to understand exactly what value the variable is holding just by reading the 
+  name of the variable.
+
+*********************************************** Data Types *************************************************************
+. In JavaScript, every value is either an object which looks something like this(See pdf notes) or a primitive value.
+  So a value is only a primitive when it's not an object
+
+. The 7 premitive data types -
+    1. Number: Floating point numbers -> Used for decimals and integers -> let age = 23;
+    2. String: Sequence of characters -> Used for text -> let firstName = 'Jitendra';
+    3. Boolean: Logical type that can only be true or false -> Used for taking decisions  -> let fullAge = true
+
+    4. Undefined: Value taken by a variable that is not yet defined (‘empty value’) -> let children;
+    5. Null: Also means ‘empty value’
+    6. Symbol (ES2015): Value that is unique and cannot be changed [Not useful for now]
+    7. BigInt (ES2020): Larger integers than the Number type can hold
+
+. There is another fundamental thing to know about types which is the fact that JavaScript has a feature called dynamic 
+  typing. This means that when you create a new variable, you do not have to manually define the data type of the value 
+  that it contains. Instead, JavaScript automatically determines the data type of a value when it's stored into a 
+  variable. And this distinction between value and variable is pretty important because in JavaScript, it's the value 
+  that has a type, not the variable. So variables simply store values that have a type.
+
+. Dynamic typing simply means that we can easily change the type of a value that is hold by a variable.
+
+. typeof null shows number which is a bug. Now about this bug, JavaScript says that a type of null is an object and 
+  this doesn't make any sense at all. And so this is regarded as a bug or an error in JavaScript. However, this bug is 
+  never corrected for legacy reasons but now it's of course not an object. This should return null just as type of 
+  undefined returns undefined.
+
+**************************************************** let, const and var ************************************************
+. Now, let and const were introduced in ES6, and so they are modern JavaScript. While the var keyword is the old way of 
+  declaring variables.
+. Refer w3Schools
+
+. If you are sure that the variable is never changing inside your program, you should declare it using const. The reason 
+  for this is that it's a good practice to have as little variable mutations or variable changes as possible because 
+  changing variables introduces a potential to create bugs.
+
+. var is basically the old way of defining variables, prior to ES6.
+
+. let is block scoped and that VAR is function-scoped
+
+**************************************************** Basic operators ****************************************************
+. An operator basically allows us to transform values or combine multiple values and really do all kinds of work with 
+  values.
+
+. There are different types of JavaScript operators:
+  . Arithmetic Operators (+, -, *, **, /, %, ++, --)
+  . Assignment Operators (=, +=, -=, *=, /=, %=, **=)
+  . Comparison Operators (==, ===, !=. !==, >, <, >=, <=, ?)
+  . Logical Operators    (&&, ||, !)
+  . Conditional Operators (?:)
+  . Type Operators   (typeof, instanceof)
+
+**************************************************** Operators precedence **********************************************
+. JavaScript has a well-defined order of operator precedence. So basically the order in which operators are executed.
+. Operators precedence table : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
+
+**************************************************** Strings and template literals **************************************
+. With template literals, we can write a string in a more normal way, and then basically insert the variables directly 
+  into the string and then they will simply be replaced. So basically a template literal can assemble multiple pieces 
+  into one final string.
+
+. Now another great use case of template literals is to create multiline strings. So that's something that, before 
+  template strings was a bit cumbersome to write.
+
+************************************************* Taking Decisions: if / else Statements ********************************
+. Emoji -> windows + .
+
+. Now what we have here is 'if', 'else' statement, which is the official name of this kind of construction here, is 
+  called a control structure. So basically this if this structure here is called an 'if', 'else' control structure
+  and it is called a control structure because this structure actually allows us to have more control over the way that 
+  our code is executed.
+  
+  For example, in this, 'if', 'else' statement the whole code does not just execute in a linear way. So JavaScript does 
+  not execute all of this code here, linearly. Instead we can now control blocks of code that should execute and blocks 
+  that should not execute. And so again that gives us a lot more control over how our code works and that's why this is 
+  called a control structure.
+
+************************************************* Type Conversion and Coercion *****************************************
+. Now, in JavaScript, there is type conversion and type coercion. So they sound very similar but are different.
+  So type conversion is when we manually convert from one type to another.
+  One the other hand, type coercion is when JavaScript automatically converts types behind the scenes for us.
+
+. Now, JavaScript can only convert to three types. So we can convert to a number, to a string or to a Boolean. But we 
+  cannot, for example, convert something to undefined or to null.
+
+. So basically, type coercion happens whenever an operator is dealing with two values that have different types. So in 
+  that case, JavaScript will then, behind the scenes, convert one of the values to match the other value so that in the 
+  end, the operation can be executed.
+
+************************************************* Truthy and Falsy Values **********************************************
+. Falsy values are values that are not exactly false, but will become false when we try to convert them into a boolean.
+
+  And in JavaScript, there are only five falsy values : 0, '', undefined, null, NaN
+
+. Everything else are our so-called truthy values. So, values that will be converted to true, for example, any number 
+  that is not zero or any string that is not an empty string will be converted to true when we attempt to convert them 
+  to a boolean.
+
+. So in practice, the conversion to boolean is always implicit, not explicit, or in other words is always typed coercion
+  that JavaScript does automatically behind the scenes.
+
+  But when exactly does JavaScript do type coercion to booleans? Well, it happens in two scenarios.
+  First, when using logical operators, and second in a logical context, like for example, in the condition of an if else 
+  statement.
+
+. Another use case for this truthy and falsy values is to check if a variable is actually defined or not.
+
+************************************************* Equality Operators: == vs. === ***************************************
+. Now, besides this triple equal, we also have a double equal. So the difference is that this one here with the three 
+  equals is called the strict equality operator. It's strict, because it does not perform type coercion. And so it only 
+  returns to when both values are exactly the same.
+
+  On the other hand, there's also the loose equality operator, which is only two equals, and the loose equality operator
+  actually does type coercion.
+
+************************************************* Boolean Logic: AND, OR & NOT Operators ********************************
+. Refer pdf notes
+
+************************************************* Logical Operators ****************************************************
+. only examples, refer previous lecture for theory
+
+************************************************* The switch Statement *************************************************
+. Refer examples and w3Schools
+
+************************************************* Statement and Expressions ********************************************
+. An expression is a piece of code that produces a value. For example, three plus four is an expression because this is 
+  gonna produce a value, 
+
+. Now, on the other hand, we have statements. And the statement is like a bigger piece of code that is executed and 
+  which does not produce a value on itself.
+
+  Now, basically we write our whole programs as a sequence of actions. And these actions are statements. for example 
+  if-else statement
+
+. expressions produce values, and that statements are like full sentences that translate our actions.
+  
+  Now this difference between expressions and statements is important to know because JavaScript expects statements and 
+  expressions in different places. For example, in a template literal, we can only insert expressions, but not 
+  statements.
+
+************************************************* The Conditional(Ternary) Operator ************************************
+. Conditional operator allows us to write something similar to an if/else statement but all in one line.
+
+  And the conditional operator is also called the ternary operator. Because it has three parts. Unlike other operators.
+
+  Ternary operator is really helpful where expression is expected and we can evaluate expression conditionally. for 
+  example in template literal or assigning value conditionally to an object
+
+************************************************* ES5, ES6+ and ESNext *************************************************
+Refer pdf notes

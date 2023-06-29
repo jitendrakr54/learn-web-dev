@@ -1,0 +1,312 @@
+**************************************************** Introduction to CSS ************************************************
+. So first of all, CSS stands for cascading style sheets, and just like html, CSS is also one of the core technologies 
+  of the web. Now remember that we use HTML to basically describe the content of a page. And on the other hand, we use 
+  CSS to describe the visual style and the presentation of the content
+
+. Basically the selector plus the declaration block is what we call a CSS rule. And so what this means is that in the end
+  or CSS code will be a lot of different CSS rules one after another where we select all of our elements and style them 
+  in any way that we want.
+
+**************************************************** Inline, Internal and External CSS *********************************
+. Inline CSS is basically just writing the CSS code inside essentially of the element. However, inline styles should 
+  usually never be used.
+  eg: 
+    <h1 style="color: blue">📘 The Code Magazine</h1>
+
+. Internal CSS is writing css code inside style element. So basically, this entire page is HTML, but everything that is 
+  inside this style element that needs to be inside of the head will be CSS.
+  eg:
+    <style>
+      h1 {
+        color: blue;
+      }
+    </style>
+
+  However, if we have a lot of CSS code, then that is also not really practical. So imagine we have like 500 lines of 
+  CSS code and that is actually not uncommon. And so in that case, that would bloat our HTML file and it would be very 
+  hard to navigate it. And so therefore, we can separate things even more by putting all of our CSS code into a special 
+  CSS file.
+
+. External CSS is writing all the css code in separate css file. We need to basically link our css file to html, And for 
+  that, we use the link element. So that's yet another new element.
+
+**************************************************** Styling text ******************************************************
+. so just because the H1 is the main heading of the page, it doesn't mean that it also needs to be the biggest one.
+  So being the H1 is really all about semantics not only about what it looks like.
+
+. And as you can see these elements here on the page, so for example this anchor here, somehow got the same font size
+  and the same font family as the P element. Even though we did not specify these styles for the link anywhere. So we 
+  didn't specify the font size and the family and the line height not for the anchor not for a strong text or not for 
+  strong elements and also not for the EM element.
+
+  Right? But, still they got these styles applied to them somehow. Right? And the reason for this is a very important
+  mechanism called inheritance.
+
+**************************************************** Combining selectors ***********************************************
+. So you might have noticed that we applied the exact same font-family to all of our elements here, right? So all these 
+  six CSS rules that we have here, all of them have font-style or actually have font-family set to sans-serif, right?
+  
+  So doing that is a little bit repetitive, right? And it's also not a good practice. Because let's say that all of a 
+  sudden, we wanted to change the font-family to something else, then we would have to go through all of these different 
+  rules and set the font-family then to something else there. So instead, what we can do is to create a list of selectors
+  in order to select multiple elements and then apply this font-family to that list, essentially.
+
+**************************************************** Class and ID selectors ********************************************
+. Now, the big difference between id's and classes is that we are not allowed to repeat id names or in other words, we 
+  can only use each id name only once. So it would not be allowed to now add an id of copyright to something else.
+  And so if we need to reuse a name multiple times then we need to use classes for that.
+
+. In CSS, it is a convention that if we have a class or an id name with multiple words we separate these words by dashes
+  like this.
+
+. why we used a class and not an id. Because in fact, there's only one list element of related posts, right? So we could
+  easily have called this an id, right? Because remember that the id's are for names that are only used once, while 
+  classes are used when we want to give multiple elements the same name. So when we want to style multiple elements the 
+  same way in CSS. So knowing about that, why did I tell you to use a class and not an id?
+
+  Well, the reason for that is that usually in the real world we never use id's. We always use classes because by using 
+  classes we are prepared for the future. So imagine that we used in fact an id of related but then at some point later, 
+  somewhere on the page we wanted to add another list of related posts. Maybe we wanted one in the sidebar and we wanted 
+  one in the footer. So imagining a more complex layout that would completely be possible, right?
+
+  But then if we had used an id of related in the beginning, we would now have to go back and change that id to a class,
+  so that we could now add another list of related posts. And so that would be a source of error if we for some reason 
+  forgot that, and we would also have to go to our CSS and change that there.
+
+  In the future, I will actually no longer use id's because as I just said, in the real world we simply always use 
+  classes even if we only use the class name once. Because by doing that, we are making our code ready for the future 
+  and ready for potential changes.
+
+**************************************************** Working with colors ********************************************
+. Refer pdf notes
+
+. Now, there are many ways of representing colors in computers and basically in writing code but one of the more 
+  traditional models is the RGB model. So in the RGB model, every single color can be represented by any combination of 
+  red, green and blue colors. So anyway, in order to actually represent a certain color we need to give each of the 
+  three base colors any value between zero and 255. And so with that, we can define a total of 16.8 million different 
+  colors.
+
+. How we can define colors in CSS. So in CSS, we have two ways of writing colors using the RGB model and those are the 
+  RGB notation and the hexadecimal notation.
+
+. So by using the RGB notation, all we do is to use this RGB function in CSS. And then we simply specify the values
+  for each of the three color channels, red, green, and blue. Then besides the normal RGB function, there is also RGB
+  with transparency, and transparency is also called alpha. And so that's why this function is called RGBA. So here we 
+  can specify a fourth value.
+
+. Hexadecimal notation which is actually a bit more used in CSS. So here in the hexadecimal notation, we don't use a 
+  scale from zero to 255, but instead we use a scale from zero to ff and ff is basically the same as 255 but in a 
+  hexadecimal scale. And we don't need to go into what that actually means. But basically hexadecimal numbers do not go
+  from zero to nine, but from zero to 15 so there are 16 different numbers and not just 10. And the last one is the f.
+  And so that's why ff here means 255.
+
+  Now, translating that to CSS we write hexadecimal notation like this with the hash then the value for red, green, and
+  blue just as I have it here on the screen. And so this then gives us, of course the exact same number as with the RGB 
+  notation.
+
+  Now in hexadecimal notation there's also something called the shorthand which we can use when all the colors are 
+  identical pairs. So in our cyan color here we have two zeros, two f's, and again two f's. And so we can abbreviate
+  that into our shorthand writing zero f f.
+
+. And now a little bit about how we actually do things in practice in the real world. So in practice, we mostly use the 
+  hexadecimal notation and then if we need transparency we use the RGBA function.
+
+**************************************************** Pseudo-classes ****************************************************
+. when we mix multiple elements inside of a parent element, then these pseudo-classes don't work really well. They are 
+  however perfect for situations like this one where all the child elements are the same. So in a list like ul or ol,
+  all the child elements are supposed to be li. And so, then this pseudo-class, like first-child, last-child, or 
+  nth-child work perfectly.
+
+**************************************************** Styling links ****************************************************
+. Below code will only target anchor tags which have links -
+  a:link {
+    color: #1098ad;
+  }
+
+. Always define stylesheet for links in this order: link, visited, hover, active
+
+**************************************************** Using Chrome DevTools *********************************************
+. Now, maybe you had wondered before why the text here is actually bold in this H 1 element. And the reason for that is 
+  basically the default style. So those default styles for the H 1 are what are displayed here in this rule of the user 
+  agent style sheet.
+
+**************************************************** CSSTheory #1: Conflicts between selectors **************************
+. what happens when there are multiple CSS rules that apply to the same elements?
+. See pdf notes
+
+. the important keywords is basically just a hack that you can use as the last resort to resolve conflicts in your 
+  CSS. But this should usually not be used.
+
+**************************************************** CSSTheory #2: Inheritance and the  vesal Selector ****************
+. Inheritance is a mechanism by which some styles, so some properties get their values inherited from parent elements to 
+  child elements.
+
+. Now, not all properties do actually get inherited, it is mostly the ones that are about text. because that would be 
+  very impractical for most of the properties. For example, let's say border-top. So if we declare a border-top of 10 
+  pixels and solid with our blue color to the body, let's see what happens then.
+
+  And indeed, it simply added this blue border to the top of our body element, but it did not do so to all of the child 
+  elements, right? Because again, that would be very, very impractical.
+
+. See pdf notes
+
+. The universal selector (*) simply selects every single element on the page. And so this is useful if we actually want 
+  a certain property applied to all elements, but which does not get inherited.
+
+  So the universal selector simply applies to all the elements, and there is no inheritance involved, and therefore, 
+  this is perfect if you want to apply a certain property that does not automatically get inherited to all the elements.
+
+  On the other hand, any style that we put here in the body gets inherited. And so that's simply a completely different 
+  mechanism than using the universal selector.
+  
+**************************************************** CSSTheory #3: The CSS Box Model ***********************************
+. Refer pdf notes
+
+. Well, the box model defines how elements are displayed on a webpage and how they are sized. So in this box model, each 
+  and every element on a webpage can be seen as a rectangular box, and each of these boxes can have content, a border, 
+  and space inside and outside of it.
+
+. Now, what's important to note here is that all of these are actually optional, so we don't have to specify paddings
+  or a border or margins. So we can define none of them or some, or even all of them. It all depends on how we want
+  our layout to look like.
+
+**************************************************** Using margin and paddings ***************************************
+. Global reset: By default, there are some margins around elements, we can reset these behavior by setting margin to zero
+  on universal selector.
+
+. It is very common to use mostly space at the bottom, in order to create vertical space.
+
+. Collapsing margin: So basically when we have two margins that occupy the same space, only one of them is actually 
+  visible on the page. And that is usually the larger of the two.
+  eg:
+    <p>Some paragraph</p>
+    <h1>Heading 1<h1>
+
+  Let's say if paragraph has margin-bottom as 15px and h1 has 40px, then margin between these two element won't be 55 px,
+  rather margin will be 40px (larger of these 2 element) due to margin collapsing.
+
+**************************************************** Adding dimensions *************************************************
+. Specifying the height and setting it to auto is only necessary if that height is already specified before in HTML. In 
+  case we don't do that. So in case we don't specify any image dimensions in HTML, then if we set the height or the 
+  width using CSS, the other one will automatically adapt in order to account for the original aspect ratio of the image.
+
+. the percentage is usually the percentage of the width of the parent container. So the parent of the post image is the 
+  header and this header is basically the entire width of the page, right? And so, if I say width of 100%, then this 
+  image should now be the width of the entire page. And so, what's special about this is that now, as we change the size 
+  of the window, then the size of the image will always stay at 100%.
+
+**************************************************** Centering our Page *************************************************
+. Now, the very first thing that we need to do in order to pull off this trick is to put all of our content into a 
+  container element, because otherwise if we don't do that, then what is there actually to center in the window?
+  And this box doesn't need to have any special meaning. So we don't need a semantic html element here. And so we can 
+  simply use a div element.
+
+. the child element can never be wider than the parent element. And so if the parent element is 700 then all the others 
+  are going to be 700 as well.
+
+. So giving the container a width is part one. And now part two is to add some margins to the left and to the right of 
+  the container. So we can say margin left and then set it to auto, which stands for automatic. And margin to the right 
+  also automatic. 
+  
+  So what this means is that the margin on the left needs to be the same, then the margin on the right side and they 
+  should both be calculated automatically by the browser. And so therefore this will mean that there will be a margin
+  on the left and on the right which will be exactly the same size, and therefore as a result the container will look 
+  centered inside of the body.
+
+************************************************* CSS Theory #4: Types of boxes *****************************************
+. Types of boxes that only occupy exactly the space that they need for its content is what we call inline boxes.
+
+  And on the other hand, all these other boxes so, for example, this paragraph or this H3 heading, these we call block 
+  level boxes or block level elements. So block level elements or boxes occupy all the space that they can and they 
+  basically create line breaks after them.
+
+. Refer pdf notes
+
+. Now, in many situations what makes even more sense is to transform a block level element into something called an 
+  inline block element. So basically that's a mix of inline and block level. box model applies just as it does for block 
+  level boxes.
+
+  So we can still set heights and width and we can still use margins and paddings just like on block level boxes or on 
+  block level elements.
+
+  Refer "nav a:link"
+
+. images are actually inline elements, but in fact they do behave like inline block elements. we can add top, bottom 
+  margin and set width, height.
+
+************************************************* CSS Theory #5: Absolute positioning ***********************************
+. We can also achieve the normal flow by setting position to the value of relative. So in this case we say that an 
+  element is in flow, which basically means that the elements are laid out according to the source code in the html.
+  So this is very straightforward. It is simply the behavior that we have been seeing up until this point.
+
+. Now on the other hand, we have absolute positioning, which basically allows us to absolutely position elements 
+  anywhere on the page. Now we can achieve this positioning mode. So we can position an element absolutely by setting 
+  its position property to the value of absolute. And so in this case, the element is then removed from the normal flow 
+  and we say that it is out of flow.
+
+  Now what happens with this element is that it completely loses any impact on surrounding elements and in fact it might 
+  even overlap them. So that's something common that happens with absolutely positioned elements. Now, in order to 
+  actually position the element that is absolutely positioned, we can use the top, bottom, left, or right properties
+  in order to position that element and that positioning is going to happen in relation to a relatively positioned 
+  container.
+
+  Refer Like button
+
+. what is very important to understand is that these 50 pixels here need to be in relation to something. And so as I 
+  just mentioned a minute ago, by default these 50 pixels here are in relation to the view port. So the visible part of 
+  the page here in the browser, that's the reason why the element moved down here to this corner, when I set the bottom 
+  to zero.
+
+  button {
+    font-size: 22px;
+    padding: 20px;
+    cursor: pointer;
+
+    position: absolute;
+    top: 50px;
+    left: 0;
+  }
+
+. Refer pdf notes
+
+************************************************* Pseudo element ******************************************************
+. Pseudo-elements are essentially elements that don't exist in the HTML but that we can still select and style in CSS.
+  And some common examples of that are the first letter of a paragraph or the first line of a paragraph or of some other 
+  text, of course.
+
+  the pseudo-element is written using two colons. for example: h1::first-letter
+
+. after pseudo element creates a pseudo element that will automatically be the very last child of the selected element.
+  Refer TOP
+
+  Now, by default, any pseudo element is actually an inline element. And so if we want to give it any padding, we want 
+  the box model to apply to it normally, right? And so in order to do that, we need to render this element as an 
+  inline-block box.
+
+. If we want to set position in opposite direction, use negative. Refer h2::after
+
+. Now, there's also the before, but actually that would look exactly the same way. The difference is that after will 
+  basically become the very last child element of the one that we are selecting here, while before will become the very 
+  first child element.
+
+********************************************* Developer Skill #1: Googling and Reading documentation ********************
+. If we are searching for a css property then It should be like: 
+    css property to add mouse cursor to button, css how to center anchor element
+    for documentation: mdn css <property-name>
+
+********************************************* Developer Skill #1: Debugging and asking question ************************
+. Let's say we forgot to close any element which doesn't cause visual impact. and  you're not sure what might be wrong 
+  here.
+
+  And so, a great solution in that case is to actually use an HTML validator tool. So, that will basically allow you to 
+  see if your HTML is valid or not. So, to do that, let's copy all of the code here. Then here, we need to google HTML 
+  validator.
+
+  And then, usually it should be this very first result, but I will also have a link to this HTML validator on my 
+  resources page as I showed you before. So here, we can validate by introducing a URI. So, that's something like a URL.
+  We can manually upload a file or we can simply paste the code that we just copied here.
+
+. diffchecker to differentiate 2 piece of code
+
+. Now to ask question, don't paste your entire code to question box. We can use codepen and paste your html, css, js code
+  then save and copy the url, and share the url to person whom you are asking your quries.

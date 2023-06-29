@@ -1,0 +1,592 @@
+************************************************* Module Introduction **************************************************
+. Module Content:
+      . What is Next.js? And Why?
+      . File-based routing & Page pre-rendering
+      . Data fetching & Adding an API
+
+************************************************* What is Next.js? *****************************************************
+. Next.js calls itself a React framework for production and that name makes a lot of sense because Next.js offers a lot of 
+  features that make building large scale production ready, React apps easier.
+
+  But I personally also like to call Next.js a full stack framework for ReactJS. And it's the full stack part which I 
+  want to highlight here.
+
+. React already is such a library and it's called a library because in its core, it's really only focusing on that user 
+  interface part, on components, state props. If you want to build large scale React projects, you typically also need 
+  to add extra libraries for routing, maybe libraries that help you with authentication and things like that.
+
+  Now Next.js is labeled a framework and a framework that builds up on React. Now the difference between a framework and 
+  a library in the end is that a framework is bigger. It has more features than a library. It's focusing on more things 
+  instead of just a single thing. And it's also giving you clear rules, a clear guidance on how you should write your 
+  code, how you should structure your files and so on.
+
+. Refer pdf notes
+
+************************************** Key features 1: Built-in Server-side Rendering(Improved SEO!)  ******************
+. If you take a standard React application built with just React, then if you inspect the source code of a loaded React 
+  page, you will notice that the page is actually pretty empty right from the start.
+
+  You only have a basic HTML skeleton there, and then some entry point, some div with an id route typically, into which 
+  the React app is loaded and rendered. But all of that rendering, is done by React. And since React is a client side, 
+  JavaScript library, all that rendering happens on the client, so in the browsers of your users, it's not happening on 
+  the server.
+
+  And as a result, the actual HTML code, which is sent from the server to the client, when a user visits your page is 
+  pretty empty.
+
+. Now, that is not necessarily a big problem. It depends on what you're building, but it can be a problem. Because for 
+  example, if your page also, fetches some data from a server that should be displayed like a list of meetups, as we're 
+  doing it here, then the user might initially see some loading state, a flickering page for a fraction of a second,
+  whilst the request is on its way, fetching the data because data fetching only begins once the JavaScript code 
+  executed on the client.
+
+  And then we still have to wait for the response of that outgoing request. Simply because the page which we requested
+  did not yet contain that data.
+
+. Now it can also be a problem if search engine optimization matters to you. if you have a public facing page with a lot
+  of content that should be found through search engines, then of course, search engine optimization does matter.
+  So for example, here, where we got this list of meetups, we see those meetups as a user but the search engine crawlers
+  will actually only see that initially empty HTML page which we're getting from a server.
+
+  So, that content is not picked up by search engine crawlers and that can be a problem. And that's where a server-side 
+  rendering could help us.
+
+. If that page would be pre-rendered on the server, if that data fetching somehow could be done on the server, when the 
+  request hits that server and then the finished page would be served to our users and to the search engine crawlers,
+  then users would not have that flickering loading state and search engines would see our page content.
+
+  And that's the problem server-side rendering solves. It allows us to pre-render React pages, React components on a 
+  server.
+
+. Now ReactJS actually has built-in features that allow you to add server-side rendering but it can be tricky to get 
+  that right. And it requires extra setup from your side. With Next.js, that becomes way easier because Next.js has 
+  built-in server-side rendering.
+
+************************************** Key features 2: Simplified routing with file-based routing *********************
+. In traditional React, you don't even have a router. And just to be clear, routing means that we give the user the 
+  illusion of having multiple pages. When we navigate around and we load different pages, then that's the job of a 
+  router.
+
+  Typically we use React Router for that. This router basically watches the URL, and when it changes, it basically 
+  prevents the browser default of sending a request to some backend server, and instead renders different content
+  on the page with React. A different component in the end. That's what routing is.
+
+. Now that's routing, and typically with React, routing is set up in code. That code could look something like this,
+  depending on the version of React Router you're using. Now this works and it's not bad, not wrong. React Router is a 
+  great package, but it is extra code which you have to write.
+
+  And then often you end up storing your components that act as pages in a separate folder, which kind of replicates 
+  your route set up in code. So if you have three pages set up as pages and code, you have three page components in that 
+  pages component folder.
+
+. Now Next.js gets rid of that in-code route definition. Instead, with Next.js, you would define pages and routes with 
+  files and folders. You have a special pages folder in Next.js apps which has to be named pages, and then you are 
+  structuring that folder, defines the routes and paths your page supports.
+
+  Now that simply allows us to get rid of that extra code, and hence we have to write less code, we have less work, and 
+  it's a highly understandable concept because it's very close to how we all started with web development.
+
+  When you're getting started with just HTML and CSS and some basic JavaScript maybe, then you build basic websites
+  by adding multiple HTML files, and the names of these files or the folders in which they sit define how you can 
+  navigate between these files. How you can link these files together.
+
+  And Next.js basically allows us to go back to this very basic, yet understandable concept of routing. And Next.js still 
+  supports all the features we might want, like nested routes or dynamic routes with dynamic parameters and all of that.
+
+************************************************** Key features 3: Build fullstack apps ********************************
+. Because Next.js also makes it easy for us as a developer to add backend code to our react project. So to build a full 
+  stack react project, where we don't just have the client side code maybe with server side pre rendering, but where we 
+  also have standalone backend code, that for example, works with the file system or reaches out to a database.
+
+  With Next.js it's very easy to add our own backend API into our react project using NodeJS code. So we can easily add 
+  such code to our Next react apps when using Next.js. And that allows us to add code for storing data to a database or 
+  to files, getting data from there, adding authentication and all of that.
+
+************************************************** Creating a new Next.js project & app ********************************
+. To create Next.js app run : npx create-next-app
+
+************************************************** Analyzing the created project ***************************************
+. Refer my-app
+. The three important folders for us here are pages, public, and styles, though pages is by far the most important one.
+  Styles, as you might guess, holds some style files. We can ignore that for now. We'll work on that soon. And public 
+  simply holds public resources our page might use. Something like images, for example. Now one thing you might see here
+  in public though, is that unlike in a regular React app, which you, for example, created with create React app with that
+  extra tool, that there in a standard React app, you have a index HTML file in the public folder.
+
+  Here in the Next.js app, you don't have that. And the reason for this is that Next.js has this built in pre-rendering.
+  And whilst it gives you a single page application, that single page is dynamically pre-rendered when a request reaches 
+  the server so that you do return an initial page with content. That is what I talked about earlier in this course as well.
+  This server-side rendering and the pre-rendering of pages.
+
+  And hence for us, the pages folder will be the most important folder because that is where we will set up that file based
+  routing, and that is there for the folder, which is important for us to define the different pages that should make up 
+  our application here.
+
+************************************************** Adding first pages **************************************************
+. In Next.js in the pages folder here, we would create three files. The index.js file will be our route page. So if a 
+  request reaches our domain slash nothing just index.js will be loaded. That is in line with standard websites.
+
+  Then we might also have a news.js file for requests that reach our domain slash news. And that's important with the 
+  exception of the index name which is a special name, which is served whenever we have a request to just slash nothing,
+  the file name will be used as a path name. So news.js the content in here, the React component in here, would be 
+  served for requests to our domain slash news.
+
+  And now what goes in those page files, I mentioned it before, our standard React component, the React components that 
+  should be loaded for that specific page. So here in index.js we can create a component just as we know it typically as 
+  a function and we could name it as HomePage.
+
+. As a side note, if you're wondering why we don't have any import statement like this at the top, where we import React 
+  from react. Next.js projects support this modern React setup where you can omit this import and it's added behind the 
+  scenes, so to say.
+
+. To start Next.js app, run: npm run dev
+
+. If we do "View page source" in react app then we don't see any content except default index.html which we have initially
+  in react app. an hence Search engine doesn't see anything in our page and doesn't do SEO. But with Next.js we get pr-rendered
+  page from server and it has all the conetnt when loaded initially and hence SEO will be performed.
+
+  Search engines would also see that content here. They see what our users see and that of course can be a great advantage.
+
+. Refer 02-starting-project/pages
+
+************************************************** Adding nested paths & pages (Nested routes) ************************
+. Now, this page would still be loaded by visiting our-domain.com/news because we're in the news folder. And that's 
+  important. Folders, which you create in your pages folder also act as path segments. And it's totally up to you 
+  whether you wanna go with news.js in the root pages folder or index.js in the news folder.
+
+. Now, it does matter though as soon as you start creating nested paths, and that's what I wanna do now. If we wanna 
+  have a path that is something like news.something-important where something-important is the identifier of the 
+  specific news item you wanna load, then you need to create a file in such a sub-folder because otherwise, you can't 
+  create such a nested path.
+
+  After all, we have two segments here and if we just create files directly in the pages folder, we're limited to one 
+  segment, the file name.
+
+  So therefore, if we want to have such a nested path, so more than one segment, we need to create a sub-folder and then 
+  we can also create the root page for that path with index.js and then create the something-important.js file as a 
+  sibling file to index.js.
+
+************************************************** Creating dynamic pages (with parameters) ***************************
+. we wanna create a so-called dynamic page where the path segment to concrete value in the path can be dynamic, so that 
+  it's not just slash news, slash something important, but also slash something else or slash this course is great, 
+  whatever.
+
+  So then this would be the identifier of a news item and we have a lot of different identifiers and we add new use all 
+  the time, but we always load the same page no matter what the concrete value here is. But then inside of the page,
+  we simply have access to that value in the path so that we can fetch the proper data. And that is something we can 
+  implement with dynamic paths.
+
+. For that, we change the file name here to a different file name, and we use a special syntax which will be understood 
+  by Next.js. We use square brackets here in the file name in front of the extension. If you have square brackets in your 
+  file name like this, this tells Next.js that this will be a dynamic page so that it should be loaded for different 
+  values in your path.
+
+  And then you can add an identifier between those square brackets where the identifier name is totally up to you.
+  Something like newsId, for example, like this. But this again is up to you, but you need those square brackets.
+
+********************************************** Extracting dynamic parameter values: useRouter() ***********************
+. To extract the concrete value entered in the URL when this page is loaded Next.js gives us a special hook which we can 
+  use. Here, instead we import from next to be precise from next/router which is a sub package of the next package
+  which exposes routing specific functionality.
+
+  And here we got the useRouter hook. It's a regular react hook, just not one built into react but a custom hook built 
+  by the next team.
+
+. Refer news/[newsId].js
+
+************************************************** Linking between pages: Link *****************************************
+. Currently, I, of course, always enter URLs in the URL bar manually and that, of course, is not how users use our 
+  website. Instead, we have links on our website that allow users to navigate around.
+
+. Refer news/index.js
+
+************************************************** Onwards to a bigger project *****************************************
+. created new project as 03-my-meetup-project
+
+************************************************** Preparing the project pages *****************************************
+. For this demo application for this project which we're building here, we will need three pages. A starting page, which 
+  shows a list of all meetups. Then the new meet up page, which allows us to add a new meetup. And then the meetup 
+  detail page which allows us to show the details for a selected meetup.
+
+************************************************** Outputting a list of meetups *****************************************
+. Refer pages/index.js
+
+************************************************** Adding the new meetup form *******************************************
+. Refer new-meetup/index.js
+
+************************************************** The "_app.js" File & Layout Wrapper *********************************
+. On new-meeup page, we are, of course still missing the layout though. We only have it on the starting page. Now we 
+  want to have it on this new meetup page as well, and therefore, of course, we can always wrap layout around our 
+  content on the new meetup page to add the layout here as well.
+
+  But you will probably see that, this becomes cumbersome, the more pages our application has. If we have an application 
+  with dozens or maybe hundreds of pages wrapping our general layout around all the page contents, so going into all the 
+  page components to then wrap layout around the content that becomes cumbersome, and that's now where this _app.js file 
+  becomes important.
+
+. This MyApp component, which is defined in there, and that is just a regular react component in the end. This special 
+  component acts as the root component Next.js will render. It receives props and uses object de-structuring here
+  to pull information out of the props and the information it pulls out there, is a component prop and a page prop.
+
+  These props are passed into this MyApp component automatically by Next.js, since Next.js is the thing using that 
+  specific component. and component is a prop that holds the actual page contents that should be rendered. So it will be 
+  different whenever we switch a page and page props are specific props our pages might be getting, and at the moment 
+  our pages are not getting any props at all, because at the moment we have no source that would provide such props.
+
+. But with that, we now know that component here in this _app.js file will in the end be the actual page content of our 
+  different pages. And it will change whenever we navigate from page A to page B.
+
+  Now, since that's the case, we can utilize this _app.js file and simply wrap this component here with our layout or 
+  with whichever wrapper you have. And we then don't have to do it inside of our different page files.
+
+. Refer _app.js
+
+************************************************** Using programmatic (imperative) navigation **************************
+. Refer MeetupItem.js
+
+************************************************** Adding custom components & css modules *****************************
+. Refer [meetupid]/index.js, MeetupDetail.js
+
+************************************************** How pre-rendering works & which propblem we face *******************
+. let's just simulate that we fetched the dummy meetups. Of course, they are available right from the start here,
+  but let's assume we just fetched them from a server. And now I set my dummy meetups as the loaded meetups and here in 
+  the JSX code, we passed the loaded meetups, so our state into meetup list.
+
+  If we do all of that, if we visit the starting page with all the meetups, we don't see any difference there. When I 
+  reload, all the meetups are there, right from the start because we never really send a HTTP request.
+
+. But technically there is a difference because it is important to note that useEffect works such that it executes this 
+  function after important, after the component function was executed. So that means that, the first time this homepage 
+  component is rendered, loadedMeetups will be an empty array.
+
+  Then this effect function will execute, it will then update the state and then this component function will execute 
+  again because the state changed and it will then re-render the list with the actual data but we'll have two component 
+  renders cycles.
+
+  And in the first render cycle, the first time this component renders, loadedMeetups state will be this initial state,
+  this empty array. Now, why am I emphasizing this?
+
+. Because if we would fetch this from a backend, our users might see a loading spinner briefly, which could or could not 
+  be the user experience we wanna offer. But in addition, even here where we don't really send the request and where the 
+  response, "arrives basically, instantly" even in this case.
+
+  Because of these two render cycles, we have a problem with search engine optimization. If I viewed a page source, you 
+  will notice that in there, the actual meetup data is missing. I got my unordered list here and this unordered list is 
+  empty.
+
+  So the items which we see on the screen here, these items are missing in the HTML content. In the HTML page we fetched 
+  from the server and they are missing because they are only rendered in the second component execution cycle. But the 
+  pre-rendered HTML page generated by Next.js automatically does not wait for this second cycle.
+
+  It always takes the result of the first render cycle and return stat as the pre-rendered HTML code. And there, this 
+  data is missing. But thankfully, Next.js also has solutions to this problem. It has more core features built into 
+  Next.js that help us with precisely this problem that we wanna pre-render a page with data, but with data for which we 
+  have to wait.
+
+************************************************** Data feching for static page(SSG) ***********************************
+. Next.js has this built-in page pre-rendering but this built-in process has a flaw. the page that is pre-rendered has 
+  basically the snapshot after the first component render cycle as its content and that might be missing crucial data.
+  So if we visit some route, if some request is sent to some route to this page then, there we return that pre-rendered 
+  page but we might be missing data here. So whilst this is theoretically good for SEO, for search engine optimization,
+  it might not always be.
+
+  But after this HTML page was received, React will actually take over, the page is hydrated as this process is called,
+  which means that now React will turn this into a single page application and take over control and then this useEffect 
+  function might be executed, data might be fetched and the page might be updated in the browser, not on the server,
+  not on the pre-rendered page but instead, after this page was received in the browser. And therefore, we then have a 
+  fully interactive page or app with all the data we need.
+
+. But if we wanna pre-render a page with data so that this initially returned HTML code already contains the data, we 
+  need to fine tune this built-it pre-rendering process and we need to configure it.
+
+  And for this, Next.js gives us two forms of pre-rendering, which we can use for controlling how the pages should be 
+  rendered. It has something which is called Static Generation and it has an alternative, which is called Server-side 
+  Rendering. And the two might sound similar but they run or the code runs at different points of time
+
+. With Static Generation, by default, your page is not pre-rendered on the fly on the server when a request reaches the 
+  server but instead, it is pre-rendered when you as a developer build your site for production. And that means that 
+  after it was deployed, that pre-rendered page does not change. At least not by default.
+
+  If you then updated the data and you know that the pre-rendered page needs to change, you need to start that build 
+  process again and redeploy again.
+
+. Now, if you need to add data fetching to a page component. you can do so by exporting a special function from inside 
+  your page component file. And that's important. This now only works in your page component files, not in other 
+  component files.
+
+  In there, you can export a function, a function called getStaticProps and it has to be called getStaticProps. This is 
+  a reserved name so to say. Next.js will look for a function with that name and if it finds it, it executes this function
+  during this pre-rendering process.
+
+  So it will then not directly call your component function and use the returned JSX snapshot as HTML content but it 
+  will, first of all, call getStaticProps before it calls the component function. And getStaticProps has this name 
+  because indeed, its job is to prepare props for this page.
+
+  And these props could then contain the data this page needs. And that's useful because getStaticProps is allowed to be 
+  asynchronous. You can return a promise there and then, and that's the key thing, Next.js will wait for this promise to 
+  resolve, which means it waits until your data is loaded and then you return the props for this component function.
+
+  And with that, you're able to load data before this component function is executed so that this component can be 
+  rendered with the required data.
+
+. Now, here in getStaticProps, you can also execute any code that would normally only run on a server. You could access 
+  a file system here or securely connect to a database because any code you write in here will never end up on the 
+  client side and it will never execute on the client side simply because this code is executed during the build process,
+  not on the server and especially not on the clients of your visitors.
+
+  Now, here in getStaticProps, you can do whatever you want, for example, fetch data from an API or from a database or 
+  read data from some files in the file system.
+
+  But then once you're done with whatever you did to get the data you need, you need to return an object here in 
+  getStaticProps. You always need to return an object here. Now, in this object, you can configure various things but 
+  most importantly, you typically set a props property here and it has to be named props. And that then holds another 
+  object.
+
+  And there we could have our meetups key in there. The structure of this props object is totally up to you, which holds 
+  our DUMMY_MEETUPS.
+
+  Refer pages/index.js
+
+************************************************** More on static site generation(SSG) *********************************
+. And one pretty big problem, which we could face in some websites, depending on what we're doing is that the data here 
+  could be outdated. This page, is generated during the build process. So thereafter, we deploy it. If we then add more 
+  meetups to our database, this pre-generated page would not know about them. And if we don't add any client-side data 
+  fetching, we would always just see the outdated meetups here. And this could, of course, be a problem.
+
+  Now, we can always rebuild our site and redeploy when our data changes. And for some websites, like personal blogs,
+  this is a great alternative because there data doesn't change too frequently but if data does change more frequently,
+  there is a extra property, which we can add to this returned object. And that's the revalidate property.
+
+  When we add this property to the object returned by getStaticProps, we unlock a feature called incremental Static 
+  Generation. Revalidate wants a number, let's say 10, and this number is the number of seconds Next.js will wait until 
+  it regenerates this page for an incoming request.
+
+  That means that with revalidate set to some number, this page will not just be generated during the build process.
+  It will be generated there but not just but it will also be generated every couple of seconds on the server, at least 
+  if there are requests for this page.
+
+  So that means that this page, with revalidate set to 10, would be regenerated on the server at least every 10 seconds 
+  if there are requests coming in for this page. And then these regenerated pages would replace the old pre-generated 
+  pages. And with that, you would ensure that your data is never older than 10 seconds.
+
+  And therefore, the number of seconds you wanna use here depends on your data update frequency. If your data changes 
+  once every hour, then setting this to 3600 might be great. If it changes all the time, one second might be better.
+  But whatever you set this number to, you will ensure that this page will occasionally be re pre-generated on the 
+  server after deployment so that you don't have to redeploy and rebuild all the time just because some data changed.
+
+*************************************** Exploring server-side rendering (SSR) with "getServerSideProps" ****************
+. Now with revalidate, you can ensure that this page is also updated regularly after deployment. But sometimes even a 
+  regular update is not enough. Sometimes you really want to regenerate this page for every incoming request.
+
+  So you want to pre-generate the page dynamically on the fly after deployment on the server. Not during the build 
+  process and not every couple of seconds, but for every request. And if that's your goal, then there is an alternative 
+  to getStaticProps. which is getServerSideProps().
+
+. And the difference to getStaticProps is that this function will now not run during the build process, but instead 
+  always on the server after deployment. This getServerSideProps function runs for every incoming requests. Now what you 
+  can do in here, is you can work with a parameter, which you'll receive. 
+  
+  With this context parameter, you also get getStaticProps. You also get access to the request object under req key, and 
+  the response object that will be sent back.
+
+. Now, which one of the two should you use? Is getServerSideProps better or getStaticProps? getServerSideProps might 
+  sound better because it's guaranteed to run for every request. But that actually can be a disadvantage, because that 
+  means that you need to wait for your page to be generated on every incoming request.
+
+. Now if you don't have data that changes all the time, and with that, I really mean that it changes multiple times 
+  every second. And if you don't need access to the request object, let's say for authentication, getStaticProps is 
+  actually better. Because there you pre-generate an HTML file, that file can then be stored and served by a CDN.
+
+  And that simply is faster than regenerating and fetching that data for every incoming request. So your page will be 
+  faster when working with getStaticProps, because then it can be cached and reused, instead of regenerated all the time.
+  Hence, you should really only use getServerSideProps if you need access to that concrete request object, because you 
+  don't have access to request and response in getStaticProps.
+
+  Or if you really have data that changes multiple times every second, then therefore even revalidate won't help you,
+  then getServerSideProps is a great choice. Now here for our meetup list, though, it's not a great choice, because that 
+  is not data, which changes frequently.
+
+. Refer pages/index.js
+
+********************************************* Working with params for SSG data fetching ********************************
+. Now we are using SSG for Meetup propject. But here we'll actually have a slight problem. Keep in mind that this is a 
+  dynamic page. So when we reach out to an API to fetch the data for a single meetup, we need a way of identifying that 
+  meetup. We need its ID for example.
+
+  Now the ID thankfully is encoded into URL. And therefore, we did learn that we can use stead useRouter hook to get 
+  access to this router object and then use the query property there. That's what we did earlier in this course. But the 
+  problem with that is that the useRouter hook can only be used in the component function, not in geStaticProps. That's 
+  not a function where you can use react hooks. So we can't get to the meetup ID from the URL with help of use router in 
+  here.
+
+  But we also don't need to. Because you might remember this context parameter, which I mentioned. I showed it to you on 
+  getServerSideProps, but I mentioned that it also actually exists on getStaticProps.
+
+  Now, when we accept it on getStaticProps, context will not hold request and response, but it will, for example, have a 
+  params key. So there will be context.parans, and that will be an object where our identifiers between the square 
+  brackets will be properties and the values will be the actual values encoded in the URL.
+
+. Refer [meetupid]/index.js
+
+*********************************** Preparing paths with "getStaticPaths" & working with fallback pages ****************
+. And getStaticPaths is a function you need to export in a page component file. If it's a dynamic page like we have it 
+  here and you're using getStaticProps, not if you're using getServerSideProps but it is needed if you do use 
+  getStaticProps.
+
+. Now what's the deal with getStaticPaths though. To understand it, let's again think about the fact that with 
+  getStaticProps a page is pre-generated during the build process. Now, what does this mean? This means that of course, 
+  Next.js needs to pre-generate all versions of this dynamic page in advance for all the supported IDs.
+
+  Because since this is dynamic, Next.js needs to know for which ID values it should pre-generate the page. Because how 
+  would it pre-generate this page otherwise? We get the ID from the URL here. Great, but keep in mind that this is not 
+  pre-generated when a user visits this page with a specific value in the URL, but during the build process. So here we 
+  need to pre-generated for all the URLs, for all the meetup ID values users might be entering at runtime. And if they 
+  enter an ID for which we didn't pre-generate the page, they will see a 404 error.
+
+. But because that is how it works, we need to add getStaticPaths which has the job of returning an object where we 
+  describe all the dynamic segment values. So all the meetup IDs in this case, for which this page should be 
+  pre-generated. 
+  
+  Now for this, this object needs to have a paths key, which is an array. And in that array, you must  have multiple 
+  objects one object per version of this dynamic page. Where this object has a parans key. That's a must have, which 
+  then itself again is an object with all the key value pairs that might lead to your dynamic page.
+
+  So if you have multiple dynamic segments, then you would have multiple keys in this nested object. Here we only have 
+  meetup ID as a single dynamic segment. And hence here in this parans object, we would add a meetup ID key and then 
+  enter the concrete value for meetup ID for which this page should be pre-generated. 
+  
+  And if we have multiple possible values. Like in this case where I have, m1 and m2 we would return a paths array with 
+  two objects inside of it, where the other one uses M2 as a meetup ID. Now, in reality, you would of course not 
+  hard-code this as a developer, but you would also fetch your supported IDs from a database or from an API and generate 
+  this array dynamically.
+
+. the fallback key. This key tells Next.js whether your paths array contains all supported parameter values or just some 
+  of them. If you set fall back to false, you say that your paths contains all supported meetup ID values. That means 
+  that if the user enters anything that's not supported here, for example, m3 he or she would see a 404 error.
+
+  If you set fall back to true on the other hand, Next.js would try to generate a page for this meetup ID dynamically on 
+  the server for the incoming request. fallback is a nice feature because it allows you to pre-generate some of your 
+  pages for specific meetup ID values.
+
+  For example the pages which are visited most frequently and then pre-generate the missing ones dynamically when 
+  requests for them are coming in.
+
+  Refer [meetupid]/index.js
+
+**************************************************** Introducing API Routes ********************************************
+. Now, up to this point, we're only working with dummy data though which is not actually fetched from anywhere. Instead, 
+  we have this dummy array or in the case of the meetupId page here, actually hard-coded data in that return statement.
+
+  And that's of course not realistic at all. Instead, we do have this AddNewMeetup page here which would allow us to 
+  enter data for a new meetup. And hence, we're now going to finish this app by adding a real backend with a real 
+  database where the data will be stored and from which we then fetch it.
+
+. For this, we can use another key Next.js feature, called API routes. API routes are a special routes, special pages,
+  which don't return HTML code, but which are instead about accepting incoming HTTP requests, also post patch, put 
+  delete requests, whatever you need with JSON data attached to them and which then might do whatever you need to do.
+
+  For example, store data in a database and then return JSON data. So you could say API routes allow you to build your 
+  own API end points as part of this next project. And they will then be served by the same server as your next app.
+
+. Now to add API routes, you add a special folder in your pages folder, and that's a folder named api. And just as the 
+  pages folder has to be named pages, this folder has to be named api and it has to be in the pages folder. Then the 
+  Next.js will pick up any JavaScript files stored in there and turn those files into API routes. So into end points, 
+  that can be targeted by requests and that should receive JSON and return JSON.
+
+. Now in this API folder, you can then again add JavaScript files where the file names will act as path segments in the 
+  URL. For example, a new-meetup.js file again, now here in the API folder. Now, in those JavaScript files here, you 
+  then don't create a React component function. 
+  
+  These API routes are not about defining, rendering or returning React components. Instead in there, we will define 
+  functions which contains server-side code because API routes will only run on the server never on the client. Decoding 
+  them will never be exposed to the client. So we can also use credentials in API routes without compromising them.
+
+  And those functions are then simply triggered whenever a request is sent to this route, so to /api/new-meetup here.
+  This would be the URL of this file and if a request is sent to this URL, it will trigger the function which we have to 
+  define in this file.
+
+. Refer pages/api/new-meetup.js
+
+**************************************************** Working with MongoDB ********************************************
+. Refer pages/api/new-meetup.js
+. Refer Video lecture
+
+**************************************************** Sending Https requests to our API Routes **************************
+. Refer pages/new-meetup/index.js
+
+**************************************************** Getting data from the database ************************************
+. We can use fetch in getStaticProps/getStaticPaths and send request to our api and get data.
+
+. Now, when you import something here in a page component file and that something is then only used in getServerSideProps
+  or getStaticProps, the imported package will not be part of the client side bundle. So you can import code here which 
+  will then only be executed on the server, and Next.js will detect this and not include it in your client's side bundle,
+  which is good both for bundle size considerations as well as for security.
+
+. Refer pages/index.js
+
+**************************************************** Getting meetup details data & preparing pages **********************
+. Refer [meetupId]/index.js
+
+**************************************************** Adding "head" metadata ********************************************
+. At this point, we haven't added any metadata. If we inspect the rendered HTML code, the head section is relatively 
+  empty. We do have some meta tags here but we are missing the description meta tag, which would be important for search 
+  engines.
+
+  I'm talking about the description meta tag, which allows you to set descriptions, which, for example, show up on a 
+  Google search here. And we're also missing a page title, which is why here in the tab title, we only see the address 
+  as a title. 
+  
+  And if our pages would show up as search results later, we also want the title like in this case here, Academind, for 
+  my own website. So setting such meta tags, adding such Head elements, that is something we definitely also wanna do
+  when we build a site and that is something which we wanna do here as well.
+
+. And to do that, we can import a special component offered by Next.js, the Head component imported from next/head.
+  This is a component which allows you to add Head elements to the Head section of your page.
+
+. Refer pages/index.js, pages/[meetupId]/index.js, pages/new-meetup/index.js
+
+**************************************************** Deploying Next.js Projects ***************************************
+. Refer Video
+
+**************************************************** Using fallback pages & Re-deploying *******************************
+We can set fallback to true, or even better, to 'blocking'.
+
+When you set fallback to true or to blocking,
+
+you're telling Next.js that the list of paths
+
+which you're specifying here, might not be exhaustive,
+
+there might be more valid pages.
+
+And, therefore, when fallback is set to true or to blocking,
+
+Next.js will not respond with a 404 page
+
+if it can't find the page immediately.
+
+Instead with fallback set to true or blocking,
+
+it will then generate that page on demand,
+
+and thereafter cache it,
+
+so it will pre-generate it when needed.
+
+Now the difference between true and blocking then is that,
+
+with true, it would immediately return an empty page,
+
+and then pull down the dynamically generated content
+
+once that's done.
+
+So you need to handle that case
+
+that the page does not have the data yet.
+
+With blocking, the user will not see anything until
+
+the page was pre-generated,
+
+and the finished page will be served.

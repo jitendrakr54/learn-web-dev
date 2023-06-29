@@ -1,0 +1,105 @@
+****************************************** What's the DOM and DOM Manipulation ****************************************
+. Refer pdf notes
+. Well, DOM stands for Document Object Model, and it is, basically, a structural representation of HTML documents.
+  The DOM allows us to use JavaScript to access HTML elements and styles in order to manipulate them. For example, we 
+  will be able to change text, to change HTML attributes and also to change CSS styles from our JavaScript.
+
+  So we can say that DOM is basically a connection point between HTML documents and JavaScript code.
+
+. Now, the DOM is automatically created by the browser as soon as the HTML page loads. And it's stored in a tree 
+  structure like this one(Refer pdf for picture). In this tree, each HTML element is one object.
+
+. And actually we use the terms, child element, parent element, sibling element and so on, when we talk about the DOM 
+  tree and DOM manipulation. Anyway, as you can see for each element in the HTML, there is one element node and the DOM 
+  tree, and we can access and interact with each of these nodes using JavaScript.
+
+. DOM always starts with the document object, right at the very top. And document is a special object that we have 
+  access to in JavaScript. And this object serves as an entry point into the DOM. Remember how you used 
+  document.querySelector in the last lecture to select an element.
+
+  So that means that the querySelector() method is available on the document object. And so that's why we say that 
+  document is the entry point to the DOM, because we need it to start selecting elements.
+
+. All right, then the first child element of document is usually the HTML element, because that's usually the root 
+  element in all HTML documents. Next, HTML usually has two child elements, head and body. And so of course you can also
+  find them here in the DOM tree.
+
+  In the HTML, they are adjacent elements, and so they are siblings in our DOM as well. Then, as we keep going deeper
+  into the nested HTML structure, we keep adding more and more children to the DOM tree. So inside head and body, you 
+  have more child elements, and the two sections and the body, even have child elements themselves.
+
+. And with that, finally, we have all our HTML elements in the DOM tree. But a Dom tree actually has more than just 
+  element nodes. It also has nodes for all the text itself, comments and other stuff, because basically the rule is that
+  whatever is in the HTML document also has to be in the DOM.
+
+  And so, as you see, the DOM really is a complete representation of the HTML document, so that we can manipulate it in 
+  complex ways.
+
+. So, many people believe that the DOM and all the methods and properties that we can use to manipulate the DOM, such as 
+  documented or the query selector and lots of other stuff are actually part of JavaScript. However, this is not the 
+  case.
+
+  Remember that JavaScript is actually just a dialect of the ECMAScript specification, and all this DOM related stuff is 
+  simply not in there.
+
+. But, now you might ask, "If the DOM is not a part of the JavaScript language, then how does this all work?" Well, the 
+  DOM and DOM methods are actually part of something called the web APIs. So the web API APIs are like libraries that 
+  browsers implement and that we can access from our JavaScript code.
+
+  Web APIs are, basically, libraries that are also written in JavaScript and that are automatically available for us to 
+  use. So all this happens behind the scenes, we don't have to import or do anything. And there is actually an official 
+  DOM specification that browsers implement, which is the reason why DOM manipulation works the same in all browsers.
+
+  Now, besides the DOM, there are actually a ton more web APIs, such as timers, the fetch API, and many more.
+
+********************************************* Handling Click Events ****************************************************
+. Now, an event is something that happens on the page. For example, a mouse click, or a mouse moving, or a key press,
+  or many other events. Then, with an event listener, we can wait for a certain event to happen, and then react to it.
+  Anyway, in order to listen for events, we first need to select the element where the event should happen.
+
+  And in this case, we want to listen to the event on this button element here, so this Check button. Because this is 
+  where the click that we're interested in will happen. So when we click on this button, something should happen.
+
+. Refer 05-guess-my-number/script.js
+
+********************************************* Implementing the Game Logic **********************************************
+. Refer 05-guess-my-number/script.js
+
+********************************************* Manipulating CSS styles **************************************************
+. document.querySelector('body').style.backgroundColor = '#60b347';
+  document.querySelector('.number').style.width = '30rem';
+  
+. Refer 05-guess-my-number/script.js
+
+********************************************* Implementing HighScores **************************************************
+. Refer 05-guess-my-number/script.js
+
+********************************************* Refactoring Our Code: The DRY Principle **********************************
+. Refer 05-guess-my-number/script.js
+
+********************************************* PROJECT #2: Modal Window ************************************************
+. querySelectorAll()
+. Refer 06-Modal/script.js
+
+********************************************* Working with classes ***************************************************
+. modal.classList.remove('hidden');
+. Refer 06-Modal/script.js
+
+********************************************* Handling an "ESC" Keypress Event ****************************************
+. Refer 06-Modal/script.js
+
+
+********************************************* PROJECT #3: Pig game ***************************************************
+. Refer 07-Modal/script.js
+
+*************************************************** Rolling the Dice *************************************************
+. Refer 07-Modal/script.js
+
+*************************************************** Switching the active player ***************************************
+. Refer 07-Modal/script.js
+
+*************************************************** Holding current score ********************************************
+. Refer 07-Modal/script.js
+
+*************************************************** Resetting the Game **********************************************
+. Refer 07-Modal/script.js

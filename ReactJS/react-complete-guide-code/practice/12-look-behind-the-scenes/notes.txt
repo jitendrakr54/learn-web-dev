@@ -1,0 +1,283 @@
+****************************************** Module introduction *********************************************************
+. How does React work behind the scenes?
+. Undersanding the virtual DOM & DOM Updates
+. Understanding State & State Updates
+
+****************************************** How react really works *****************************************************
+. See pdf notes
+. Lets not forget that React is a JavaScript library for building user interfaces. We also learned and we saw, that React
+  is all about components. We use components to build those user interfaces, and React embraces this component concept.
+  It uses components to effectively compose user interfaces and it uses components to effectively update user interfaces.
+
+. We also saw this ReactDOM thing and in the end ReactDOM is your interface to the web. React itself, React.js does not 
+  know the web. It does know nothing about the browser in the end. React knows how to work with components but it doesn't
+  care whether those components contain HTML elements or if they contain totally fictional elements, that does not matter
+  to React. It's ReactDOM to which that matters in the end and which ultimately needs to bring real HTML elements to the 
+  screen. But React is just a library that manages components, that manages state and that manages different components 
+  states and that finds out how components might need to change and which differences you might have from a previous state
+  of a component compared to the current state. And React hands all that information regarding what changed and what should
+  be visible on the screen no matter what screen that is, off to the interface it's working with, for example, it hands it 
+  off to ReactDOM because ReactDOM is then responsible for working with the real DOM, which is part of the browser.
+  And therefore ReactDOM is responsible for bringing something onto the screen, which the user is then able to see.
+
+. React only cares about components. It cares about props, which is basically data you pass to components to make components
+  configurable and to enable parent-child component communication. React cares about state which is internal data inside of
+  a component. And React cares about context which is component-wide data. And whenever props, state or context changes,
+  components that use these concepts are updated by React and React checks whether this component now wants to draw 
+  something new onto the screen. And if that should be the case, React will let ReactDOM know about that so that ReactDOM
+  is able to bring that new screen, that new component, that new output to the screen.
+
+. the question of course is, how exactly does this work? As I mentioned, React is concerned about components and what 
+  React in the end does is, it uses a concept called the virtual DOM. It determines how the component tree, which your app
+  is building in the end, and every component itself, of course, has a sub tree, that JSX code returned by that component.
+  It determines how that component tree currently looks like and what it should look like, for example, after a state 
+  update. And that information is then handed off to ReactDOM which now knows about the differences and which then knows 
+  how it should manipulate the real DOM to match that virtual DOM, that virtual snapshot React derived for your component
+  trees.
+
+. There's one important thing to note. Throughout this course I often said that React would rerun a component function,
+  that it would reevaluate a component. And indeed, as I mentioned before, whenever state props, or a context of a 
+  component changes, that component function is re-executed. That component is re-evaluated by React. But it is worth 
+  noting that reevaluating a component is not the same as re-rendering the DOM. So just because a component function is 
+  re-executed by React does not mean that the respective part of the actual real DOM is re-rendered or re-evaluated.
+  Instead we have to differentiate between our component part, our React part and the real DOM. Our components, as I just
+  said, are re-evaluated whenever props, state or context changes. So React then executes that component function again.
+  Now the real DOM on the other hand is only updated in the places where it needs to be changed based on that difference
+  React derived between the previous state of a component and its tree and the current state after the state prop or 
+  context change.
+
+. So the real DOM is not changed all the time. It's changed rarely and only when needed. And that's important for 
+  performance, because making a virtual comparison between the previous state and the current state, that's fairly cheap 
+  and easy to do. That happens only in memory. Reaching out to the real DOM, that's rendered in the browser is pretty 
+  expensive from a performance perspective, because working with the real DOM just turns out to be a performance 
+  intensive task. Of course not a tiny change in one place, but if you do that tiny change in a lot of places all the time,
+  then your page might become slow because you're working with the real DOM too much. And that's my React has this 
+  structure of doing virtual comparisons with that virtual DOM and then only passing the changes between your last 
+  snapshot and the current snapshot to the real DOM. That's how React works here. It does this virtual DOM diffing,
+  finding out the difference between two snapshots. 
+  
+. And to see a real example, it could look like this. (See pdf - Virtual DOM Diffing) Let's say all the given component
+  our previous evaluation result. So when the component function ran the last time is this. And now some state changes
+  and all of a sudden we wanna show a new paragraph. So that's our current evaluation result. In this case, React would 
+  determine that the difference between both snapshots is this paragraph and it would report does change to ReactDOM
+  so that ReactDOM can update the real DOM and insert this paragraph. ReactDOM would not rerender the entire DOM.
+  It would not touch this existing h1 or div element. It would only insert the paragraph after the h1 element inside of 
+  the div. That's how React works behind the scenes in a nutshell.
+
+************************************************ Component update in action ********************************************
+. React will only rerun this function(component) and re-evaluate what's on the screen if state, props or context changes.
+. Refer App.js where on button click paragraph is toggled, and in developer tools, elemets tab we can see only paragraph
+  is flashed when added.
+
+**************************************** A Closer look at child component re-evalation **********************************
+. Component where you manage state or where you have props or context and that state props or context changes that 
+  component will be re-evaluated and re-executed.
+
+. Added DemoOutput and used in App component, here whenever state change on button click in App component, App component is
+  re-evaluated (check console log) and we are passing props(based on state change) to DemoOutput component, so DemoOutput
+  is also re-evaluated as props changes(check console log)
+
+. Now let's pass false to show props - <DemoOutput show={false}></DemoOutput>
+  Now, what would you expect as a result? Let's see if the app reload we see app running and DemoOutput running makes sense.
+  The app just loaded, both was rendered, but something interesting happens when I click Toggle Paragraph. If I do that, 
+  you see App running, okay, we changed the state there but you also see DemoOutput running in console. And that's 
+  interesting. The props didn't change, right? We have to show prop and the value I pass in there is still false. It never
+  changes, it's always false. So why was DemoOutput re-executed?
+
+. Well, let's take it step by step. The app function is re-executed because state changed here. Now, what is part of that
+  app function? Of course, this return statement and there we return some JSX code.Now, all those jsx elements here in the
+  end are like function calls to the respect of component functions. So we call the function for the DemoOutput component.
+  We call the function for the button component. That's why those child components are also re-executed and re-evaluated
+  just because the parent component changed because they are part of the parent components, function body. And if the 
+  parent component function runs again of course the child component functions also run again. So in the end, the prop 
+  value doesn't even matter here for this component to be executed again.
+
+. Of course, the fact that DemoOutput runs again does not mean that the real Dom is touched. We can verify this with 
+  elements there you'll see that nothing flashes. I can hammer that button and nothing changes there because react just 
+  re-evaluates the components. And as you learned, re-evaluating a component and re-running its component function is not
+  the same as re-rendering the real Dom or manipulating the real Dom.
+
+. But it is really important to understand that if a component is re-executed all its child components will also be 
+  re-executed and re-evaluated. So therefore of course not just a DemoOutput component is re-evaluated, the button is as 
+  well.
+
+. and this poses or this brings up one important question, isn't this bad? Because if all those component functions are 
+  re-executed that's a lot of ongoing function executions and virtual comparisons that certainly costs some performance,
+  right?
+
+********************************** Preventing Unnecessary Re-Evaluations with React.memo() *****************************
+. How can we tell React that it should re-evaluate component under certain circumstances only?
+. For that we need to wrap our component with React.memo(). React.memo allows us to optimize functional components not
+  class based component.
+. Now, what does memo do? It tells React that for this component, which it gets as a argument, React should look at the 
+  props this component getsand check the new value for all those props and compare it to the previous value those props 
+  got. And only if the value of a prop changed, the component should be re-executed and re-evaluated. And if the parent 
+  component changed but the prop values for that component here did not change, component execution will be skipped.
+  we can see the result of that by going back. Initially, of course, DemoOutput is executed because the App was just 
+  rendered for the first time. But now if we clear the console, if I click this button, you see only APP and Button 
+  RUNNING is being printed. The DemoOutput RUNNING is not being printed, and therefore MyParagraph RUNNING is also not 
+  being printed because MyParagraph is a child of DemoOutput. And if DemoOutput is not re-executed, of course, its child 
+  is also not re-executed. So this is now an optimization in place here that avoids this unnecessary re-rendering.
+
+. Now, that might bring up a new question, though: Why aren't we using that on all components if it allows us to optimize
+  them? Because this optimization comes at a cost. The memo method here tells React that whenever the App component changed,
+  it should go to this component here and compare the new prop values to the previous prop values, so therefore React 
+  needs to do two things. It needs to store the previous prop values, and it needs to make that comparison. And that, of
+  course, also has its own performance cost. And it, therefore, greatly depends on the component you're applying this to
+  whether it's worth it or not because you're trading the performance cost of re-evaluating the component for the 
+  performance cost of comparing props. And it's impossible to say which cost is higher because it depends on the number 
+  of props you have and on the complexity of your component and the number of child components your component has.
+  Of course, React.memo can be a great tool if you have a huge component tree with a lot of child components. And on a high
+  level in the component tree, you can avoid unnecessary re-render cycles for the entire branch of the component tree.
+
+. Like in this case, by avoiding the re-evaluation of DemoOutput, we're also automatically avoiding the re-evaluation of
+  MyParagraph even though we're not using React Memo in there just because we cut off this entire branch, so this entire 
+  branch of the component tree. That is something where React.memo can definitely be worth it. If you, on the other hand,
+  have a component where you know it's going to change or its props values are going to change with pretty much every 
+  re-evaluation of the parent component anyways, then React.memo doesn't make a lot of sense because if the result is that
+  the component should re-render anyways,
+
+. Button realistically doesn't re-change, so re-evaluating the Button all the time shouldn't be worth it. There's nothing
+  on it that changes, right? We have the same text, we have the same function, so why don't we wrap it? For that, let's go
+  to Button and use React.memo down here and wrap our Button component with it. Now, you will see something interesting if
+  you do that. If you save that and reload the app, of course, initially, we see Button RUNNING. But now if we click Toggle
+  Paragraph, we, again, see Button RUNNING. Why is that happening? That makes no sense, right?
+
+. Well, we see Button RUNNING again and again because, actually, its prop values did change. That's strange, right?
+  It is so because props to the Button is not a primitive values, it's a function which is object. and when React memo
+  compares previous oject with current object then it's not same and hence Button props is re-exected.
+
+**************************************** Preventing Function re-creation wih useCallback() *****************************
+. We can make React Memo work for prop values that are objects as well. We just need to tweak the way we create and store
+  those objects a little bit. There is an extra hook provided by React that helps us with that. And that is the 
+  useCallback Hook. 
+  
+. useCallback is a hook that allows us to basically store a function across component executions. So it allows us to tell
+  React that we wanna save a function and that this function should not be recreated with every execution. With that one 
+  in the same function object is stored so one in the same place in memory and therefore the comparison does work.
+  it will save a function of our choice basically somewhere in React's internal storage and we'll always reuse that same
+  function object then when this component function executes.
+
+. And using it is simple. We just wrapped the function we wanna save with it. So here we use the useCallback Hook and pass
+  our function as a first argument to useCallback and useCallback then returns that stored function and when the app function 
+  reruns useCallback will look for that stored function which React stored for us and reuse that same function object.
+  and in second argument, array of dependencies So therefore here we have an empty array of dependencies which basically
+  tells React that this callback function this function here which we wanna store it in toggle paragraph handler ultimately
+  will never change that it has no dependencies and the data for always the same function object should be reused when the
+  app component rerenders.
+
+  const toggleParagraphHandler = useCallback(() => {
+    setShowParagraph((prevShowParagraph) => !prevShowParagraph);
+  }, []);
+
+. useCallback() prevents re-creation of function.
+
+. Refer App.js
+
+****************************************** useCallback() and its dependencies ******************************************
+. Functions in JavaScript are closures. That means when a function is defined, which happens when the app function runs
+  in this functions case, when that function here is defined, JavaScript basically locks in all the variables that we're
+  using in there. All the variables that are defined outside of the toggleParagraphHandler function that we are using.
+
+  In this case, the allowedToggle variable, that is a variable or a constant coming from the app function and I'm using 
+  it inside of this function. Therefore JavaScript closes over that constant and basically stores that constant for that 
+  function definition. That means the next time this function here, the toggle paragraph handler, is executed, this stored 
+  variable will be used. And with that, the value of that variable at the point of time, it was stored.
+
+  This generally is perfect because this allows us to use variables from outside the function, in the function, and call 
+  that function at any point of time we want, which is exactly what we want for a function that we bind to a button.
+  The problem with that, and with useCallback however is, that with useCallback we're telling React to store that function,
+  and exactly that function somewhere in memory.
+
+  Now, when the app function is re-evaluated and reexecuted because the toggle state changed, then React will not recreate
+  this function because we're using useCallback where we told React that we don't want to recreate it under all circumstances.
+  So therefore the allowToggle value React stored for our function, is still the old allowToggle value from the first time
+  the app component was executed, not the most recent one.
+
+  There are cases where we actually want to recreate a function because values being used in that function that are coming
+  from outside the function might have changed. And here we have such a case. So here we would want to add allowToggle as
+  a dependency in our dependency array. And that tells React that we generally want to store that function.
+
+  But, whenever allowToggle changes and it has a new value, we want to recreate that function and store that new recreated
+  function. And this ensures that we always use the latest allowToggle value inside of that stored function. 
+  If allowToggle does not change however, then we don't recreate the function.
+
+. Refer App.js
+
+****************************************************** A First Summary *************************************************
+. Now, when React re-evaluates a component, it does not just re-evaluate that component, but since it reruns the entire
+  function and therefore all the re-builds, this JSX code rebuilds the output for this latest snapshot, so to say.
+  It will also rerun all components that you have in this JSX code. Like in this case, it will rerun the demo output
+  and the button components. Now to avoid unnecessary re-executions of child components, you can use React.memo() to tell 
+  React, hey, please only execute this component function again if the props really changed, so if we got real new values
+  in there. If we got no new values, please don't re-execute this function. Now since reevaluating a component means
+  that the entire component function runs again.
+
+************************************************ A Closer look at state & components **********************************
+. React behind the scenes creates a new state variable, you could say, which React manages for you, and which React also
+  for you ties to this component.
+  
+. it's strange that even though we call useState every time the app function runs again, we don't seem to lose or 
+  reinitialize our state all the time. The reason for that is simple. useState is coming from React, and React is 
+  managing the state and the connection to the component for you. And as part of that management process, React makes sure
+  that useState and the value you pass as a default value to useState essentially is only considered once. The first time
+  ever a component is rendered, so the very first time the app component runs, useState, when executed, creates a new state
+  variable which is handed off to React and which is managed by React. React then basically memorizes to which component 
+  that belongs. The app component, in our case. And it uses the default value to initialize the state with that value.
+  For subsequent app function calls, so for reevaluations of the app component, when useState is being called, no new state
+  is being created. Instead, React recognizes that it already has a state for this component, and it instead simply updates
+  that state as needed.
+
+******************************************* Undersanding State Scheduling & Batching ***********************************
+. When we call state updatng function, react doesn't call it immidiately instead it shecdule the state.
+
+  Now in reality most of the time, state changes, scheduled state changes will be processed very fast, pretty much 
+  instantly. So in reality, it might feel instant. If we click a button and that removes a paragraph to us as a human, that
+  happens instantly. But React reserves the right of actually postponing that state change. For example, because a lot of
+  other performance intensive tasks are going on at the same moment, potentially it asks that, React considers to have a 
+  higher priority.
+
+. Reason for using fucntion form while updating state if it depends on previous state.
+
+  Let's say on your screen, you have a input field where the user is able to type something. Reacting to that user input
+  would have a higher priority than changing some text on the screen. And for reasons like that, React might postpone 
+  scheduled state changes. Now, what React does is, it guarantees you that the order of state changes for one in the same
+  type of state is guaranteed.
+  
+. If you have two state updates in the same synchronous code snippet after each other.
+  So not in a promise in different than blocks but in the same function, for example, where nothing in between would cause
+  a time delay or anything like that. So if you have two synchronous lines of code after each other, where you would then
+  call a state updating function in such cases, React will batch those state updates together in one long synchronous 
+  process, so for example, in one function that executes start to end without any callbacks or promises in between, in such
+  cases React will take all the state updates that are produced by that function and it will batch them together into one
+  state update.
+
+******************************************** Optimizing with useMemo() ************************************************
+. We have useCallback to store function objects and only rebuild them when some input changed. We have something similar 
+  for all other kinds of data, and that is another hook which we can import, the useMemo hook. useMemo basically allows 
+  you to memoize, so basically that means to store, any kind of data which you want to store, just like useCallback does 
+  it for functions.
+
+. In our example(DemoList.js), we are sorting the list and this sorting will be done every time if this component 
+  re-execute (due to other value in props changes, for example even if title change but array did't change). So in such
+  scenario we don't want to sort unnecessarily, so basically we would like to store sorted list if list in props didn't 
+  change.
+
+  so we can memoize the result of this sorting here simply by calling useMemo here, and now useMemo, as a first argument, 
+  wants a function. That is, however, not a function that will be memorized. Instead, that function should return what you
+  want to store, so in this case it should return that sorted array.
+
+  Now, just like useCallback, useMemo wants a second argument which is an array of dependencies, basically to ensure that
+  this stored value is updated whenever one of the values you're using in there changes. And in this case, indeed, whenever
+  items changes, whenever we get new items, we wanna re-sort them, so items are a dependency here.
+
+. If I reload, we see it runs initially, of course, but it still also runs when I change the title. Now, the idea was that
+  it shouldn't run there. Why is it running again then? Well, because items re-changed. The items here actually are always
+  recreated when App reruns because we always create a new array here. So even if it's technically a similar array with 
+  the same values and the same order, it's still technically a new array in memory, and that is treated as a brand new 
+  object which isn't the same as the old array even if it contains the same values.
+
+  So to ensure that we don't unnecessarily pass a new array here, we can use useMemo() for array as well.
+
+. useCallback() allows to memoize(cache) function, so it returns memoized callback function. for example: changeTitleHandler
+  useMemo() allows to memoize value like array, object, so it returns memoized value. for example:  sortedList 

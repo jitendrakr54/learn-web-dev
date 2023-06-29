@@ -1,0 +1,32 @@
+. Now, HTML is a markup language that we web developers can use to structure and describe the entire content of any 
+  webpage. So notice how I said markup language because HTML is really not a programming language. It's a markup language
+  because we use it to describe something.  And in the case of HTML, we do describe content using elements.
+
+. Each and every page should only have one H1 heading. So only one primary heading. That is very important to keep in 
+  mind. This is not really mandatory, so it doesn't violate any HTML rules if we have multiple H1s, but it is a very 
+  good practice to always just have one of them. Now, about all the other ones, we can have of course, multiple of them.
+
+. Now, however, the use of B is actually not a good practice. So B is actually an older HTML element. And starting in 
+  HTML5, we should always use the strong element instead of B. The reason for that is that B doesn't have any so-called 
+  semantic meaning, But essentially what this means is that B is simply an element, but without a specific meaning. 
+  While on the other hand, the strong element means that this is really an important element that we want to stand out 
+  from the page.
+
+. attributes are basically pieces of data which we can use to describe elements. So there are lots of different 
+  attributes in HTML, and one of them is the source attribute.
+
+. So in HTML, when we talk about semantics, what we mean is that certain elements have actually a meaning or a purpose 
+  attached to them. So when we think about a certain HTML element, we should actually not think about what that element 
+  looks like as it's rendered on the page but instead, we should think about what that element actually means and what 
+  it stands for. Now, not all elements in HTML are semantic.
+
+  Now, you might ask why we actually do that and there are multiple reasons. And I think I mentioned them already 
+  actually. So one of them is search engine optimization, which basically means that search engines, such as Google will 
+  be able to understand the structure of your content, and therefore, they will be better able to analyze what your 
+  content and what your webpage is all about.
+
+  Also, writing semantic HTML is extremely important for accessibility, and especially for people who rely on screen 
+  readers to consume our webpages.
+
+. aside element is usually used for some secondary information that complements the information in the main part of the 
+  page.

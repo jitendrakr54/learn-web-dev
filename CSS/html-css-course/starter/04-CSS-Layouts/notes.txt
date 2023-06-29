@@ -1,0 +1,272 @@
+****************************************************** Using Floats ****************************************************
+. Refer pdf notes
+
+. float property makes it so that the elements that come after it will float around that first element.
+
+. When we use float: left and with this, what is going to happen is that this image is basically going to be taken out
+  of the document flow just like an absolutely positioned element.
+
+  Now, the difference here with floats is that then all the other elements will basically float around it.
+  eg:
+    .author-img {
+      float: left;
+    }
+
+  Now, the problem is, next element (paragraph will float behind the img). So if we add some small padding like 50px. 
+  There will be no impact because para is behind the img. So to fix this, we need add float property on para as well.
+
+  .author {
+    padding-left: 10px;
+    float: left;
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+
+  Now para will float after the image.
+
+. collapsing element: when this happens, we say that the element's height has collapsed. And again, this did happen
+  because both of its children are now floated.
+
+  h1 {
+    float: left;
+  }
+
+  nav {
+    float: right;
+  }
+
+****************************************************** Clearing floats ************************************************
+. the easiest way of doing that, which is not the best way, but it is the easiest one, is to simply add another element 
+  here to the header and then clear the floats from there. So let's add a div here with the class of clear.
+
+  Now, if we only want it to clear the left floats then here we can say clear left. And the same with right. But in this 
+  case, we have a left float and a right float. And so we want to clear both of them. And so we use both. And if we now 
+  save this, then our problem is indeed fixed.
+
+  h1 {
+    float: left;
+  }
+
+  nav {
+    float: right;
+  }
+
+  .clear {
+    clear: both;
+  }
+
+. Now, this is not a good practice as we don't want to clutterhtml by adding empty div. So another solution is 
+  "clearfix hack". Basically we add clearfix class on parent element and then add pseudo element ::after on that.
+
+  .clearfix::after {
+    clear: both;
+    content: "";
+    display: block;
+    /* need to add block as by default pseudo elements are inline element */
+  }
+
+****************************************************** box-sizing: border-box *****************************************
+. default behavior of box model is that if there is an element of width 300px and then add some padding of 40px then 
+  total width becomes 340px which is not right.
+
+  we can fix this problem by changing default behavior using "box-sizing: border-box". Now width and height remains same
+  as defined.
+
+  Now, what this also means at the same time is that padding and borders that we do specify will now reduce the inner 
+  width of the content area.
+
+. Now, we always want the box model to work like this by default on every single element from here on. And so basically 
+  what we want is for this property here to be applied to every single element on the page. we can do so by adding this 
+  property on universal selector.
+
+****************************************************** Introduction to Flexbox *****************************************
+. To get started with flexbox, we need to use the display property and set it to flex on some container element. and 
+  container element whih has some child elements. After setting this, So all these elements are now immediately side by 
+  side without having to use any floats or anything like that.
+
+  And these elements here, we call them the flex items because they are the child element of the flex container.
+
+. Now again, horizontally, each of this element takes up exactly the space that is necessary for its text content.
+  However, vertically things are a bit different. So vertically by default, all the flex items are as tall as the 
+  tallest element.
+
+. So to basically center all these items vertically all we have to do is to say, align-items, and then simply center.
+
+  And of course we can also center them horizontally. So basically center all of these items inside of the flex 
+  container. So we do that with justify-content and set it to center.
+
+****************************************************** A Flexbox Overview *****************************************
+. See pdf for more
+
+. First of all, the element on which we want to use Flexbox is called the Flex container. And all we have to do in order 
+  to create a flex container is to set its display property to flex, and that's it.
+
+  So if we do this, then all the direct children of that flex container will become the so-called flex items.
+
+. Now, the direction in which these flex items are laid out is called the main axis. Which is represented with this 
+  arrow here. Then the other perpendicular axis is simply called the cross axis, and it's important to know about these 
+  names because we can actually change the direction of the main axis, and so therefore also of the cross axis.
+
+  Plus we can align elements along the main axis and along the cross axis in different ways.
+
+. Refer pdf notes for flex properties and pictures
+
+****************************************************** Spacing and aligning flex items *********************************
+. So basically using "align-items" on the flex container will make it so that all the flex items will have the same 
+  alignment. So in this case, all aligned to the center. However, in many situations we want to override that for one 
+  single element. And so for that we use the aligned self property.
+
+    .el--1 {
+      align-self: flex-start;
+    }
+
+. So changing the order in which flex items are displayed on the page can be very helpful when we are adapting a bigger 
+  layout to a small layout for mobile screens. Now the default value for all elements is always zero. And so if we want 
+  to move an element to the very first position, all we need is to do, is to specify a number that is lower than that.
+
+  By default, they're all zero. And so if we want to move one of them to the first position we simply need to give them 
+  a number that's lower than that such as minus one.
+
+  And the same is true of course if we want to move an element to the back. So let's try this one. And so if we specify 
+  a value that is larger than zero, so larger than all the other ones, then it'll simply move to the back. And if we 
+  then want to make another one the last, then we simply need yet another number that is even larger. So let's say two.
+
+  .el--5 {
+    align-self: stretch;
+    order: -1;
+  }
+
+. Now if we want to add some margin to the right side of flex item, we can use margin-right property But problem with 
+  this is we have to remove margin from last child.
+
+  So to tackle this issue, we have a property in flexbox which is gap which basically add defined gap between flex items.
+  We need to define gap on flex container.
+
+****************************************************** The flex property **********************************************
+. The flex property is actually a short end for flex grow, flex shrink, and flex spaces. So when we want to size flex 
+  items and in particular with a width, then we usually do not use the width property but instead we use flex bases.
+
+  And what happened here is that now some of these elements do actually have a width of 100 pixels but when the content 
+  is larger than 100 pixels then the element actually extends to fit that content.
+
+. So again, if there is not enough space in a container to fit the items with the size that we describe here using flex 
+  spaces then flex box is allowed to shrink these items by default because flex shrink is set to 1.
+
+  However, if we want to change that which sometimes we might want then we can simply status to 0. And so now you see 
+  that they are indeed 200 pixels wide but then of course the content no longer fits the container. So setting flex 
+  shrink to zero is not always advisable, but in some situations it's necessary.
+  
+  So essentially what Flex Shrink does is to determine whether flex box is allowed to shrink element if necessary or not.
+
+. And finally, there's also basically the opposite of that which is flex grow and which determines whether elements are
+  allowed to grow as large as they can or not. if we set flex-grow here to 1, then all this remaining space right here 
+  is basically evenly divided by all the remaining elements. When we set flex-grow: 1 to one of the element then Well  
+  only this element here was allowed to fill up all the remaining space. And so these four are still with the size of 
+  the content and then the remaining space was filled up by this element.
+
+  So setting flex grow to 1 on all of these elements here makes it so that they have the same size and it wouldn't even 
+  have to be 1. What matters is that they are the same number. So if all of them would be 5 then they would still have 
+  the same size.
+
+  But now if one of them was 2 so let's again try this one here. Well then this one here would get double of the 
+  remaining space then these other ones.
+
+. flex shorthand property Now the flex property is actually pretty smart. So for example, we can simply set it to one 
+  like this and then it'll automatically figure out that this means that flex grow should be one.
+
+  So the first value is flex grow, which is 0 and then we would set that to 0 because that is the default. Then the 
+  second value is flex shrink which remember here we want it set to zero so we would set that to 0. And then the last 
+  one is flex bases. So this one we want at 200. And so that's it.
+
+***************************************************** Adding flexbox to our project ************************************
+. Refer style.css
+
+***************************************************** Building a Sample flexbox layout *********************************
+. if we don't define align-items then automatically all the elements will stretch as far as they can.
+
+***************************************************** Introduction to CSS Grid ****************************************
+. Refer pdf notes
+
+***************************************************** A CSS Grid Overview **********************************************
+. Refer pdf notes
+
+. Unlike Flexbox, we cannot change the direction of the row and column axis. Which in my opinion actually makes it even 
+  a bit easier to work with CSS Grid.
+
+. grid lines(refer pdf) are numbered from 1 to the number of columns plus 1. And the number of rows plus 1. So if we 
+  have 3 columns, then we have 4 grid lines for the columns. And if we have 2 rows then we have 3 grid lines for the 
+  rows.
+
+  And these numbers are actually important because we can use them to place a grid item exactly in one place in the grid
+  where we want it to be.
+
+. Now the intersection of all these grid lines, so both the grid lines for the columns and the rows, and creates all 
+  these areas in which we can place, or grid, items. And these areas are called the grid cells.
+
+. we can actually create spaces between the grid items. And these are then called gutters or gaps. So, remember, for 
+  that we use the gap property or also the row-gap and column-gap property.
+
+. A grid track can be a row or also a column. So each of these(refer pdf) are grid tracks and so in this example here we 
+  have 2 row tracks and 3 column tracks.
+
+***************************************************** Sizing grid columns aand rows ************************************
+. Actually, most of the magic of CSS grid comes from a very new unit, which is the Fr unit. So using the Fr unit here 
+  instead of pixels will allow us to very easily create flexible columns and flexible rows. So again, using pixels 
+  allows us to only give these tracks very rigid dimensions.
+
+  So these here are always 200 pixels no matter what. So if I resize this like this or like this the size always stays 
+  the same here of these columns, right? So at some point it even overflowed the container, right? And so many times 
+  that is not what we need.
+
+  And instead we want flexible columns and rows. And so as I said in the beginning for that we can use the new Fr unit.
+  eg:
+    grid-template-columns: 250px 200px 1fr 1fr;
+
+  Now, last 2 column will have same width, and if we resize the window, they will grow/shrink in same proportion.
+
+  If we want to have same width for all 4 columns then we have to set 1fr to all 4 columns
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+
+  if we say auto for example, on the fourth column then it will only take exactly the size that is necessary to fill its
+  content. And many times in practice, this is actually exactly what we need for one of the columns 
+    grid-template-columns: 1fr 1fr 1fr auto;
+
+. let's write grid template columns again because there is actually an easier way of writing four times fr like we did 
+  here. So instead, CSS grid introduced a repeat function where we can simply write, repeat, then open parenthesis
+  and then write how many columns you want and how large they should be. So let's say one Fr, and there we go.
+  So this is equivalent to just writing one Fr four times.
+   grid-template-columns: repeat(4, 1fr);
+
+. Refer css-grid.html
+
+***************************************************** Placing and spanning grid items *********************************
+. we have basically let CSS grid decide where to place our items in a completely automatic way simply following the 
+  source HTML code. However, sometimes it's important to manually place elements in a grid cell other than the 
+  predefined one.
+
+  So now we are actually interested in these numbered grid lines here because they will allow us to place any grid item 
+  wherever we want.
+
+      .el--8 {
+        grid-column: 2/3; // now this grid item will start from 2 and end to 3 in column
+        grid-row: 1/2;  // now this grid item will start from 1 and end to 2 in row
+      }
+
+      .el--2 {
+        /* grid-column: 1 / 4; */ // this will start from 1 and span to 4
+        grid-column: 1 / span 3;  // this will start from 1 and span to 3 cells(same as above)
+        grid-row: 2/3;
+      }
+
+. In some situations, we might not even know how many columns there are in a grid or we might simply not want to think
+  about how many cells we need to span. And so in those situations, there is a very nice trick that we can use instead 
+  of manually spanning. And so if we simply want one element to span all the way to the end we can use minus one.
+
+    grid-column: 1/-1;
+
+. And finally, of course, the same thing. So spanning also works for rows.
+
+***************************************************** Aligning grid items and tracks *********************************
+. Refer css-grid.html
+
+***************************************************** Building a simple css grid layout *******************************

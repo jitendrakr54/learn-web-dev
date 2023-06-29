@@ -1,0 +1,656 @@
+********************************************** Module Introduction *****************************************************
+. Working with (side) Effects
+. Managing more Complex State with Reducers
+. Managing App-Wide or Component-Wide State with Context
+
+************************************** What are "Side Effects" & Introducing useEffect *********************************
+. See pdf notes
+. React library itself has one main job to render the UI, to React to our user input, to re-render the UI when it's 
+  needed. That is what we focused on thus far with state and events and all of that. Now, therefore side effects are 
+  everything else that might be happening in your application. eg: Store data in browser storage, Send Http Requests to 
+  backend servers, set & manage timers
+
+  These are all tasks which you of course often have to consider in your application. For example, a lot of web 
+  applications needs to send Http requests to backend servers but these tasks are all not related to bringing something 
+  onto the screen. At least not directly. Of course you might be sending a Http request to then draw something onto the 
+  screen once you got the response, but sending the request itself and handling potential errors and so on that's not 
+  something you need React for, that's not something React cares about, that's not what React is.
+
+  So these are therefore tasks which must happen outside of the normal component evaluation. So outside of your normal 
+  component function. So therefore such side effects should not go directly into this component function because that 
+  would most likely create bugs, infinite loops or simply send too many Http requests.
+
+. Therefore we'll have a better tool for handling side effects and that's a special React Hook which we can use. The 
+  useEffect() Hook. The useEffect() Hook is simply another built in Hook. So another function you can run inside of 
+  your component function that will do something special. The useEffect() Hook is called with two arguments with two 
+  parameters. The first argument is a function that should be executed after every component evaluation if the specified
+  dependencies changed. And the specified dependencies are the second argument that you pass in. That's an array full 
+  of dependencies.
+
+********************************************** Using the useEffect() ************************************************ 
+. Usecase 1: Auto login when page reloads if logout is not clicked
+. Huge disadvantage with below approach is that we would create an infinite loop. Because we check for this being 
+  stored. If it is stored, we set this to true. And whenever we call a state setting function this component function 
+  re-executes and therefore this would run again would find one would set it again and so on.
+
+  const userLoggedIn = localStorage.getItem("isLoggedIn");
+  if (userLoggedIn == "1") {
+    setIsLoggedIn(true);
+  }
+
+. Hence from react, besides useState we import useEffect like this. And then here we can simply call useEffect just 
+  like this.
+
+  useEffect(() => {
+    const userLoggedIn = localStorage.getItem("isLoggedIn");
+    if (userLoggedIn == "1") {
+      setIsLoggedIn(true);
+    }
+  }, []);
+  
+  Here, The first argument is a function. For example here and anonymous arrow function. The second argument is an 
+  array of dependencies. In this function, we can now run this code here, which we don't wanna run directly in the 
+  component function. Because now this function here is executed by react and it is executed after important, after 
+  every component re-evaluation. So whenever this component function ran thereafter, this will run. And if you then 
+  update the state in here(calling setIsLoggedIn) the component will run again. But it (code inside useEffect()) will 
+  not just run after every component evaluation but only if the dependencies here changed.
+
+  Now when the app starts for the first time that will be the case. If this component function runs for the very first 
+  time because your app just started, then the dependencies are considered to have changed because you had no 
+  dependencies before you could say. But once it ran for the first time for example, with this setup here, we have no 
+  dependencies but therefore of course they also didn't change compared to the first execution cycle. So therefore this 
+  anonymous function here would indeed only run once when the app starts because thereafter the dependencies never 
+  change. Hence this will not result into infinite loop.
+
+. Refer App.js
+
+***************************************************** useEffect & Dependencies *****************************************
+. Usecase 2: To validate form
+
+. And this tells React, that after every login component function execution, it will rerun this useEffect function but 
+  only if either setFormIsValid, or enteredEmail or enteredPassword, changed in the last component rerender cycle. If 
+  neither of the three changed, this effect function will not rerun. that now useEffect function reruns whenever 
+  enteredEmail or enteredPassword changed. So that's another scenario where useEffect shines. It helps us make sure 
+  that we have one code, in one place, instead of as before in multiple places which reruns, whenever one of the 
+  dependencies changed. And that's also something where you use useEffect. So it's not just for when a component was 
+  created for the first time, but it's equally common to use it to rerun logic when certain data, typically some state 
+  or some props changed.
+
+  useEffect(() => {
+    setFormIsValid(
+      enteredEmail.includes("@") && enteredPassword.trim().length > 6
+    );
+  }, [enteredEmail, enteredPassword]); 
+  // useEffect will call this function, when any of the dependencies(enteredEmail, enteredPassword) is changed
+
+**************************************** What to add & Not to add as Dependencies **************************************
+  You learned, that you should add "everything" you use in the effect function as a dependency - i.e. all state variables 
+  and functions you use in there.
+
+  That is correct, but there are a few exceptions you should be aware of:
+
+. You DON'T need to add state updating functions (as we did in the last lecture with setFormIsValid): React guarantees 
+  that those functions never change, hence you don't need to add them as dependencies (you could though)
+  
+. You also DON'T need to add "built-in" APIs or functions like fetch(), localStorage etc (functions and features built-
+  into the browser and hence available globally): These browser APIs / global functions are not related to the React 
+  component render cycle and they also never change.
+
+. You also DON'T need to add variables or functions you might've defined OUTSIDE of your components (e.g. if you create
+  a new helper function in a separate file): Such functions or variables also are not created inside of a component 
+  function and hence changing them won't affect your components (components won't be re-evaluated if such variables or 
+  functions change and vice-versa)
+
+  So long story short: You must add all "things" you use in your effect function if those "things" could change because 
+  your component (or some parent component) re-rendered. That's why variables or state defined in component functions, 
+  props or functions defined in component functions have to be added as dependencies!
+
+  Here's a made-up dummy example to further clarify the above-mentioned scenarios:
+
+  import { useEffect, useState } from 'react';
+ 
+  let myTimer;
+ 
+  const MyComponent = (props) => {
+    const [timerIsActive, setTimerIsActive] = useState(false);
+  
+    const { timerDuration } = props; // using destructuring to pull out specific props values
+  
+    useEffect(() => {
+      if (!timerIsActive) {
+        setTimerIsActive(true);
+        myTimer = setTimeout(() => {
+          setTimerIsActive(false);
+        }, timerDuration);
+      }
+    }, [timerIsActive, timerDuration]);
+  };
+  In this example:
+
+. timerIsActive is added as a dependency because it's component state that may change when the component changes.
+  (e.g. because the state was updated)
+
+. timerDuration is added as a dependency because it's a prop value of that component - so it may change if a parent 
+  component changes that value (causing this MyComponent component to re-render as well)
+
+. setTimerIsActive is NOT added as a dependency because it's that exception: State updating functions could be added but
+  don't have to be added since React guarantees that the functions themselves never change.
+
+. myTimer is NOT added as a dependency because it's not a component-internal variable (i.e. not some state or a prop 
+  value) - it's defined outside of the component and changing it (no matter where) wouldn't cause the component to be 
+  re-evaluated.
+
+. setTimeout is NOT added as a dependency because it's a built-in API (built-into the browser) - it's independent from 
+  React and your components, it doesn't change
+
+******************************************** Using the useEffect Cleanup function: Debouncing ***************************
+. Now, sometimes you also have an effect that needs to do some cleanup work. Let's say here, we're executing this 
+  function essentially on every keystroke. This is what happens here. I can prove this to you. If I console.log this, 
+  "Checking form validity!", you will see, if you go back here to the console, with every keystroke, this runs. Now, 
+  that's not a problem here. This function execution is fairly fast. But what you do in this function, that might be a 
+  problem. Here, we are updating some state. This might already not be ideal. And I'll be honest, for this simple state 
+  update it won't be a problem, but of course it means that it triggers another function component execution, and that 
+  React again needs to check whether it needs to change something in the DOM. So even that might not be something you 
+  really wanna do for every keystroke. Now imagine you would do something more complex, like, for example, send an HTTP 
+  request to some backend where you check if a username is already in use. You don't wanna do that with every 
+  keystroke. Because if you do, that means you're going to be sending a lot of requests. And I don't know about you, 
+  but that might be a lot of unnecessary network traffic. So that's something you might wanna avoid.
+
+. And as I said, even this here, this state updating is something you might not wanna do on every keystroke. Instead, 
+  something you might want to do is that you collect a certain amount of keystrokes, or you simply wait for a pause of 
+  a certain time duration after a keystroke. And only if the pause is long enough, you go ahead and do your thing. So 
+  for example, here, whilst the user is actively typing, I might not wanna check if it's a valid email address. I care 
+  about when the user stops typing. So for example, here, when I type, and then I stop for, let's say, 500 milliseconds 
+  or longer, then I wanna check. Okay, the user seems to be done, let's see if it's valid. That's something we might 
+  wanna do. And the same for the password. Now that's a technique which is called Debouncing. We wanna debounce the 
+  user input.
+
+. We wanna make sure we're not doing something with it on every keystroke, but once the user made a pause during typing.
+  And with useEffect, it's actually easy to implement. We can use setTimeout, which is a function built into the 
+  browser, to wait for, for example, 500 milliseconds until we execute some function. Now, in this function, we might 
+  want to check our form validity or to update our form validity. Now we would only do this after 500 milliseconds. 
+  Now, if I move my console.log in here, you will see that this alone doesn't do much. The only result is that we don't 
+  see the output immediately but with a slight delay of 500 milliseconds, which makes sense because for every 
+  keystroke, we're now setting a timer and after 500 milliseconds, we do this.
+
+  eg:
+      useEffect(() => {
+        setTimeout(() => {
+          console.log("Checking from validity!");
+          setFormIsValid(
+            enteredEmail.includes("@") && enteredPassword.trim().length > 6
+          );
+        }, 500);
+      }, [enteredEmail, enteredPassword]);
+
+. Well, the trick is that we actually save the timer. And for the next keystroke, we clear it so that we only have one 
+  ongoing timer at a time. And only the last timer will, therefore, complete. And as long as the user keeps on typing,
+  we always clear all other timers. And therefore, we only have one timer that completes, and that completes after 500 
+  milliseconds, which is the delay the user has to issue a new keystroke to clear this timer.
+
+. In the useEffect function, so the function you pass as a first argument, you can do something we haven't done before.
+  You can return something. Now the something you return here has to be one specific thing. It needs to be a function 
+  itself. So here you can also return a function, for example, an anonymous arrow function. But it could also be a 
+  named function just as for all the places where I'm using anonymous functions. So we are returning this anonymous 
+  arrow function here. That's a so-called cleanup function.
+
+. This will run as a cleanup process before useEffect executes this function the next time. So to make it clear when 
+  this runs, whenever this useEffect function runs, before it runs, except for the very first time when it runs, this 
+  cleanup function will run. And in addition, the cleanup function will run whenever the component you're specifying 
+  the effect in unmounts from the DOM. So whenever the component is reused. So the cleanup function runs before every 
+  new side effect function execution and before the component is removed. And it does not run before the first side 
+  effect function execution. But thereafter, it will run before every next side effect function execution. 
+  
+. So we can simply console.log 'CLEANUP' here to get a feeling for when it runs.If I reload this page, you see 
+  "Checking form validity!" ran. So this code ran clearly, our main side effect function code. But we don't see the 
+  cleanup call. We don't see the cleanup log because of what I said. It does not run before the very first side-effect 
+  execution. But if I then type here just one character, you'll see cleanup runs immediately, and then the code inside 
+  of this side effect function, inside of this function here, sorry, this code here executed. So that's how cleanup 
+  runs. It runs before every new side effect function execution.
+
+. So with this in mind, we can clear this timer with the built-in clearTimeout function, which is built into the    
+  browser. There, I call clearTimeout and pass the identifier of this timeout to it. And this makes sure that whenever 
+  the cleanup function runs, I clear the timer that was set before this cleanup function ran, so in the last side 
+  effect function execution, so that when the next side-effect execution is due, we are able to set a new timer. So we 
+  clear the last timer before we set a new one. That's what's happening here. And again, if the order is not clear to 
+  you, have a look at those console.log statements, this one and this one, and see in which order they execute.
+
+. Now, here, if I type a lot very quickly, you see a lot of CLEANUPS, but you only see one "Checking form validity!".
+  And that means that this code in here only ran once for all those keystrokes. And that's what I mentioned earlier.
+  If we want to be sending an HTTP request here, we would have now only sent once instead of a dozen HTTP requests.
+  And that's an improvement. And of course, also a nice example for this cleanup function and when it matters and how 
+  it works.
+  eg:
+    useEffect(() => {
+      const identifier = setTimeout(() => {
+        console.log("Checking form validity!");
+        setFormIsValid(
+          enteredEmail.includes("@") && enteredPassword.trim().length > 6
+        );
+      }, 500);
+
+      return () => {
+        console.log("CLEANUP");
+        clearTimeout(identifier);
+      };
+    }, [enteredEmail, enteredPassword]);
+
+. Refer Login.js
+
+*************************************************** useEffect Summary *************************************************
+. I'll add a new useEffect call where I only add this first argument. So for the moment, no second argument. And in 
+  there we can log, EFFECT RUNNING. Now, at the moment we have no information about the dependencies, we just have this 
+  first argument. And this is a valid way of using it, though you will rarely use useEffect like this. The reason for 
+  this is that if I reload, you see it runs when the component first mounts, so when this login component is rendered 
+  for the first time, but then also for every state update. For example, if I click in here and click out of there, we 
+  see, EFFECT RUNNING. For every keystroke we see, EFFECT RUNNING. So this really now runs for every time this 
+  component function reruns because you learned this effect function runs after every component render cycle. Not 
+  before it and not during it, but after it. Including the first time this component was mounted.
+
+  useEffect(() => {
+    console.log("EFFECT RUNNING");  
+  });
+
+. Now, this changes once we add an empty array. Now this function here, only executes for the first time this component 
+  was mounted and rendered, but not thereafter, not for any subsequent rerender cycle. So we see in fact, running here,
+  but for the keystrokes, we don't see it. Now if I log in, we also don't see it again. So it really only ran once.
+
+  useEffect(() => {
+    console.log("EFFECT RUNNING");  
+  }, []);
+
+. Alternatively, we add a dependency like entered email or entered password. Now this function here, reruns whenever 
+  the component was re-evaluated and this state, in this case here, changed. So if I now log out and reload, we see 
+  EFFECT RUNNING, for the first time this was mounted, but now for keystrokes in the email, nothing changes. For 
+  keystrokes in password, we see effect running though, because the password is a dependency.
+
+  useEffect(() => {
+    console.log("EFFECT RUNNING");  
+  }, [enteredPassword]);
+
+. We also have the cleanup function, which we can return. This cleanup function runs before this state function as a 
+  whole, runs, but not before the first time it runs. So here I will, again, log, EFFECT CLEANUP, save this. We see 
+  only EFFECT RUNNING here for the first render cycle, for the email, nothing happens. But once I start typing in the 
+  password, we see EFFECT CLEANUP being triggered and it triggers before the EFFECT function runs.
+  
+  useEffect(() => {
+    console.log("EFFECT RUNNING"); 
+
+    return () => {
+      console.log("EFFECT CLEANUP");
+    };
+  }, [enteredPassword]);
+
+. Now, if we had an empty array here, so no dependencies, we learned that we only see EFFECT RUNNING once, and the 
+  cleanup function in this case, would run when the component is removed. So in this case for example, when I log in 
+  and the component is removed from the DOM, we see effect cleanup. So that's how useEffect works, and how the 
+  different parts of it are related and when they execute.
+
+  useEffect(() => {
+    console.log("EFFECT RUNNING");
+
+    return () => {
+      console.log("EFFECT CLEANUP");
+    };
+  }, []);
+
+********************************** Introducing useReducer for State management & Reducers In general *******************
+. See pdf
+
+. useReducer is another built in Hook and it will help us with state management. So it's a bit like useState, but 
+  actually with more capabilities and especially useful for more complex state. Because sometimes you have more complex 
+  state, for example, multiple States that kind of belong together, that are managing the same thing just different 
+  aspects of it. Or you have multiples states that kind of chained together or are related. In such cases, useState and 
+  the state you get from there often becomes hard or error-prone to use and manage. And it's easy then to ride bad or 
+  inefficient or potentially buggy code, which is of course it's never what we want. useReducer is then an alternative 
+  to useState. So it's a replacement, if you need a more powerful state management. Now, this does not mean that you 
+  should always use useReducer because it's more powerful, so it's always better. No, because it's also a bit more 
+  complex to use, It requires a bit more setup. So for a lot of scenarios for the majority I would argue you probably 
+  use useState.
+
+. Here in our validateEmail and validatePassword handlers. There, we are calling setEmailIsValid and setPasswordIsValid,
+  to set new states, for this emailIsValid and passwordIsValid state. These are our two states, which we're setting 
+  there. Now, how are we setting these states? Well, by having a look at another state and calling a method on it. 
+  We're having a look at the enteredEmail state, which is a different state. This is our enteredEmail state. It's a 
+  different state than our emailIsvalid state. Sure, they are related. They both changed because of what the user 
+  entered, but technically these are two different states, two different variables. And we are deriving our new 
+  emailIsvalid state by looking at another state and that is something we should not do. It works in most cases, but in 
+  some scenarios it could not work because maybe some state update for enteredEmail wasn't processed in time. And then 
+  we would try to update emailIsValid, based on some outdated enteredEmail state. So we should use the function form 
+  here, but again, just as with a setFormIsValid we can't, because with the function form of our state updating 
+  function here. We only get the latest state for that state which we're setting here. So we would get the latest 
+  emailIsValid state not the latest enteredEmail state if we use the function form here. So that's why this is not an 
+  option. And therefore here we are already violating this rule which I told you to not to violate. And that is a 
+  scenario where useReducer is always a good choice.
+
+. If you update a state, which depends on another state, then merging this into one state could be a good idea. And you 
+  can do that without useReducer as well. You could simply manage an email state, which is an object with the value and 
+  the valid being part of the same object. You could do it with the useState, but in such cases when your state becomes 
+  more complex, bigger and combines multiple related states, useReducer can also be worth a closer look.
+
+************************************************** Using useReducer() Hook *********************************************
+. See pdf
+. useReducer just like useState, always returns an array with exactly two values. And therefore you can use array 
+  destructuring as we did it with useState to pull out these values and store them in separate constants. Now, the two 
+  values you are getting are the latest state snapshot, because it is a state management mechanism like useState. So of 
+  course you get your state snapshot. But you also get a function that allows you to update that state snapshot. So 
+  that's kind of the same as for useState, though the state updating function will work differently. Instead of just 
+  setting a new state value, you will dispatch an action. 
+
+  And that action will be consumed by the first argument you pass to useReducer a so-called reducer function. So this 
+  is a function which gets the latest state snapshot automatically because this function will be called by React and it 
+  gets the action that was dispatched. Because React will call this reducer function whenever a new action is 
+  dispatched. So then it gets the last state snapshot managed by React. And that gets the action that was dispatched 
+  that triggered this reducer function execution. Now the reducer function then also should do one important thing. It 
+  should return a new updated state. So it's a bit like the function form of the useState hook, but an extended version 
+  of that, you could say, because of that action thing. 
+  
+  In addition, you can also set some initial state and also an initial function that should run to set the initial state
+  in case your initial state is a bit more complex.
+
+  const [state, dispatchFn] = useReducer(reducerFn, initialState, initFn);
+
+. Now I did mention that we could use useReducer here to combine our entered values and validities for the email and the
+  password. And we could also use it to manage the overall form state with it. So we could either manage one big form 
+  state that includes everything or in multiple smaller states. Both would work, both would be fine, but to keep things 
+  simple here, we will simply start by managing our emailState with useReducer.
+
+. useReducer just like useState, always returns an array with exactly two values. And therefore you can use array 
+  destructuring as we did it with useState to pull out these values and store them in separate constants. Now, the two 
+  values you are getting are the latest state snapshot, because it is a state management mechanism like useState.
+  So of course you get your state snapshot. But you also get a function that allows you to update that state snapshot.
+  So that's kind of the same as for useState, though the state updating function will work differently.
+
+. Instead of just setting a new state value, you will dispatch an action. And that action will be consumed by the first 
+  argument you pass to useReducer a so-called reducer function. So this is a function which gets the latest state snapshot
+  automatically because this function will be called by React and it gets the action that was dispatched. Because React 
+  will call this reducer function whenever a new action is dispatched. So then it gets the last state snapshot managed by
+  React. And that gets the action that was dispatched that triggered this reducer function execution. Now the reducer 
+  function also should return a new updated state. So it's a bit like the function form of the useState hook, but an 
+  extended version of that.
+
+. Now, please note that I created this reducer function outside of the component function. And I did so because inside 
+  of this reducer function, we won't need any data that's generated inside of the component function. So this reducer 
+  function can be created outside of the scope of this component function because it doesn't need to interact with 
+  anything defined inside of the component function. All the data which will be required and used inside of the reducer 
+  function will be passed into this function when it's executed by React, automatically. So that's why we can define it
+  outside off the component function here.
+
+. Now this reducer function receives two arguments, two parameters. Our last state snapshot and the action that was 
+  dispatched.
+
+************************************************** useReducer & useEffect **********************************************
+. We are validating form twice in emailChangeHander and passwordChangeHandler and that too on every key stroke, that looks
+  not optimal. So here we can use useEffect as we learned earlier.
+
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log("Checking from validity!");
+      setFormIsValid(emailState.isValid && passwordState.isValid);
+    }, 500);
+    return () => {
+      console.log("CLEANUP");
+      clearTimeout(identifier);
+    };
+  }, [emailState, passwordState]);
+
+. Now, still here, we have a problem though, the problem we'll have here is, that this effect runs too often. This will 
+  run whenever the email or the passwordState changed. Now that includes cases where maybe just the value changed, which 
+  might not be what we want. We actually only care about the validity here. Now it turns out that we updated the validity,
+  now whenever the value changes as well. So here, for example if I have a password that is valid, if I add one more 
+  character, it's still valid. Nonetheless, our effect re-executed here. Now that's something we might wanna avoid and it
+  re-executes at the moment because our dependency is the entire email and passwordState, not just the validity part of 
+  it which is actually the part we're interested in. Here, we can use a technique, We can use object de-structuring,
+  so the same as array destructuring, just with objects, to pull out certain properties of objects. For example, from 
+  emailState, we can extract isValid, and store it in a new constant of the same name. And we can do the same for the 
+  passwordState.
+
+  const { isValid: emailIsValid } = emailState;
+    const { isValid: passwordIsValid } = passwordState;
+
+    useEffect(() => {
+      const identifier = setTimeout(() => {
+        console.log("Checking from validity!");
+        setFormIsValid(emailIsValid && passwordIsValid);
+      }, 500);
+      return () => {
+        console.log("CLEANUP");
+        clearTimeout(identifier);
+      };
+    }, [emailIsValid, passwordIsValid]);
+
+****************************************** Adding Nested Properties As Dependencies To useEffect ************************
+. In the previous lecture, we used object destructuring to add object properties as dependencies to useEffect().
+
+  const { someProperty } = someObject;
+  useEffect(() => {
+    // code that only uses someProperty ... 
+  }, [someProperty]);
+
+  This is a very common pattern and approach, which is why I typically use it and why I show it here (I will keep on 
+  using it throughout the course).
+
+  I just want to point out, that they key thing is NOT that we use destructuring but that we pass specific properties 
+  instead of the entire object as a dependency.
+
+  We could also write this code and it would work in the same way.
+
+  useEffect(() => {
+    // code that only uses someProperty ...
+  }, [someObject.someProperty]);
+
+  This works just fine as well!
+
+  But you should avoid this code:
+
+  useEffect(() => {
+    // code that only uses someProperty ...
+  }, [someObject]);
+
+  Why?
+
+  Because now the effect function would re-run whenever ANY property of someObject changes - not just the one property 
+  (someProperty in the above example) our effect might depend on.
+
+******************************************* useReducer vs useState for State management **********************************
+. See pdf 
+. Now, generally, you will know when you need useReducer. for example, because using useState becomes too cumbersome,
+  you find yourself dealing with a lot of kind of related state snapshots, which still are kind of independent and you 
+  start updating them together in a way that just doesn't work out. Then, you want to consider using useReducer.
+
+. useState is your main state management tool. Typically, you start with useState and often it's all you need. It's great
+  for independent pieces of state and data. It's great for simple state, you could say. It's great if state updates are 
+  easy and limited to a few kinds of updates. So, if you don't have a lot of different cases that will change a state and
+  especially if you don't have, let's say, an object as a state or anything like that. 
+
+. Now, if you do have an object as a state or a more complex state useReducer might be interesting because, in general, 
+  useReducer is great if you need more power and with more power, I simply mean that you can write such a reducer function
+  You should especially consider useReducer, if you're dealing with related data with state that is made up of related 
+  pieces of state. So when you, for example, have a scenario, as we had it with our form input state. And, in general, 
+  useReducer can be helpful if you have more complex state updates, if you have different cases, different actions that 
+  can change a state, cases like this. Now, you could absolutely also use useReducer to manage the form state as a whole 
+  with useReducer, instead of using useState for the form validity you could replace these two reducers and the form 
+  validity with one big reducer that manages the entire form, but that's something I will come back to later in the forms
+  module.
+
+******************************************************** Context API **************************************************
+. Context provides a way to pass data through the component tree without having to pass props down manually at every 
+  level.
+
+. Now it is quite common that you pass data to components through props, but it's always a problem if you forward state
+  through multiple components. So if you basically just leverage props to forward data to another component. And that's 
+  actually something we're doing in the MainHeader. Here in the app component, I'm passing isLoggedIn through the 
+  isAuthenticated prop to main header. And I'm passing the LogoutHandler through the onLogout prop to the main header as
+  well. Now in the main header though, I'm using neither of those two props. I'm using them only to forward them again
+  to the navigation component because it's the navigation component in the end, which needs the isLoggedIn data to render
+  different links and which needs the onLogout prop and the logoutHandler therefore, to do something when the logout 
+  button is clicked. So essentially what I'm doing here, is in the main header I'm receiving props, I'm receiving data 
+  through props which I'm not actually using primarily in the main header. Instead, I just forward that data.
+
+. See pdf notes
+
+. That's not necessarily a problem, but in big apps, that chain of forwarding might become longer and longer. Consider 
+  this example of a fictional app. We could have an app with an app component, with, let's say, an auth section, with a
+  login form, with a shop section where we have a list of products in which we render individual product items, and with
+  a cart. Now in the login form, we might have the login event when the user fills out the form and submits the form,
+  and we validate the data and find out that the user is logged in. And we might need that login data, So the login 
+  status, the information that the user is loggedIn in different parts of the app. We might need it in the shop.
+  We might need it in the cart, to show the cart to avoid that the user can go there if he or she is not logged in.
+  It's easy to imagine that we need information about the login status in different parts of the app. And we have 
+  something similar. Let's say the user adds a product to the cart. We need that information in the cart component
+  to show the product there, for example. But since the product is a direct child of products, which is a child of shop,
+  which is a child of app. And since the login event happens in the login form, which is a child of auth, which is a 
+  child of app, we don't have those direct connections to the other components where the data might be needed.
+  If a user clicks a button in the product component to add a product to the cart, the information needs to reach the 
+  Cart component but there is no direct connection between the product component and the cart component. And the same for
+  the login. And therefore, what we typically would do is we would use props to pass a function handler to the login form,
+  for example, so that in there we can call it. But that essentially means that we're forwarding data through our 
+  different components. And the same, of course, if we add something to the cart. Now, that means that this function that
+  should be triggered when the user adds something to the cart would probably be managed in the app component, because we
+  lifted the state up to the level where we have access to both the product component, indirectly, and the cart component.
+  And that's only the case in the app component. Only this component has at least indirect connections to both components,
+  product, and cart.
+
+  And therefore we would forward a pointer to the add to cart function through all those other components, the shop 
+  component and the products component, even though those components probably don't need that function. They only need it
+  so that they can forward it to the product component in the end. So in the end here, we have the same problem I 
+  described here just on a larger scale. Here, it's a very simple app but even here we are forwarding data through the 
+  main header to the navigation component on props we receive in the main header even though we don't really need the 
+  data there.
+
+  So therefore, in bigger apps, you could easily build such prop chains, which are used to forward data through components
+  to other components. That's something you can do, and that's not necessarily bad but the bigger your app gets, the more
+  inconvenient it is to do that. Instead, it would be nicer if we could use props in a component to only receive the data
+  this component really needs from its parent, and not to forward our data through the parentwhich the parent doesn't ever
+  manage nor need itself. And for that we got a component-wide, "behind the scenes", State Storage, built into React.
+  We have a concept called React Context, and this then allows us to, for example, trigger a action in that component-wide
+  State Storage, and then directly pass that to the component that is interested without building such a long prop chain.
+  And that allows us to solve our problem in a more elegant way here.
+
+***************************************** Using the React Context API **************************************************
+. Create a folder as store or context then create a file as auth-context (as per requirement) and use below function
+  React.createContext(). while Auth-Context itself is not a component, it is an object that will contain a component.
+
+. To use Context in your app you need to do two things. You need to provide it, which basically tells React,
+  "Hey, here's my Context." All components that are wrapped by it should have access to it And besides providing, you 
+  then need to consume it. You need to hook into it, you need to listen to it, if you wanna call it like this.
+  Now, providing is always the first step. Providing means that you wrap in JSX code all the components that should be 
+  able to tap into that Context. So that should be able to listen to that Context. Any component that's not wrapped will
+  not be able to listen. So here, if we know that we need this Context everywhere in the entire application.
+  So in all components possibly, we wanna wrap everything in app component with it. If we knew that we only needed,
+  let's say, in the LogIn component and its child components, we could only wrap to login component. But here we'll need
+  it in the MainHeader, we'll need a down there, we'll need it everywhere. So therefore, we can wrap our main header and 
+  this main section with Auth-Context.
+
+  And AuthContext itself wouldn't be a component in JSX we need a component though, but with a dot we can access a 
+  property on this AuthContext object that contains a component and that's the provider. Auth-Context provider is a 
+  component we can use in our JSX code, and we can wrap it around other components and those other components and all 
+  their descendant components. So all their children and their children's children and so on, all those components will 
+  now have access to that Context.
+
+  and now we can listen in two ways. We can listen by using Auth-Context consumer or by using a React Hook. Now we'll 
+  typically use the React Hook, but let me show you the other alternative to consumer as well. Let's say here in 
+  Navigation component, we're interested in knowing whether the user is Authenticated or not. For that we can also use 
+  AuthContext steer and wrap everything where we need data from it with that consumer. So here, for example, we could 
+  wrap the entire component with AuthContext. Again, make sure to import it, of course dot consumer now. Previously we 
+  had the provider, now we have the consumer. The consumer works a bit differently though. The consumer takes a child
+  which actually should be a function between curly braces like this and as argument, you'll get your Context data.
+  So in our case, you'll get this object here. And then, in this function you should return your JSX code, which should 
+  have access to that data. So here I'm grabbing all that NAV code, I'm returning that and in there, I now for example,
+  have access to ctx.isLocggedIn. 
+
+  Now we can remove the isAuthenticated prop on the MainHeader and in the MainHeader therefore, stop forwarding it to the
+  Navigation. and in Navigation, we could now use Context.IsLoggedIn everywhere where we need the IsLoggedIn information.
+  And that's now where we break up that props chain, where we stop forwarding that data, which we don't need in the 
+  MainHeader and where we instead leverage Context.
+
+  Now I did mention, however that the consumer is just one way of consuming our Context. It's an okay-ish way, but I don't
+  like that syntax too much having that function that then returns our code. You can do that, but there actually is a more
+  elegant way and more elegant solution using the use Context Hook.
+
+    <AuthContext.Consumer> 
+    </AuthContext.Consumer>
+
+********************************************* Tapping Into Context with the useContext Hook *****************************
+  Now by importing a Hook from React, and that's the useContext() Hook. Another Hook that's built into React you call 
+  useContext in your React Component Function, and you pass the Context appointer at the Context you want to use to it.
+  So in our case, I'm pointing to AuthContext. Now what you get back, is the Context value. So here, I'll store this in 
+  a ctx Constant to make my code down there worth again. This is all we need to do and this, of course I would say it's 
+  a bit more elegant and a bit nicer than using AuthContext Consumer.
+
+    const ctx = useCotext(AuthContext);
+
+******************************************** Making context dynamic ***************************************************
+  But we're still forwarding the onLogout prop or the logoutHandler function through props and that's of course still not
+  ideal. It would be nicer if we could use the MainHeader without props. So without passing any data to it because we 
+  don't need to forward onLogout. But of course at the moment this would not work. This would mean at the moment that 
+  we're simply not able to log out because we're not passing our LogoutHandler. So hammering the LogOut button here
+  in the navigation wouldn't do anything. The good thing is we can set up a dynamic context where we don't just pass data
+  to our components but also functions, which technically of course owes this data.
+
+  Here all we need to do is in our AuthContext.Provider where we set up the value besides passing down isLoggedIn.
+  We can also pass down, onLogout where we point at the logoutHandler just like this. If I do that and make sure you 
+  don't execute it you just wanna point at the function. If I do that, then every listening component every component 
+  that listens to Auth context we'll be able to utilize logoutHandler here simply through the onLogout context value.
+  So therefore back in Navigation where we are referring to props.onLogout
+
+******************************************* Building & Using a Custom Context Provider Component ************************
+  It is a good idea to also add your functions like onLogout in my case to the default context when you create a context.
+  And there you can just store a dummy function which does nothing. I'm doing this for better IDE auto-completion.
+  Because you will see that if I don't have this here in the Navigation component, here if I try to call onLogout,
+  I'm not getting any suggestion by my IDE. It doesn't know that there is a onLogout prop.
+
+  Another thing that you might consider is depending on your application structure and how you're managing your data,
+  you also might want to pull more logic out of for example App component and create a separate Context Management 
+  component. See AuthContextProvider component
+
+******************************************* React Context Limitations ************************************************* 
+. See pdf notes and lecture
+
+******************************************* Rules of Hooks **********************************************************
+. See pdf notes
+. React hooks are simply all those functions that start with use. eg: useState, useEffect
+. you must only call react hooks in react functions. That means in react component functions as we did it thus far,
+  or also allowed in custom hooks.
+. you must only call react hooks at the top level of your react component functions or your custom hook functions. Don't
+  call hooks in nested functions. Don't call them in any block statements.
+
+**************************************** Refactoring Input Component **************************************************
+. Created a separate re-usable Input component and using that in Login Component 
+
+**************************************** Diving into "Forward Refs" ****************************************************
+. I want to make button visible always, currently which is not and I want to basically focus the first invalid Input I 
+  find. So here it's now always Submittable and if I click on Login, I now want to make sure that we actually focus the 
+  first Input that is invalid.
+
+. useImperativeHandle allows us to use this Component or functionalities from inside this Component imperatively, which 
+  simply means not through the regular state props management, not by controlling the Component through state in the 
+  parent Component, but instead by directly calling or manipulating something in the Component programmatically.
+  And again, that is something you rarely wanna use and therefore, you shouldn't use it very often in your projects as 
+  well.
+
+  The second parameter is a function, a function that should return an object. And that object will contain all the data
+  you will be able to use from outside. So for example here, we could add an activate field or a focus field, totally up
+  to you, and then point at the internal function or the internal variable or whatever it is that should be accessible 
+  from outside through that name. For example, here, point at activate.
+
+  We also have this first argument, which we need to provide to useImperativeHandle. And that's actually something we 
+  also get here in our Component function argument list, thus far we always just worked with props and in 99.9% of cases,
+  that is all you will need. However, there technically also is a second argument you can accept and that's a ref.
+  Well, that's interesting. There is a ref, if a ref should be set from outside, will also need something else to make 
+  sure that this can be set but this is then available. So if now the parent Component, the Login Component adds the ref
+  prop and binds this to something, essentially, this here will establish the connection. This will be part of allowing 
+  this binding. And it's this ref, which we should parse to useImperativeHandle.
+
+  Now we're still not there yet. This alone would not work In order to enable this second argument here, we need to export
+  our Component function in a special way. We need to wrap it with something special and that's coming from React, and 
+  it's called forwardRef. And that is basically a function which we execute, a method which we execute, to which we parse
+  our Component function. So our Component function is now the first argument to forwardRef and forwardRef returns a React
+  Component, so Input still is a React Component but a React Component that is capable of being bound to a ref. And now 
+  with that, Input is able to take a ref prop and it will expose a ref, and it is controllable or usable with refs. But 
+  the only thing you will be able to use is what you expose here through useImperativeHandle. So for example, here, I'm 
+  exposing this focus function, a function because it points at the activate function. So now in the Login Component,
+  we can call emailInputRef.current.focus because that's the external name we set up. With the useImperativeHandle and 
+  forwardRef, you can expose functionalities from a React Component to its parent Component to then use your Component
+  in the parent Component through refs and trigger certain functionalities. That is something you can do. And that does 
+  not just work for functions, we could also expose the value here through refs if we wanted to.

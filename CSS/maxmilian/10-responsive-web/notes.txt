@@ -1,0 +1,214 @@
+************************************************** Module Introduction *************************************************
+. Module Content:
+      . Hardware vs. Software Pixels
+      . The "viewport" <meta> tag in HTML
+      . Media queries with @Media
+
+********************************************** Why our project should become responsive ********************************
+. Well we have our starting page which looks nice on the desktop device. but if we now go back to our starting page for 
+  example and decrease the width like that right here, well then you can see that our site adjusts to this smaller width
+  but we have a lot of issues, for example the nav bar up here is kind of a mess, then we can see that the different plans
+  are also not really well organized.
+
+  We can see that the pricing right here is outside of the box, the same thing is true for recommended or also if we 
+  decrease it further, for the text right here and we can see that our svgs right here are also not displayed correctly,
+  so basically our website is only partially responsive at the moment.
+
+  We have additional issues, for example this hamburger menu right here is visible all the time, although we actually only
+  need it on the mobile device. So what we need, we need concepts and tools to make the site responsive and for that, we 
+  first have to understand the difference between hardware or device pixels and software or CSS pixels.
+
+********************************************* Understanding Hardware pixels vs. Software Pixels ************************
+. The problem at the moment though is that our browser does not really understand the difference between a desktop device
+  and a mobile device. Although we only have a mobile device which should actually be smaller than our desktop device if 
+  we decrease the width, the browser basically squeezes the entire website onto our mobile phone and with that, there is 
+  no responsive design at all available at the moment.
+
+. and while this works perfect for monitors or desktop devices, for a mobile phone, this leads to a website being displayed
+  like this which is of course way too small. And what causes this problem of course in the end is that modern mobile 
+  phones have a really high pixel density and this high pixel density, so a lot of pixels in a really little amount of 
+  space lead to the problem that these, as I would call them, traditional ways of translating pixels into inches and by 
+  that, specify the amount of information that is displayed on the device is not working anymore.
+
+  So if pixels are translated into inches and we have the problem that we have too many pixels and not enough space 
+  available or a too-small device, then we can either increase the size of the device which is difficult because our mobile
+  phones have the size they have or decrease the amount of pixels because if we have less pixels available, then less 
+  information would be displayed at the same time on our display and with that, we would have a bigger font size and a 
+  bigger size of the entire content of the website actually.
+
+. How can we tell the browser that it should apply this pixel ratio to make sure that it translates the actual hardware 
+  pixels, so 751334 into 375667. Well the answer is we simply have to add this viewport meta tag.
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  now the style totally changed because now our browser is able to identify the actual device width we have right here on
+  our smartphone. This means he does not consider the actual hardware pixels but considers the CSS, the software pixels.
+
+********************************** Comparing the viewport metatag(HTML) and media queries(CSS) *************************
+. So which tools do we have to add a responsive design? Well, we just saw that we have this viewport meta tag, this is 
+  created or added in HTML and we have media queries.
+
+  The viewport meta tag is required to be able to adjust our site to the device viewport. If we only take into account the
+  actual pixels, we will not be able to display our websites correctly or in a convenient and appropriate way on mobile
+  devices. Therefore in addition to the actual pixels, we need to take into account the device width and with that, 
+  automatically apply a specific pixel ratio which will then allow us to translate the hardware pixels into these software,
+  the CSS pixels. 
+  
+  The important thing is though that we cannot apply any design changes, so in case you want to say if I am in a mobile 
+  version, I would like to change the entire structure of my website, I would like to add some things or maybe make some 
+  things disappear, this is not possible. The only thing it does, it translates the pixels according to the pixel ratio 
+  and therefore adjust the way our website is displayed.
+
+. In contrast to that, we have the media queries. The media queries allow us to change the design depending on the actual
+  size and that's the important difference, media queries really allow us to specify the way our website is displayed 
+  depending on the size and size doesn't mean a single size, we are able to define specific rules based on the width for 
+  example where specific properties of our website should change. you could change basically anything you want with such 
+  media queries, you could also change colors for example.
+
+  media queries are really cool and allow you to really adjust the look of your website depending on different device sizes.
+  The important thing with that is of course that these changes are defined by us. With the viewport, the impact we have 
+  is limited because the viewport will just translate the pixels but with the media queries, we can really dive into the 
+  design and specify a unique design for the different devices.
+
+******************************************** Understanding the "viewport" metatag **************************************
+. The first attribute we added was this viewport attribute, this simply allows us to tell this meta tag that it should 
+  target the viewport, so actually the area on our device inside our browser that should display our website.
+
+  The second attribute we added was this content attribute, with that, we are now able to set the width of our page that
+  we have, so the page on the viewport, the visible part of it basically, this should be equal to the width of the screen
+  of our device and that's the important thing lectures. With that, we were able to tell our browser that our device
+  is a smaller device, a mobile device and therefore, it should apply this pixel ratio conversion because otherwise, we 
+  would have the problem that we had initially, that our browser simply has a look at the amount of hardware pixels it has
+  and therefore is not aware of the fact that we have a smaller device and with that, simply displays the entire website 
+  squeezed into our mobile device screen.
+
+  Then we have this initial scale information right here, the initial scale simply defines the zoom level that we have. 
+  1.0 simply means that we have the default value, this means no zoom is applied.
+
+  Now zooming in and zooming out are the next types of information that we can specify in this meta tag
+      user-scalable=yes
+  
+  Now there are two more interesting types of information that we can add to our content attribute right here, the first 
+  one is the maximum scale, right here. If you think about the initial scale which set the default zoom level when the 
+  user enters our website, the maximum scale simply restricts the maximum zoom level that is available. we can also add a
+  minimum scale of course. The minimum scale simply restricts the amount of zooming out level that our user is allowed to
+  apply.
+        maximum-scale=2.0 minimum-scale=1.0
+
+******************************************** Designing websites "Mobile first" ****************************************
+. Normally, you'll start creating your website mobile first. This means you start creating the page in a way that it looks
+  nice on mobile devices. The reason for that is simply that many users are using mobile devices now to access websites
+  and with that, you want to make sure that you have a nice looking website for mobile devices.
+
+*********************************************** Adding our first media queries ****************************************
+. the media query and tells the code that this is a media query, then we have to specify an if statement basically, that's
+  how you can imagine that. This simply tells you if this condition is met, then please apply the following code and our 
+  condition right here will be a min width right, of 40rem.
+
+  A media query simply allows you to define a specific condition, an if condition as you can imagine it and once this 
+  condition is true, you can change one or multiple properties of the selector of your choice. And as you can imagine, this
+  is a really powerful tool which allows you to easily create responsive websites.
+
+. Refer main.css 
+
+************************************** Things to keep in mnd when working with media Queries ****************************
+. we will now design our website from a mobile first perspective. This means all our code outside the media queries is our
+  mobile code. the media query should kick in once we are above this border, so once our min-width is equal or larger than
+  the value we specify right here is true.
+
+. you could also add multiple media queries below each other, we could say that we do not want to have our website to be 
+  built for two devices, mobile and desktop for example, but we also want to have a version for really large devices for 
+  example and let's say that the large devices start right here at 60rem.
+
+************************************************ Finding the right breaking points **************************************
+. Normally when you build your website, you need kind of an idea of where this breaking points could be. You can of course
+  play around and have a look at your design but you might want to target specific devices and make sure that you have 
+  logical breaking points to ensure that your website looks good on as many devices as possible and without having to add
+  like 10 media queries right here. 
+  
+  So one idea how to do this is if you go again to "mydevice.io" for example and go to compare devices, then you can 
+  select smartphones or tablets up here and with that, you can get a really quick overview of the width and height, 
+  important choose the CSS width and height right here, of the width and height of the most common devices, for example 
+  though we have an iPad right here, we have a Galaxy tab and then you can see that for example, 768 of width, that's of 
+  course in portrait mode because we would normally build our websites for the portrait mode.
+  
+  on tablets would be a good approximation or a good starting point for a breaking point that you could set because then 
+  you could make sure that you optimize your mobile design for if you look at the smartphone width right here, we can see
+  that the most modern smartphones have a width of more than 300 pixels.
+
+  So basically, if your website looks good for widths between 300 pixels and 768 pixels, you would ensure that you have a
+  nice looking website for most mobile phones and then you could set your first breaking point at 768 pixels and then 
+  maybe make another breaking point at 1000 pixels.
+
+. One additional thing I would like you to keep in mind though is that the way you add your media queries right here is not
+  the correct one to be honest. It's totally fine to add the media queries below the actual rule you have for the 
+  corresponding selectors but in the end and we will also do this in this course, once we finish our media queries, you 
+  would simply take them and paste them right here at the bottom of your code, like that because with that, other 
+  developers can easily find all your media queries and change them if necessary and this helps us to keep our code more 
+  structured.
+
+******************************************** Creating the Mobile First Design for our plans *****************************
+. Changed image styles to "center / cover no-repeat"
+. Refer plans styles for mobile first design
+
+*************************************************** Making the plans Responsive *****************************************
+. When we resize the browser, our plans gets bigger and bigger and smaller. So it would be good idea to add max-width and
+  min-width.
+  @media (min-width: 40rem) {
+    .plan__list {
+      width: 100%;
+      /* margin: auto; */
+      text-align: center;
+    }
+
+    .plan {
+      display: inline-block;
+      width: 30%;
+      min-width: 13rem;
+      max-width: 25rem;
+    }
+
+    .plan--highlighted {
+      box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+*************************************************** Your Challenge *****************************************************
+. Style key features vertically for mobile devices intead of side-by-side
+
+  @media (min-width: 40rem) {
+    .key-feature {
+      display: inline-block;
+      width: 30%;
+      min-width: 13rem;
+      max-width: 25rem;
+      vertical-align: top;
+    }
+  }
+
+******************************************************* Assignments ****************************************************
+
+************************************************ Working with logical operators ****************************************
+. This is how you can specifically target the way your website behaves, not only depending on the width of your device but
+  also of combinations, so of two different conditions met at the same time and additional information like how the user 
+  uses its device, so in landscape or portrait mode. In addition to this and combinator.
+
+    @media (min-width: 40rem) and (orientation: potrait) @media (min-width: 40rem) and (orientation: landscape)
+
+. we also have comma separated lists. This means if I now simply change the end with a comma like that, then if one of 
+  these two conditions is true, then the code will be applied. This means we either have a minimum width of 40rem or the 
+  landscape orientation to display our website according to this desktop view.
+
+  @media (min-width: 40rem), (orientation: landscape).
+
+************************************************** Useful Resources & Links *********************************************
+  
+. Dive Deeper into Selected Topics
+
+. Absolute lengths on W3.org: https://www.w3.org/TR/css-values-3/#absolute-lengths
+
+. More about device sizes: https://bjango.com/articles/min-device-pixel-ratio/
+
+. Media queries theory: https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries
+
+. Applying media queries: https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries

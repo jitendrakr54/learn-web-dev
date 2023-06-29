@@ -1,0 +1,86 @@
+******************************************************* Module Intorduction *******************************************
+. Module Content:
+      . How to add CSS to HTML
+      . Setting up CSS Rules
+      . Selectors, Properties & Values
+      . Conflicting Styles
+
+********************************************* Understanding the course project setup ***********************************
+. Added index.html and favicon for title
+
+********************************************* Adding CSS to our project with Inline Styles *****************************
+. <section style="background: #ff1b68">
+. not recommended
+
+**************************************** Understanding the <style> tag & creating a .css file *************************
+. A selector simply is an additional piece of information that tells CSS to which element in your DOM, so inside of your 
+  body and the body is also treated as an element by the way, to which element you want to assign this declaration.
+
+. Refer pdf
+
+. Using external css is recommended. using an extra stylesheet, you can have a clear separation of your HTML and your 
+  CSS code which is especially useful as your CSS code grows and it would bloat your head section at some point and 
+  additionally if you use the same stylesheet in multiple pages let's say, then your browser can cache the stylesheet 
+  and doesn't need to re-download it for every new page, whereas if you include your styles in the head section, you 
+  increase the file size of your HTML file and the browser needs to re-download it since it's part of the HTML page for 
+  every new page which can be slower.
+
+**************************************** Applying additional styles & importing google fonts *************************
+. To change the font we need to change the "font-family". you can use a default font family, like sans-serif. This is a 
+  special keyword which will use the default set up in your browser. Now where is this coming from?
+
+  Now for this, we should open our browser preferences. In these preferences and that of course depends on your browser 
+  but in Chrome, you've got the customize fonts area and each browser should have something like this.
+
+  Now you're not limited to using font families included on your system, however sans-serif, serif and monospace are 
+  always great values because they will use the browser defaults.
+
+  Sometimes you want a specific font though and you can't rely on that font being installed on the machine of the user,
+  so to include a font which is not necessarily install ready, you can use a tool called Google Fonts.
+
+. Refer index.html
+
+********************************************** Theory Time - Selectors **************************************************
+. cabab case is recommended for writing class name and ids for html
+
+. CSS stands for cascading style sheets and cascading simply means multiple styles can be applied or multiple rules can 
+  be applied to the same element. Now these rules may lead to conflicts though, here for example, we got our color set 
+  up in the h1 tag and in the section title class.
+
+  Now to resolve such conflicts, CSS knows a concept called specificity and there are clear rules included in the CSS 
+  specification that define how such conflict should be resolved and which type of selector has a higher specificity.
+
+. Refer pdf notes for specifity order
+
+********************************************** Understanding Inheritance  ********************************************
+. Inheritance is an important concept for passing styles down without explicitly selecting an element and especially for 
+  things like font sizes, font families, this is extremely useful because you typically want to have one and the same 
+  style for the majority of your text on your screen and therefore, setting this up in the body section is a great way 
+  as it will then make sure you can use inheritance.
+
+. therefore, some styles, not all there are exceptions but we'll dive into this later, some styles, especially the 
+  font-related styles are passed down to child. However inheritance has a very low specificity, inheritance always comes 
+  at the bottom even below the browser defaults.
+
+. Refer pdf notes
+
+**************************************************** Adding Combinators ********************************************
+. A combinator allows us to combine multiple selectors to be more precise about what we want to select. As a side note 
+  if you use combinators, you also create a higher specificity.
+
+**************************************************** Theory Time - Combinators *****************************************
+. Refer pdf notes
+
+**************************************************** Summarizing properties & Selectors ********************************
+. Refer pdf notes
+
+**************************************************** Useful resources & links ******************************************
+. Complete MDN CSS Reference (don't learn this by heart!): https://developer.mozilla.org/en-US/docs/Web/CSS/Reference
+
+. Do you prefer reading? Find written CSS docs on MDN: https://developer.mozilla.org/en-US/docs/Web/CSS
+
+. Common CSS Properties Reference: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference
+
+. CSS Combinators: https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Combinators_and_multiple_selectors
+
+. More details on CSS Specifity: https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity

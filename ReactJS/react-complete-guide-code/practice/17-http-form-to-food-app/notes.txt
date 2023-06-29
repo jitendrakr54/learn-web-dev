@@ -1,0 +1,84 @@
+********************************************* Module introoduction ******************************************************
+. The better food order project
+. Module Content :
+    . Adding a Checkout / Order Form
+    . Submitting Orders to a Backend Server (Http)
+    . Fetching meals data
+
+********************************************* Moving "Meals" Data to the backend ****************************************
+. Added meals to firebase
+. watch videos for reference
+
+********************************************* Fetching Meals via Http ***************************************************
+. The function you pass to useEffect should not return a promise. Instead, you learned that the function you pass to    
+  useEffect may return a cleanup function which can be executed.
+  eg:
+      // can't do this
+        useEffect(async () => {
+          await fetch(
+            "https://react-test-51d80-default-rtdb.firebaseio.com/meals.json"
+          );
+        }, []);
+. Refer AvailableMeal.js
+
+***************************************************** Handling Errors ***************************************************
+. If we are unable to fecth data from backend(firebase), then UI will be in loading state as there is no error handling 
+  so far, so we need to handle those errors.
+
+. So after putting fetchMeals() inside try..catch we'll notice something interesting. It's still only says loading here.
+  Now that can be tricky to spot. The reason for that is that we're using try-catch, but keep in mind that fetchMeals is 
+  an async function, and therefore, it always returns a promise. Now, if we throw an error instead of a promise, that 
+  error will cause that promise to reject.
+
+      try {
+        fetchMeals();
+      } catch (error) {
+        setIsLoading(false);
+        setHttpError(error.message);
+      }
+  
+  So we can't use try-catch to wrap it unless we also await this for which we would need to turn our Effect function 
+  here into an async function, which we're not allowed to do.
+
+  Now, we could still work around that by putting that into a separate function, which we call thereafter so that we 
+  have separate functions, one for sending the HTTP request and one for error handling. And that be absolutely fine.
+
+  But here, I think it's a bit easier to simply use the fact that it's a promise and add to catch method on it. Since 
+  that returns a promise, you can add then() to handle success cases when the promise fulfills successfully. And we can 
+  add catch() to handle errors coming up inside of the promise. And therefore, instead of try-catch here, we wanna catch 
+  the error we're getting and move that code here into this catch block. And that's the traditional promise only way
+  of handling an error inside of a promise.
+
+************************************************ Adding a checkout form ************************************************
+. So now we added a couple of items to our cart, it would now be nice if we could order them. For this we have the 
+  Order button but currently that's not doing anything. I want to make sure that when we click this Order button we kind 
+  of expand this modal, and we also show a form where the users should enter the address and the name, and thereafter we 
+  can confirm that input to send off that order to the backend.
+
+  Refer Checkout.js
+
+************************************************ Adding form validation ************************************************
+. Added form validation in Checkout form, refer Checkout.js
+
+************************************************ Submitting & Sending Cart Data *****************************************
+. Now this checkout component is already a pretty full component with a lot of code in there and therefor I'll not 
+  add the request logic in there but instead I want to kind of submit or ascend the submitted data back to the cart 
+  where we then also have the cart data which is good because we need that to send it to the server, to then send both 
+  the carts data so the items in the cart as well as the submitted user data to the server. Now, one important word here,
+  on a server you should typically never trust the data you get from a client because of validation as we built it here 
+  can always be circumvented. For example, I as a visitor could edit the loaded JavaScript code. It's not hidden from me.
+  Refer : https://academind.com/tutorials/hide-javascript-code
+
+  Therefore, you typically always wanna validate incoming data on the server as well. Now here, we only have a dummy 
+  backend with Firebase and whilst we could actually also add some service and logic to that, for example: NodeJS
+
+  Sent userData and cart items to firebase server : Refer Cart.js
+
+************************************************ Adding Better user feedback ********************************************
+. Now therefore, as a last step, I of course wanna change the user experience a little bit. I want to clear what we see 
+  on the screen here. If we clicked, confirm and show a loading spinner and then access message if the cart was submitted
+  and of course the cart should then also be cleared thereafter.
+
+. Refer Cart.js
+
+************************************************ Summry *****************************************************************

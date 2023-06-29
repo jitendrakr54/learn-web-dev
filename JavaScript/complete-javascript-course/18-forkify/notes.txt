@@ -1,0 +1,88 @@
+******************************************************** MVC Architecture *********************************************
+. why do we even need an architecture when we build software? Well, there are actually multiple reasons.
+
+  First, the architecture will give our project the structure in which we can then write the code. So just like a house, 
+  software also needs a structure. Now in software, structure basically means how we organize and divide the code into 
+  different modules, classes, and functions. So all these will basically hold our code together and give it structure.
+
+  The next reason is maintainability. So when we build a project, we always need to think about the future and keep in 
+  mind that the project is never really done. It is never finished. We will always need to change things in the future
+  and we will need to maintain the project. And that only works if the project is nicely structured.
+
+  Plus, we might even want to add new features to the project, which brings us to expandability. So expandability is 
+  basically the ability to easily add new features in the future. And once again, that is only possible with a good 
+  structure, and a good overall architecture. So the perfect architecture is basically one that allows for all these three
+  aspects of structure maintainability, and expandability.
+
+. Now, in order to achieve that perfect architecture, we can of course create our own architecture from scratch. And that's
+  exactly what we did in the Mapty project. However, that only works with a really small project like that one. But when 
+  the project grows more complex, then it's going to be very hard to achieve a good architecture completely on our own.
+  And so instead, we can opt for a well established architecture pattern that developers have been using for years, or 
+  even for decades. And examples of that are model view controller, model view presenter, flux, and many other 
+  architectures.
+
+  Now these days, in modern web development, many developers actually use a framework like react, Angular, Vue or Svelte
+  to take care of the architecture for them. And so in this case, developers don't have to think a lot about architectures
+  on their own. And probably this is actually a good idea at a certain point, especially for large scale applications.
+
+. Now no matter where the architecture comes from, and who develops it, there are some components that any architecture 
+  must have. And that is business logic, state, an HTTP library, application logic, and presentation logic.
+
+  Business Logic:
+  Business logic is basically all the code that solves the actual business problem. So that's code that is directly 
+  related to what the business does and to what it needs. So if your business is what's up, then your business logic will
+  include sending messages. Now if your business is a bank, then one of the many parts of business logic will be to store
+  transactions. But if your business is a budget manager, then your business logic will certainly include calculating 
+  taxes. So essentially, business logic is the logic that is really related to solve the problem that the business set out
+  to solve in the first place.
+
+  State:
+  Next is the state which is one of the most important aspects of any web application. So the application state is 
+  essentially what stores all the data about the application that is running in the browser. So the data about the 
+  applications front-end basically. So the state should store any data that you might fetch from an API or data that the 
+  user inputs, or what page the user is currently viewing and so on. And this data should be the so called single source 
+  of truth, which should be kept in sync with the user interface. So that means that if some data changes in the state,
+  then the user interface should reflect that. And the same is true the other way around. So if something changes in the 
+  UI, then the state should also change. Now storing and displaying data and keeping everything in sync is one of the most
+  difficult tasks when building web applications. And that's why there are actually many state management libraries like 
+  Redux or MobX.
+
+  HTTP Library:
+  Next, the HTTP library is simply responsible for making and receiving AJAX requests. And we have been doing that using 
+  the fetch function and so that's what we will keep doing here. And most real world applications of course, need some 
+  interaction with the web. And so that's why this is an aspect to keep in mind.
+
+  Application Logic(Router):
+  Now about the Application logic, this is the code that is only concerned about the implementation of the application 
+  itself. So it's more the technical aspects of the application, which are not directly related to the underlying business
+  problem. So for example, application logic includes handling of UI events and navigation on the page. That's the reason
+  why this component is many times also called a router. So basically mapping actions to the users navigation.
+
+  Presentation Logic(UI Layer):
+  Finally, the presentation logic, which is also called the UI layer, is of course all about the visible part of the 
+  application. So essentially, we can say that the presentation logic is responsible for displaying the application state
+  on the user interface, in order to keep everything in sync.
+
+  Now any good architecture has a way of separating all these components. So instead of mixing everything together in one
+  big file, and in one big mess.
+
+
+
+. Sass is basically a better way of writing CSS, which has some nice additional features, which makes writing CSS in a 
+  large scale application a lot easier. Now, browsers actually don't understand Sass and so it has to be converted to CSS.
+  And so Parcel is going to do that for us..
+
+. dist folder here is not really important for us in development. So everything that we will develop will be here in the
+  source folder and only what we then see in the browser is actually coming from this distribution.
+  So again, that's the whole logic of having a module bundler. So it takes, or basically a raw source code and compiles it
+  into this nice package here, let's say, so this folder that is ready to ship to browsers.
+
+. Now, in a nutshell, what continuous integration means or continuous deployment as Netlify apparently calls it, that 
+  basically is to connect a site to a git repository, and then whenever we change the code in our repository, then that 
+  will automatically trigger a new deployment of our site. And so then everything happens really automatically.
+
+  So all we will have to do then is to basically build our code locally, committed to our git repository, then push that 
+  git repository to or remote repository on GitHub, and then from there, the site will automatically be built and deployed.
+
+  We can now tell Netlify to run our build command whenever there is a change in the repository. so in our case it is:
+    parcel build index.html --dist-dir ./dist --no-scope-hoist

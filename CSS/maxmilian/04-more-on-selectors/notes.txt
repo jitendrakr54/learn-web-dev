@@ -1,0 +1,90 @@
+************************************************ Module Introduction **************************************************
+. Module Content:
+      . More on CSS Classes
+      . !important
+      . More on Pseudo Classes & Elements
+      . :not()
+
+************************************************ Using Multiple CSS classes & combined selectors ***********************
+. you can use multiple classes on one element, if you got two classes applied to the same element and they both happened 
+  to set a certain style on the element, then the normal specificity and order rules will apply, the order in this class 
+  list here is not important regarding this. So if we have two classes added to an element then order will be as in CSS, 
+  not in html.
+
+************************************************ Classes or IDs? ******************************************************
+. The advantage about CSS classes is that they're reusable, you can add them to any HTML element which should get a 
+  certain style, they allow you to mark and name things for styling purposes only. With that I mean that you create these
+  classes only to apply certain styles, they don't really have any other meaning. They should be your first pick because
+  other selectors, like for example tag selectors, often have the disadvantage  of giving you less control,
+
+  it's easy to mess something up just because you style your h1 tag with the tag selector and you accidentally style some
+  other h1 tag on the same page in the same way even though you didn't want to do that. So only use tag selectors for some
+  generic styles that really should affect all elements of that tag.
+
+  Class selectors on the other hand are always a good choice and they're the most used selector type therefore.
+
+. ID selectors can be a decent choice too though. They're only used once per page or an ID is only used once per page I 
+  should say and therefore, if you get a certain style that really should just affect one element on your page and never 
+  more, using an ID selector definitely is not a bad idea. However, it's important to keep in mind that IDs also got a 
+  none CSS meaning on your page, mostly the thing that you can link to IDs. 
+  
+  So therefore using IDs just to apply a style is not really something I can recommend, use a class instead even if you 
+  only use it once because the ID introduces some other effects which are not horrible or unnecessarily bad but all is 
+  not optimal maybe. So therefore use ID selectors if you planned on using an ID anyways, if it semantically makes sense
+  but don't just add them because you want to add some style.
+
+************************************************ (Not) using !important ***********************************************
+. It overwrites specificity and all other selectors, that's super important. It overwrites all these things and therefore,
+  this specific declaration would always be applied. Therefore you shouldn't really use important. In most cases, it's not
+  a good idea to use it because you're overwriting something that's baked into CSS, it quickly leads to bad code and 
+  you'll find yourself using important all over the place, you're messing up your CSS code therefore. 
+  There are some edge cases in which using it can be fine but in general, don't use important, this is really important.
+
+************************************************ Selecting the Opposite with :not() ************************************
+. This is an interesting pseudo class because it allows us to basically reverse a certain rule or exclude a certain 
+  selector. So here for example, in that example you can already see, we would apply a certain style to anything that's
+  not a paragraph, so it will exclude the selector you pass between the parentheses.
+
+  // Select any element that is NOT a paragraph
+  :not(p) {
+    color: blue;
+  }
+
+  Now this shows how to use not, it can be really handy in some situations but often, you also can find a positive way of 
+  writing such a rule.
+
+  a:not(.active) {
+    color: blue;
+  }
+
+  But this can be written in positive way:
+
+  a {
+    color: blue;
+  }
+
+  Ofcourse this would apply to anchor which has active class but it can be overridden. and I recommend using this way,
+  so the positive cases, simply because it's easy to mess up with the not selector, you can write overly complicated and 
+  hard to understand rules and from a performance perspective, keep in mind that your CSS code has to be parsed and 
+  applied. It's also better because not, as you can imagine, is harder to check than simply going through all the positive
+  cases from top to bottom. So use not with caution but there can be situations where it allows you to achieve exactly 
+  what you want it to achieve.
+
+***************************************************** CSS & Brwoser Support *******************************************
+. Whenever you use a certain feature in CSS, be that a certain type of selector or more relevant, a certain property, a 
+  certain style, you have to check if the browsers of your target audience supports that feature, otherwise you can't use 
+  it, On MDN, you can find browser support at the end of every page, so if you're on the page of a certain CSS property or
+  a certain CSS selector, at the bottom you'll find this table. There you see a split for desktop and mobile browsers and
+  you see the major browsers and how well they support a certain feature. 
+
+  Now you can also use another page, caniuse.com. caniuse.com allows you to search for a certain feature, let's say 
+  background and then you will see all kinds of matches it finds.
+
+***************************************************** CUseful Resources & Links ***************************************
+. A discussion on "classes vs IDs": https://stackoverflow.com/questions/12889362/difference-between-id-and-class-in-css-and-when-to-use-it
+
+. When is using !important  okay? => https://css-tricks.com/when-using-important-is-the-right-choice/
+
+. The :not()  pseudo class: https://developer.mozilla.org/en-US/docs/Web/CSS/:not
+
+. Can I Use: https://caniuse.com/

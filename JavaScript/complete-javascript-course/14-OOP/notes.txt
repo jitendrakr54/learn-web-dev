@@ -1,0 +1,352 @@
+*********************************************** What is Object-oriented programming? ***********************************
+. Well, object-oriented programming, or OOP in short, is a programming paradigm that is based on the concept of objects.
+  And paradigm simply means the style of the code, so the how we write and organize code. Now we use objects to model,
+  so to describe aspects of the real world, like a user or a to-do list item, or even more abstract features like an HTML 
+  component or some kind of data structure.
+
+  Now, as we already know, objects can contain data, which we call properties, and also code, which we call methods.
+  So we can say that by using objects, we pack all the data and the corresponding behavior all into one big block.
+  So again, that's data and corresponding behavior. And this makes it super easy to act directly on the data.
+
+  So in OOP objects are self-contained pieces of code or blocks of code, like small applications on their own. And we then
+  use these objects as building blocks of our applications and make objects interact with one another. Now these interactions
+  happen through a so-called public interface, which we also call API. This interface is basically a bunch of methods
+  that a code outside of the objects can access and that we use to communicate with the object.
+
+. why does OOP actually exist?
+
+  Well, this paradigm was developed with the goal of organizing code, so to make it more flexible and easier to maintain.
+  So before OOP, we might have a bunch of codes gathered across multiple functions, or even in the global scope without any
+  structure. And this particular like crazy style of code is what we usually call spaghetti code and spaghetti code makes 
+  it very hard to maintain large code bases and let alone, add new functionalities to it. So the idea of OOP was basically
+  created as a solution to this problem.
+
+. Now, actually using object is nothing new for us at this point. We have been using them all the time. However, up until
+  now, we have basically only used objects as loose collections of data and without making them interact with one another.
+  Also, we didn't have a way to generate objects programmatically. All we ever did was using simple object literals,  but 
+  in OOP, we actually need a way to generate, so to create, new objects from our code.
+
+  And to do that in traditional OOP, we use something called classes. You can think of a class as a blueprint, which can 
+  then be used to create new objects based on the rules described in the class. So it's just like an architecture where 
+  the architect develops a blueprint to exactly plan and describe a house. But the blueprint is really just an abstract 
+  plan, like a set of rules, but nothing tangible that you can actually touch. However, from that blueprint, many real 
+  houses can then be built in the real world.
+
+. See User class in pdf and with that we can create objects. Now we call all objects created through a class instances of
+  that class. So again, an instance is a real object that we can use in our code, which was created from a class, and a 
+  class itself is not an object. 
+  
+  So back to the blueprint analogy from earlier, this instance is like a real house, which was created from the abstract 
+  blueprint created by the architect. And the beauty of this is that now we can use this class to create as many instances
+  as we need in our application. Just like we can build multiple houses from just one blueprint.
+
+  so these objects, of course can have different data in them, but they all share the same functionality, which is to 
+  login and to send messages.
+
+. how do we actually design a class? Or in other words, how do we actually model real-world data into classes?
+
+  Now the answer is, as you can imagine, not straightforward. So there is not a single correct way of designing classes.
+  There are, however, four fundamental principles that can guide us toward a good class implementation. And these 
+  principles are abstraction, encapsulation, inheritance, and polymorphism. And these are actually techniques that can 
+  also be used outside of OOP, but they are especially relevant in this context.
+
+. Refer pdf notes
+
+****************************************************** OOP in JavaScript **********************************************
+. How does OOP actually work in JavaScript?
+
+  Well, in JavaScript we have something called prototypes and all objects in JavaScript are linked to a certain prototype
+  object. So we say that each object has a prototype. And now here comes the magic. So, the prototype object contains 
+  methods and properties that all the objects that are linked to that prototype can access and use. And this behavior is 
+  usually called prototypal inheritance.
+
+  Prototypal inheritance means that all objects that are linked to a certain prototype object can use the methods and 
+  properties that are defined on that prototype. So basically, objects inherit methods and properties from the prototype 
+  which is the reason why this mechanism is called prototypal inheritance.
+
+. Now we can also say that objects delegate behavior to the linked prototype object. And behavior is just another term for
+  methods here. So besides prototypal inheritance, we also call this mechanism, delegation. And that's also the reason why
+  this arrow is pointing upwards because technically, objects delegate their behavior to the prototype.
+
+  On the other hand, in classical OOP with classes, the behavior, so the methods, are actually copied from the class to
+  the object and so that is completely different.
+
+  For example, each time that we used an array method like map(), we are able to use that method because of prototypal 
+  inheritance. So, what does this mean? Well, array.prototype is the prototype object of all the arrays that we create in
+  JavaScript. So, just like this example array called num here. Now this prototype object contains all the array methods,
+  including map().
+
+  So, this is where they are actually defined. So, since array.prototype is the prototype of the num array, it means that
+  num is linked to that prototype. And therefore, it has access to all the methods that are defined on the array.prototype
+  object, just like the map method.
+
+. Like, how do we actually create prototypes? And, how do we link objects to prototypes? And how can we create new objects
+  without having classes from which we can instantiate objects? So, in summary, the question is how do we implement 
+  Object-Oriented Programming in JavaScript in practice?
+
+  Well, in JavaScript there are actually three different ways of doing all this: 
+  the constructor function technique, ES6 classes and the Object.create().
+
+  So first, constructor functions are a way of creating objects programmatically, using a function which will also set
+  the new object's prototype. And this is actually how built-in objects like arrays or maps or sets are implemented.
+  Also, this is how OOP has been done in JavaScript basically since the beginning.
+
+  Next, the ES6 release introduced classes into JavaScript. And so now, ES6 classes are actually the more modern way
+  of doing OOP in JavaScript. However, keep in mind that these are actually not the kind of classes that we talked about
+  in the last lecture and in the last slide. They are instead just so called 'syntactic sugar' over constructor functions.
+  So this means that ES6 classes are basically just a layer of abstruction over constructor functions. So, it's really 
+  just a nicer syntax that makes it easier for newcomers to do OOP in JavaScript. But behind the scenes, ES6 classes are
+  actually implemented with constructor functions. And so they also use prototypal inheritance
+
+  Finally, there's also the object.create() which is basically the easiest and most straightforward way of linking an 
+  object to a prototype object. However, it's not as used as the other two mehods.
+
+**************************************************** Constructor Functions and the new operator ************************
+. A constructor function is actually a completely normal function. The only difference between a regular function, and a 
+  function that we call constructor function with the new operator.
+
+  There is convention that constructor functions always start with a capital letter.
+
+  An arrow function will actually not work as a function constructor. and that's because it doesn't have its own this
+  keyword and we need that.
+
+. When we create object with new then behind the scenes, there have been four steps-
+  . New empty object is created
+  . function is called, and in this function call the "this" keyword is set to newly created object, So, basically in the 
+    execution context of the Person function, the this keyword will point to this new object here that was created in step
+    number one.
+  . newly created object is linked to a prototype
+  . object that was created in the begining is then automatically returned from the constructor funtion.
+
+. You should never create a method inside of a constructor function. That's because imagine we were gonna create a hundred
+  or thousands or even tens of thousands of Person objects using this constructor function. Then what would happen, is that
+  each of these objects would carry around this function here. So if we had a thousand objects, we would essentially create
+  a thousand copies of this function. And so that would be terrible for the performance of our code. Again, don't do this.
+  But instead to solve this problem, we are gonna use prototypes and prototype inheritance.
+
+. Just note that function constructors are not really a feature of the JavaScript language. Instead, they are simply a 
+  pattern that has been developed by other developers. And now everyone simply uses this.
+
+***************************************************** Prototypes ***************************************************
+. How does prototypal inheritance and delegation actually work?
+
+  So, first each and every function in JavaScript automatically has a property called prototype. And that includes, of 
+  course, constructor functions. Now every object that's created by a certain constructor function will get access to all
+  the methods and properties that we define on the constructors prototype property.
+
+  So just to visualize in our case, this would be Person.prototype. So the prototype property of the constructor function.
+  So again, all the objects that are created through this constructor function here will inherit, so they will get access
+  to all the methods and properties that are defined on this prototype property. And so let's now actually add a method
+  to this prototype property.
+
+  Now there exists only one copy of this function (calcAge). So only one of them exists, but then all of the objects that
+  are created using this constructor function can basically reuse this function on themselves. And so, the this keyword,
+  of course, in each of them is as always set to the object that is calling the method.
+
+. Now, where does this __proto__, property here, on the Jonas object actually come from? 
+
+  Well, remember the new operator, well, it contains this step number three which links the empty new object to the 
+  prototype. And so basically, it is this step number three which will create this __proto__ property. So it creates
+  this __proto__ property and it sets its value to the prototype property of the function that is being called.
+
+*********************************************** Prototypal Inheritance and the prototype chain *************************
+. Refer pdf notes
+
+. Now, constructor function has a prototype property which is an object and inside that object, we defined the calcAge()
+  method and Person.prototype itself actually also has a reference back to person which is the constructor property.
+  So, essentially Person.prototype.constructor is gonna point back to Person itself.
+
+  Now remember, Person.prototype is actually not the prototype of Person but of all the objects that are created through 
+  the person function.
+
+. let's now actually analyze how an object is created using the new operator and the constructor function. So, when we call
+  a function, any function with the new operator the first thing that is gonna happen is that a new empty object is created
+  instantly. Then the this keyboard and the function call is set to the newly created object.
+
+  So, inside the function's execution context this is now the new empty object and that's why in the functions code we set
+  the name and birth year properties on the this keyword because doing so will ultimately set them on the new object.
+  So next comes the magical step. So now the new object is linked to the constructor function's prototype property.
+  So in this case, Person.prototype. 
+  
+  And this happens internally by adding the __proto__ property to the new object. So, Person.prototype is now the new 
+  objects prototype which is denoted in the __proto__ property of Jonas. So again, __proto__ always points to an object 
+  prototype and that is true for all objects in JavaScript.
+
+  And finally the new object is automatically returned from the function unless we explicitly return something else.
+  But in a constructor function like person we usually never do that. and with this the result of the new operator and the
+  person constructor function is a new object that we just created programmatically and that is now stored in the Jonas 
+  variable and this whole process that I just explained is how it works with function constructors and also with ES6 
+  classes but not with the Object.create() syntax
+
+. When we call calcAge() method on jonas object, Well, if a property or a method cannot be found in a certain object 
+  JavaScript will look into its prototype and there it is. So there is the calcAge function that we were looking for
+  and so JavaScript will simply use this one. That's how the calcAge function can run correctly and return a result.
+
+  And the behavior that we just described is what we already called prototypal inheritance or delegation. So the jonas 
+  object inherited the calcAge method from its prototype or in other words it delegated the calcAge functionality to its
+  prototype.
+
+. Now the fact that Jonas is connected to a prototype and the ability of looking up methods and properties in a prototype
+  is what we call the prototype chain. So the jonas object and it's prototype basically form a prototype chain but 
+  actually the prototype chain does not end here.
+
+  jonas object linked to its prototype via the __proto__ property. But now let's remember that Person.prototype itself
+  is also an object and all objects in JavaScript have a prototype, right? Therefore, Person.prototype itself must also 
+  have a prototype. And the prototype of Person.prototype is Object.prototype. Why is that?
+
+  Well, Person.prototype is just a simple object which means that it has been built by the built in object constructor 
+  function and this is actually the function that is called behind the scenes whenever we create an object literal.
+  So just an object simply with curly braces. So essentially the curly braces are just like a shortcut to writing new 
+  object.
+
+  But what matters here is that Person.prototype itself needs to have a prototype and since it has been created by the 
+  object constructor function its prototype is gonna be Object.prototype. It's the same logic as with the jonas object.
+  So, since jonas has been built by a person, Person.prototype is the prototype of Jonas, all right?
+
+  Now this entire series of links between the objects is what is called the prototype chain and Object.prototype is usually
+  the top of the prototype chain which means that it's prototype is null. So it's underscore proto property will simply 
+  point to null which then marks the end of the prototype chain.
+
+. In the prototype chain whenever JavaScript can't find a certain property or method in a certain object it's gonna look up
+  into the next prototype in the prototype chain and see if it can find it there. So again the prototype chain is pretty 
+  similar to the scope chain but instead of working with scopes, it works with properties and methods in objects.
+  
+  And now let's actually see another example of a method lookup. To do that we call the hasOwnProperty() method on the 
+  jonas object. JavaScript is gonna start by trying to find the called method on the object itself. But of course
+  it can't find the hasOwnProperty() method on Jonas. So, according to how the prototype chain works, it will then look 
+  into its prototype which is Person.prototype.
+
+  Now, we didn't define any hasOwnProperty() method there either and so a JavaScript is not gonna find it there and so 
+  therefore it will move up even further in the prototype chain and now look into Object.prototype and Object.prototype 
+  does actually contain a bunch of built in methods and has own property is one of them.
+
+  Great, so JavaScript can then take this one and run it on the jonas object as if has own property had been defined 
+  directly on Jonas. And remember the method has not been copied to the jonas object. Instead, it simply inherited the 
+  method from object dot prototype through the prototype chain.
+
+*********************************************** Prototypal Inheritance on built-in Objects ****************************
+. We can use prototype chain to add method directly to Array.prototype
+
+  Array.prototype.unique = function () {
+    return [...new Set(this)];
+  };
+
+  However, what we just did here. So extending the prototype of a built-in object is generally not a good idea.
+  if you're working just on a small project on your own then I guess you could do this, but really don't get into the
+  habit of doing this for multiple reasons.
+
+  The first reason is that the next version of JavaScript might add a method with the same name that we are adding,
+  for example this one here, but it might work in a different way. And so your code will then use that new method
+  which, remember, works differently. And then that will probably break your code.
+
+  And the second reason why you shouldn't do this is because when you work on a team of developers, then this is
+  really gonna be a bad idea because if multiple developers implement the same method with a different name
+  then that's just going to create so many bugs that it's just not worth doing this.
+
+. Prototypal Inheritance is the reason why we can actually call methods on functions such as call(), apply(), bind() 
+  It's because they are objects and objects have prototypes.
+
+********************************************************* ES6 Classes *************************************************
+. Classes in JavaScript do not work like traditional classes in other languages like Java or C++.
+
+  So instead, classes in JavaScript are just syntactic sugar over what we learned in the last few videos. So they still 
+  implement prototypal inheritance behind the scenes but with a syntax that makes more sense to people coming from other 
+  programming languages. And so that was basically the goal of adding classes to JavaScript.
+
+  Classes are just a special type of functions. So although we use the class keyword here, behind the scenes, classes are
+  still functions, and therefore, we have class expressions and class declarations.
+
+. classes are not hoisted
+. classes are first-class citizens which means we can pass them into functions and also return them from functions.
+. classes are executed in strict mode
+
+******************************************************** getters and setters *****************************************
+. Every object in JavaScript can have setter and getter properties. And we call these special properties assessor
+  properties, while the more normal properties are called data properties.
+
+  So getters and setters are basically functions that get and set a value so just as the name says, but on the outside
+  they still look like regular properties.
+
+  setters and getters are helpful if we want to do some opertaion or validation before setting and getting
+
+****************************************************** static methods *************************************************
+. static methods are attached to the constructor, not to the prototype of the constructor.
+  
+  Static methods are not available on the instances, and sometimes they are still useful to implement some kind of
+  helper function about a class or about a constructor function.
+  eg - Array.from(), Number.parseInt()
+
+****************************************************  Object.create() *********************************************** 
+. There is actually a third way of implementing prototypal inheritance or delegation which is Object.create() which works
+  in a pretty different way than constructor functions and classes work. Now, with Object.create, there is still the idea
+  of prototypal inheritance. 
+  
+  However, there are no prototype properties involved. And also no constructor functions, and no new operator. So instead,
+  we can use Object.create to essentially manually set the prototype of an object, to any other object that we want.
+
+  with Object.create, we can set the prototype of objects manually to any object that we want. And in this case, we 
+  manually set the prototype of the Steven object to the person proto object.
+  
+  The big difference is that we didn't need any constructor function, and also no prototype property at all,
+  to achieve the exact same thing.
+
+. Object.create creates a new object, and the prototype of that object will be the object that we passed in.
+
+*********************************************** Inheritance between "Classes": Constructor Function ********************
+. we explored how prototype inheritance works in JavaScript. And we did that using a couple of different techniques.
+  So we used constructor functions, ES6 classes, and object.create(). Now all of these techniques basically allow objects 
+  to inherit methods from its prototype. So to delegate their behavior to their prototype, But now it's time to turn our 
+  attention to more real inheritance.
+
+. Basically what we want to do is to make person.prototype, the prototype of student.prototype. Or in other words, we want
+  to set the __proto__ property of student.prototype to person.prototype.
+
+  we are gonna have to create this connection manually. And to do this, so to link these two prototype objects,
+  we are gonna use Object.create() because defining prototypes manually is exactly what object.create() does.
+
+*********************************************** Inheritance between "Classes": ES6 Classes ****************************
+. If no properties are required to be added in child class then no constructor is required at all. super() will be called
+  automatically.
+
+*********************************************** Inheritance between "Classes": Object.create **************************
+. Refer script.js
+
+********************************************** Encapsulation: Protected properties and methods *************************
+. Encapsulation basically means to keep some properties and methods private inside the class so that they are not
+  accessible from outside of the class. Then the rest of the methods are basically exposed as a public interface,
+  which we can also call API.
+
+  Now, there are two big reasons why we need encapsulation and data privacy -
+  1. first it is to prevent code from outside of a class to accidentally manipulate or data inside the class.
+  2. Second reason is that when we expose only a small interface so a small API consisting only of a few public
+     methods then we can change all the other internal methods with more confidence.
+     Because in this case, we can be sure that external code does not rely on these private methods. And so therefore
+     our code will not break when we do internal changes. So that's what encapsulation and data privacy are and the
+     reasons for it.
+
+. However JavaScript classes actually do not yet support real data privacy and encapsulation. Now there is a proposal
+  to add truly private class fields and methods to the language, but it's not completely ready yet.
+
+. We will basically fake encapsulation by simply using a convention. So the first candidate to protect here is again,
+  this movements array that we have been talking about. So the movements are mission critical data and so here we will 
+  protect this data so that no one can accidentally manipulate it. And for now, all we will do is to add this underscore
+  in front of the property name and that's it.
+
+************************************* Encapsulation: private class fields and methods (True encapsulation) **************
+. Private class fields and methods are actually part of a bigger proposal for improving and changing JavaScript classes
+  which is simply called Class fields. Now this Class fields proposal is currently at stage three. And so right now it's 
+  actually not yet part of the JavaScript language.
+
+  However, being at stage three means that it's very likely that at some point, it will move forward to stage number four.
+  And then it will actually become a part of the JavaScript language.
+
+. So in this proposal, there are actually four different kinds of fields and methods
+
+  1. public fields
+  2. private fields
+  3. public mathods
+  4. private methods
+  static version
+
+************************************************************* ES6 class summary ******************************************
+. Refer pdf notes

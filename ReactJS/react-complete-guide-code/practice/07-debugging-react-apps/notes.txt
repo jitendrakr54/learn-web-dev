@@ -1,0 +1,4 @@
+******************************************** Module Content ************************************************************
+. Understanding Error messages
+. Debugging & analyzing react apps
+. Using the react DevTools

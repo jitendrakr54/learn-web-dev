@@ -1,0 +1,679 @@
+*********************************************** Asynchronous JavaScript, AJAX and APIs ********************************
+. Refer pdf notes
+
+. Most of the codes that we've been writing so far in the course has been synchronous code, and synchronous simply means
+  that the code is executed line by line, in the exact order of execution that we defined in our code, just like in this
+  small example.
+
+  So as the first line of code is reached in the execution, it is simply executed in the execution of thread. 
+  Execution of thread is part of the execution context, which does actually execute the code in the computer's processor.
+  But anyway, then the next line of code is executed and then the next one, all in sequence. So each line of code always 
+  waits for the previous line to finish execution. 
+  
+  Now this can create problems when one line of code takes a long time to run. For example, in this current line of code,
+  we have an alert statement, which creates this alert window. Now, as we've experienced in the past, this alert window 
+  will block the code execution, right? So nothing will happen on the page until we click that OK Button. And only then,
+  the code can continue executing. So this is hopefully a nice illustration of the problem with synchronous code.
+
+  Now, most of the time synchronous code is fine and makes perfect sense. But imagine that execution would have to wait
+  for example, for a five second timer to finish. That would just be terrible, right? Because meanwhile, nothing on the 
+  page would work during these five seconds. And so that's where asynchronous code comes into play.
+
+. Now, in this example the first line of code is still synchronous here, and we also move to the second line in a 
+  synchronous way. But here we encountered the set timeout function, which will basically start a timer in an asynchronous
+  way. So this means that the timer will essentially run in the background without preventing the main code from executing.
+  We also register a callback function, which will not be executed now, but only after the timer has finished running.
+  
+  Now this callback function that I just mentioned is asynchronous JavaScript. And it is asynchronous because it's only 
+  going to be executed after a task that is running in the background finishes execution. And in this case, that is the 
+  timer. So this callback that we just talked about is registered, and then we immediately move on to the next line.
+  So the main code is not being blocked and execution does not wait for the asynchronous timer to finish its work.
+  And that's the big difference between synchronous and asynchronous code.
+
+  Now, when the timer finally finishes after five seconds, the callback function will finally be executed as well. So 
+  you'll see that this callback runs after all the other code, even though in the code, it doesn't appear at the end.
+  And so basically an action was deferred into the future here in order to make the code non-blocking.
+
+. So in summary, asynchronous programming is all about coordinating the behavior of our program over a certain period of 
+  time. And this is essential to understand. So asynchronous literally means not occurring at the same time.
+
+  Now, as we saw in this example, we need a callback function to implement this asynchronous behavior, right? However, 
+  that does not mean that callback functions automatically make code asynchronous. That is just not the case, okay?
+  For example, the Array map method accepts a callback function as well, but that doesn't make the code asynchronous.
+  Only certain functions such as set timeout work in an asynchronous way.
+
+  Event listeners also alone do not make code asynchronous, just like callback functions alone, do also not make code 
+  asynchronous. For example, an event listener listening for a click on a button is not doing any work in the background.
+  It's simply waiting for a click to happen, but it's not doing anything. And so there is no asynchronous behavior involved
+  at all.
+
+  Now what makes this code example asynchronous is simply the fact that the image is loading asynchronously in the 
+  background, but not the fact that we are listening for the load events to happen. So what matters is the asynchronous 
+  behavior of a task, like running a timer or loading an image. And there are more examples of asynchronous behavior in 
+  JavaScript like the Geolocation API that we used before, or AJAX calls. And AJAX calls are probably the most important 
+  use case of asynchronous JavaScript.
+
+. The goal of asynchronous JavaScript is basically to deal with long-running tasks, that basically run in the background.
+  And the most common use case of asynchronous JavaScript is to fetch data from remote servers, in so-called AJAX calls.
+
+. AJAX stands for asynchronous JavaScript and XML, and basically it allows us to communicate with remote web servers in an
+  asynchronous way. Now in practice, we make AJAX calls in our code in order to request some data from a web server 
+  dynamically. So without reloading the page so that we can use that data in our application dynamically.
+
+  For example, right in the next video, we're going to make Ajax calls to request data about countries. And we can then 
+  use that data about countries to build a small application that shows us information about the country that we're 
+  currently in.
+
+. let's say that we have our JavaScript application running in the browser, which is also called the Client. And we want 
+  the application to get some data from a web server. And let's say the data about countries, So with Ajax, we can do an 
+  HTTP request to the server, which has this data. And the server will then set back a response containing that data that
+  we requested.
+
+  And this back and forth between Client and server all happens asynchronously in the background, just the way we learned
+  before. And there can even be different types of requests, like get requests to receive data or post requests to send 
+  data to a server.
+
+  Now, when we're asking a server to send us some data, this server usually contains a web API. And this API is the one 
+  that has the data that we're asking for. API stands for Application Programming Interface. an API is basically a piece 
+  of software that can be used by another piece of software in order to basically allow applications to talk to each other
+  and exchange information. And that's true not only for web development and JavaScript, but for programming in general.
+
+  Now in JavaScript and web development, there are countless types of APIs, like the DOM API or the Geolocation API
+  that we have been using. So these are called APIs because they are a self-contained piece of software that allow other
+  pieces of software to interact with them.
+
+. An online API is essentially an application running on a web server, which receives requests for data, then retrieves 
+  this data from some database and then sends it back to the client. Now, when building applications in practice, we simply
+  call these online APIs, API, and many people will also call these APIs, Web APIs, or again, just simply API.
+
+  Now, of course we can build or own Online APIs, but that requires back-end development. So development with servers and
+  databases and all that.
+
+. Data format: Ajax stands for asynchronous JavaScript and XML.
+  
+  So the X there stands for XML and XML is a data format, which used to be widely used to transmit data on the web.
+  However, these days basically no API uses XML data anymore. The term Ajax is just an old name that got very popular back
+  in the day, and so it's still used today, even though we don't use XML anymore.
+
+  So instead, most APIs these days use the JSON data format. So JSON is the most popular data format today because it's 
+  basically just a JavaScript object, but converted to a string. And so therefore, it's very easy to send across the web
+  and also to use in JavaScript once the data arrives.
+
+*********************************************** Our First AJAX Call: XMLHttpRequest **********************************
+. If we reload this page here a couple of times, then they might appear in a different order. And the reason for that is 
+  basically that the data arrives at a slightly different time, each time that we're loading the page. And so in fact, this
+  really shows the non-blocking behavior in action. So as we call getCountryData here with Portugal, for the very first 
+  time, it sends of this request, and then JavaScript moves on in the code right away. And so it goes right here to this 
+  next line. And this, of course, fires off another AJAX call immediately, way before the data of Portugal has actually 
+  arrived.
+
+  So again, we will have two AJAX call happening at the same time. And so whatever one arrives first, will then fire the 
+  load event first. Now, if we actually wanted these requests to be made in a specific, like predefined order, then we 
+  would basically have to chain the requests. Which means to make the second request only after the first request has 
+  finished.
+
+. Refer script.js
+
+****************************************** How the web works: Requests and Responses *********************************
+. Whenever we try to access a Web server, the browser, which is the client, sends a request to the server and the server 
+  will then send back a response and that response contains the data or the Web page that we requested. this process works
+  the exact same way no matter if we're accessing an entire Web page or just some data from a Web API. And this whole 
+  process actually has a name and it's called the Request-response model or also the Client-server architecture.
+
+. 1. DNS mapping:
+  Now, every URL gets an HTTP or HTTPS, which is for the protocol that will be used on this connection which is 
+  restcountries.eu in this case. Now this domain name, restcountries.eu is actually not the real address of the server that
+  we're trying to access. It's really just a nice name that is easy for us to memorize.
+
+  But what this means is that we need a way of kind of converting the domain name to the real address of the server.
+  And that happens through a so-called D-N-S. So DNS stands for domain name server and domain name servers are a special 
+  kind of server. So they are basically like the phone books of the Internet. So the first step that happens when we access
+  any Web server is that the browser makes a request to a DNS and this special server will then simply match the web 
+  address of the URL to the server's real IP address, all right.
+
+  And actually this all happens through your Internet service provider, And then after the real IP address has been sent 
+  back to the browser, we can finally call it.
+
+
+. 2. TCP/IP Scoket Connection:
+  Once we have the real IP address, a TCP socket connection is established between the browser and the server. And so they
+  are now finally connected. And this connection is typically kept alive for the entire time that it takes to transfer all
+  files of the Website or all data.
+
+  Now what are TCP and IP? Well TCP is the Transmission Control Protocol. And IP is the Internet Protocol. And together 
+  they are communication protocols that define exactly how data travels across the Web. They are basically the Internet's
+  fundamental control system, because again, they are the ones who set the rules about how data moves on the Internet.
+
+. 3. HTTP Request:
+  Now it's time to finally make our request. And the request that we make is an HTTP request, where HTTP stands for 
+  Hypertext Transfer Protocol. So after TCP/IP, HTTP is another communication protocol. And by the way, a communication 
+  protocol is simply a system of rules that allows two or more parties to communicate. Now in the case of HTTP, it's just
+  a protocol that allows clients and Web servers to communicate. And that works by sending requests and response messages 
+  from client to server and back.
+
+. Message Format:
+  Now a request message will look something like this. The beginning of the message is the most important part called the
+  start line. And this one contains the HTTP method that is used in the request, then the request target and the HTTP 
+  version.
+
+  So about the HTTP methods, there are many available, but the most important ones are; GET, for simply requesting data,
+  POST, for sending data and PUT and PATCH, to basically modify data.
+
+  Now about the request target. This is where the server is told that we want to access the rest/V2/alpha resource in this
+  case. So we had this in the URL before and now it is simply sent as the target in the HTTP request. And so then the 
+  server can figure out what to do with it. Now, if this target was empty, so if it was just a slash basically then we 
+  would be accessing the website's route, which is just restcountries.eu in this example.
+
+  Then the next part of the request are the request headers, which is just some information that we sent about the request
+  itself. There are tons of standard different headers, like what browser is used to make the request, at what time, the 
+  user's language and many, many more.
+
+  Now finally, in the case, we're sending data to the server. There will also be a request body, and that body will contain
+  the data that we're sending, for example, coming from an HTML form. So that is the HTTP request. Now, of course, it's not
+  us developers who manually write these HTTP requests, but it's still helpful and valuable that you understand what an 
+  HTTP request and also a response look like.
+
+  There is also HTTP, And the main difference between HTTP and HTTPS is that HTTPS is encrypted using TLS or SSL, which 
+  are yet some other protocols.
+
+. 4. HTTP Response:
+  So our request is formed and now it hits the server, which will then be working on it until it has our data or Web page
+  ready to send back. And once it's ready, it will send it back using, as you can guess, an HTTP response. And the HTTP 
+  response message actually looks quite similar to the request. So also with a start line, headers and a body.
+
+  Now, in this case, the start line has, besides the version also a status code and a message. And these are used to let 
+  the client know whether the request has been successful or failed. For example, 200 means, OK. And the status code that
+  everyone knows is 404, which means page not found. Then the response headers are information about the response itself.
+
+  And finally, the last part of the response is, again, the body, which is present in most responses, and this body usually
+  contains the JSON data coming back from an API or the HTML of the Web page that we requested or something like that.
+
+. In our imaginary example, we only just did one request to restcountries.eu and got one response back, right? And that's
+  how it's gonna work when all we do is to access an API. However, if it's a Web page that we're accessing, then there will
+  be many more requests and responses. And that's because when we do the first request, all we get back is just the initial
+  HTML file.
+
+  That HTML file will then get scanned by the browser for all the assets that it needs in order to build the entire Web 
+  page like JavaScript, CSS files, image files, or other assets. And then for each different file, there will be a new HTTP
+  request made to the server. So basically this entire back and forth between client and server happens for every single
+  file that is included in the Web page.
+  
+  However, there can be multiple requests and responses happening at the same time, but the amount is still limited
+  because otherwise the connection would start to slow down. But anyway, when all the files have finally arrived, then the
+  Web page can be rendered in the browser, according to the HTML, CSS and JavaScript specifications that you already know.
+
+. TCP and IP are the communication protocols that define how data travels across the Web. So first the job of TCP is to 
+  break the requests and responses down into thousands of small chunks, called packets before they are sent. Once the small
+  packets arrive at their final destination, TCP will reassemble all the packets into the original request or response.
+
+  And this is necessary so that each packet can take a different route through the Internet because this way the message 
+  arrives at the destination as quick as possible, which would not be possible if we sent the entire data simply as a big
+  chunk. So that would be like trying to go through dense traffic with like the biggest bus that you can imagine. So 
+  probably not a good idea.
+
+  Now, as a second part, the job of the IP protocol is to actually send and route these packets through the Internet. So 
+  it ensures that they arrive at the destination they should go, using IP addresses on each packet. Okay, and that's it.
+
+**************************************************** Callback hell *****************************************************
+. So in the last lecture, we did a simple AJAX call to fetch data from a country's API. So we created a function for that.
+  And as we call the function multiple times, multiple AJAX calls were made at the same time. So they were basically 
+  running in parallel. And we could not control which one finished first,
+
+  However, in this lecture, let's create a sequence of AJAX calls, so that the second one runs only after the first one 
+  has finished. And here's what we're gonna do. So in the countries data here, there is some property of the bordering 
+  countries. So you see, this one here has the code ESP, which stands for Spain. And so that's because Spain is a bordering
+  country of Portugal.
+
+  And so what we will do now is after the first AJAX call is completed, we will get this border. And then based on this 
+  code, we will also render the neighboring country right here besides the original country. And so in this case, the 
+  second AJAX call really depends on the first one, because the data about neighboring countries, is of course a result of
+  the first call. So without the first call, we wouldn't even know which data to fetch, in the second call.
+
+. So, we have one AJAX call here that depends on another one. And so what we have here is one callback function inside of
+  another one. So you see here, we attach the first callback function. And then inside of that, we have yet another one.
+  So in other words, here, we have nested callbacks.
+
+  But now imagine that we wanted to do more requests in sequence, like the neighbor of the neighbor of the neighbor, and 
+  like 10 times over. So in that case, we would end up with callbacks inside of callbacks inside of callbacks, like 10 
+  times. And actually, for that kind of structure. And for that kind of behavior, we have a special name. And that special
+  name is callback hell.
+
+  So basically, callback hell is when we have a lot of nested callbacks in order to execute asynchronous tasks in sequence.
+  And in fact, this happens for all asynchronous tasks, which are handled by callbacks. And not just AJAX calls.
+
+. The problem with callback hell is that it makes our code look very messy. But even more important, it makes our code
+  harder to maintain, and very difficult to understand, and to reason about, and code that is hard to understand and 
+  difficult, will have more bugs, and it's just worse code.
+
+  So this is a great rule that you should always remember and keep in mind. So again, the rule is that code that's hard to
+  understand, is basically bad code, because it will have more bugs, because the harder it is to understand code and to 
+  reason about the code, the more difficult it will be to add new features and to add more functionality to the application.
+
+  But anyway, given all these problems with callback hell, we of course, need a way to solve callback hell. and fortunately
+  for us, since ES6, there is actually a way of escaping callback hell by using something called "Promises".
+
+*********************************************** Promises and fetch API ************************************************
+. The formal definition of a promise is that it's an object that is used basically as a placeholder for the future result
+  of an asynchronous operation. And if that sounds weird to you, we can also say that a promise is like a container for an
+  asynchronously delivered value or even less formal. Let's say that a promise is a container for a future value.
+
+  and the perfect example of a future value is the response coming from an AJAX call. So when we start the AJAX call,
+  there is no value yet, but we know that there will be some value in the future. And so we can use a promise to handle 
+  this future value.
+
+. Now, what's the big advantage of using promises? Well, there are two of them actually,
+
+  first by using promises, we no longer need to rely on events and callback functions to handle asynchronous results,
+  events and callback functions can sometimes cause unpredictable results. And so this is a big win already,
+
+  but even better with promises, we can chain promises for a sequence of asynchronous operations instead of nesting like
+  we did in the last video. And with this, we can finally escape callback hell, which was our initial goal all along
+  and by the way, promises are an ES6 feature.
+
+. Now, since promises work with asynchronous operations, they are time sensitive. So they change over time. And so promises
+  can be in different states and this is what they call the cycle of a promise. So in the very beginning, we say that a 
+  promise is pending. And so this is before any value resulting from the asynchronous task is available.
+
+  Now, during this time, the asynchronous task is still doing its work in the background. Then when the task finally 
+  finishes, we say that the promise is settled and there are two different types of settled promises and that's fulfilled
+  promises and rejected promises.
+
+  So a fulfilled promise is a promise that has successfully resulted in a value just as we expect it. For example, when we
+  use the promise to fetch data from an API, a fulfilled promise successfully gets that data, and it's now available to 
+  being used. On the other hand, a rejected promise means that there has been an error during the asynchronous task.
+  And the example of fetching data from an API, an error would be for example, when the user is offline and can't connect
+  to the API server.
+
+. Now these different states are very important to understand because when we use promises in our code, we will be able to
+  handle these different states in order to do something as a result of either a successful promise or a rejected one.
+  Another important thing about promises is that a promise is only settled once. And so from there, the state will remain
+  unchanged forever. So the promise was either fulfilled or rejected, but it's impossible to change that state.
+
+  Now, these different states that I showed you here are relevant and useful when we use a promise to get a result, which
+  is called, to consume a promise. So we consume a promise when we already have a promise, for example, the promise that 
+  was returned from the fetch function, right at the beginning of this video, remember.
+
+  But in order for a promise to exist in the first place, it must first be built. So it must be created in the case of the
+  fetch API, it's the fetch function that builds the promise and returns it for us to consume. So in this case, we don't 
+  have to build the promise ourselves in order to consume it. Now, most of the time we will actually just consume promises,
+  which is also the easier and more useful part.
+
+. Refer pdf docs & MDN : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+*************************************************** Consuming Promises ************************************************
+. In order to be able to actually read this data from the body, we need to call the json method on the response. the json()
+  method here is a method that is available on all the response objects that is coming from the fetch function, so all of 
+  the resolved values, that this json function itself, is actually also an asynchronous function. And so what that means,
+  is that it will also return a new promise. Okay, and so now we need to handle that promise as well.
+
+. Refer script.js
+
+*************************************************** Chaining Promises ************************************************
+. Refer script.js
+
+. the then() method always returns a promise, no matter if we actually return anything or not. But if we do return a value,
+  then that value will become the fulfillment value of the return promise.
+
+. So right now we have four steps here, even, but of course we could extend this as much as we want. So even if we wanted
+  the neighbor of the neighbor of the neighbor, like 10 countries, we could easily do this by chaining all these promises
+  one after another and all without the callback hell. So here, instead of the callback. And this one is again, very easy
+  to understand and to read.
+
+*************************************************** Handling Rejected Promises *****************************************
+. An important part of web development is to actually handle the errors because it's very common that errors happen
+  in web applications. A promise in which an error happens is a rejected promise. Now, actually the only way in which the
+  fetch promise rejects is when the user loses his internet connection. And so for now, that's gonna be the only error
+  that we will handle here.
+
+. Now there are two ways of handling rejections and the first one is to pass a second callback function into then()
+  method. So the first callback function here is always gonna be called for the fulfilled promise. so for a successful
+  one. But we can also pass in a second callback which will be called when the promise was rejected.
+
+  Above approach is a little bit annoying and so in fact there is a better way of basically handling all these errors
+  globally just in one central place. So instead of all of these callback functions here let's just delete them. okay. 
+  So this is a lot nicer just having one callback and then instead we can handle all the errors no matter where they 
+  appear in the chain right at the end of the chain by adding a catch() method.
+
+. Beside then() and catch(), there is finally() method. the finally method is not always useful, but sometimes it actually
+  is. So we use this method for something that always needs to happen no matter the result of the promise.
+  
+  And one good example of that is to hide a loading spinner like these rotating circles that you see everywhere in web a
+  aplications when you load some data. So these applications show a spinner when an asynchronous operation starts and then
+  hide it once the operation completes. And that happens no matter if the operation was successfully or not. And so for 
+  that to finally method is perfect.
+
+  this actually works because catch itself also returns a promise. So that's the only way why this here can work so of 
+  course this only works on promises.
+
+. fetch function will not reject the request even though data is not found
+
+*************************************************** Throwing errors manually *****************************************
+. When we tried fetching country data which doesn't exist then we got 404 error, which is because our API couldn't find 
+  any country with this name. But still, even though there was obviously a big problem with this request, the fetch
+  function still did not reject in this case. and promise should actually be rejected right away, but again, it just 
+  doesn't, and so we will have to do it manually.
+
+. Now the effect of creating, and throwing an error in any of these then methods is that the promise will immediately 
+  reject. So basically, the promise returned by this then handler here will be a rejected promise. And that rejection will
+  then propagate all the way down to the catch handler, which we already have set up here.
+
+. Now if we have error in finding neighbour's country data in that case also we need to handle that error, so now if we do
+  so we will have code repetition which is not a good idea. And so now, I think that it's a good time to actually create 
+  ourselves a really nice helper function. And this helper function will wrap up the fetch the error handling, and also 
+  the conversion to JSON.
+
+. Whenever we want to create some error that we want to handle down here, in the catch handler, all we need to do is to 
+  throw, and create a new error.
+
+*************************************************** Asynchronous behind the senes: The Event loop **********************
+. JavaScript runtime is basically a container which includes all the different pieces that are necessary to execute
+  JavaScript code. Now, the heart of every JavaScript runtime is the engine. So, this is where code is actually executed
+  and where objects are stored in memory. So, these two things happen in the call stack and in the heap.
+  
+  Now, what's important to note here is that JavaScript has only one thread of execution. And so it can only do one
+  thing at a time. There is absolutely no multitasking happening in JavaScript itself. Now, other languages like Java can
+  execute multiple pieces of code at the same time, but not JavaScript. 
+  
+  Next we have the web APIs environment. These are some APIs provided to the engine, but which are actually not part of the
+  JavaScript language itself. So, that's things like the DOM, timers, the fetch API, the geolocation API, and so on and so
+  forth.
+  
+  Next up, there is the callback queue and this is a data structure that holds all the ready to be executed callback
+  functions that are attached to some event that has occurred.
+
+  Finally, whenever the call stack is empty the "event loop" takes callbacks from the callback queue and puts them into
+  call stack so that they can be executed. So the event loop is the essential piece that makes asynchronous behavior
+  possible in JavaScript. It's the reason why we can have a non blocking concurrency model in JavaScript. And a concurrency
+  model is simply how a language handles multiple things happening at the same time.
+
+  As you know, by now, a JavaScript engine is built around the idea of a single thread. But if there was only one thread 
+  of execution in the engine then how can asynchronous code be executed in a non blocking way?
+
+. Let's consider below example for to understand above question.
+
+  el = document.querySelector('img');
+  el.src = 'dog.jpg';
+  el.addEventListener('load', () => {
+    el.classList.add('fadeIN');
+  });
+  fetch('https://someurl.com/api').then(res => console.log(res));
+
+. So, let's walk through the code line by line. Now let's start by selecting this image element. And then in the next line
+  we set the source attribute of that image to dog.jpg. And as we learned before this will now start to load this image 
+  asynchronously in the background. So, as you already know everything related to the DOM is not really part of JavaScript,
+  but of the web APIs. And so it's in a web APIs environment where the asynchronous tasks related to the DOM will run.
+  And in fact, the same is true for timers, AJAX calls and really all other asynchronous tasks. So, again, these 
+  asynchronous tasks will all run in the web API environment of the browser.
+
+  Now, if the image would be loading in a synchronous way it would be doing so right in the call stack blocking the
+  execution of the rest of the code. But, as we already learned, that would be terrible. And that's why loading images in
+  JavaScript is asynchronous. So it does not happen in the call stack. So, not in the main thread of execution, but really
+  in the web APIs environment.
+
+  Now, if we want to do something after the image has finished loading, then we need to listen to the load event.
+  And so that's exactly what we do in the next line of code. So, here we attach an event listener to the load event of
+  that image and pass an a callback function as always. In practice, this means to register this callback in the web
+  APIs environment, exactly where the image is loading. And callback will stay there until the load event is emitted. So,
+  we're handling asynchronous behavior here with a callback.
+
+  In the next line, we make an AJAX call using the fetch API. And as always the asynchronous fetch operation will
+  happen in the web APIs environment. And again, that's because otherwise we would be blocking the call stack and
+  create a huge lag in our application. Finally, we use the then() method on the promise returned by the fetch function.
+  And this will also register a callback in the web API environment so that we can react to the future resolved value
+  of the promise. So this callback is associated with a promise that is fetching the data from the API. So, with this, we
+  have now executed all the top level of code. So, all the code that is not inside any callback function in asynchronous
+  way.
+
+  We also have the image loading in the background and some data being fetched from an API. And so now it's time for
+  this to get really interesting. Let's say the image has finished loading and therefore the load event is emitted on
+  that image. What happens next, is that the callback for this event is put into callback queue. And the callback queue is
+  basically an ordered list of all the callback functions that are in line to be executed.
+  
+  And you can think of this callback queue, as a TODO list that you would write for yourself with all the tasks that
+  you have to complete. So, the callback queue is also a to do list of a kind, but with tasks that the call stack will
+  eventually have to complete. Now, in this example, there are no other callbacks in the queue yet, but there could be
+  of course. So, if there were already other callbacks waiting in line, then this new callback would of course go
+  straight to the end of the queue. And there it would sit patiently for its turn to finally run.
+ 
+  And this actually has big implications. So, imagine that you set a timer for five seconds. And so after five seconds
+  that timer's callback will be put on the callback queue. And let's say there were already other callbacks awaiting. And
+  let's also say that it took one second to run all of those callbacks. Then, in that case, your timers callback would only
+  run after six seconds and not after five. So, these six seconds are the five seconds that passed for the timer, plus the
+  one second that it took to run all the other callbacks that were already waiting in line in front of your timer.
+
+  So, what this means is that the timers duration that you define is not a guarantee. The only guarantee is that the
+  timers callback will not run before five seconds, but it might very well run after five seconds have passed. So, it all 
+  depends on the state of the callback queue. And also another queue that we're gonna learn about in a second.
+  
+  Now, another thing that's important to mention here is that the callback queue also contains callbacks coming from
+  DOM events like clicks or key presses or whatever. Now, we learned before that DOM events are not really asynchronous
+  behavior, but they still use the callback queue to run their attached callbacks. So, if a click happens on a button with
+  addEventListener then what will happen is just like what I illustrated here with the asynchronous load event.
+
+  But anyway now it's time to finally learn about the event loop. It looks into the call stack and determines whether
+  it's empty or not. except of course for the global context, then if the stack is indeed empty which means that there's 
+  currently no code being executed then it will take the first callback from the callback queue and put it on the call 
+  stack, will be executed. And this is called an event loop tick. So each time the event loop takes a callback from the
+  callback queue. We say that there was an "event loop tick".
+  
+  So, as we can see here the event loop has the extremely important task of doing coordination between the call stack
+  and to callbacks in the callback queue. So, the event loop is basically who decides exactly when each callback is
+  executed. We can also say that the event loop does the orchestration of this entire JavaScript runtime. Another thing 
+  that becomes clear from this whole explanation is that the JavaScript language itself has actually no sense of time. 
+  That's because everything that is asynchronous does not happen in the engine. It's the runtime who manages all the 
+  asynchronous behavior. And it's the event loop who decides which code will be executed next. But the engine itself 
+  simply executes whatever code it has given.
+
+. So let's try to recap what's happened here. So, the image started loading asynchronously in the web APIs environment
+  and not in the call stack. We then used addEventListener to attach a callback function to the image load event. And this
+  callback is basically or asynchronous code it's code that we deferred into the future because we only want to execute it
+  once the image has loaded. And in the meantime, the rest of the code kept running.
+  
+  Now addEventListener did not put the callback directly in the callback queue. It simply registered the callback, which
+  then kept waiting in the web APIs environment until the load event was fired off. Only then the environment put the call
+  back into queue. Then while in the queue the callback kept waiting for the event loop to pick it up and put it on the 
+  call stack. And this happened as soon as the callback was first in line and the call stack was empty. So, all this 
+  happened so that the image did not have to load in the call stack, but in the background in a non blocking way.
+
+  So, in a nutshell, the web APIs environment, the callback queue and the event loop, all together, make it possible
+  that asynchronous code can be executed in a non blocking way even with only one thread of execution in the engine.
+
+. We still have to fetch() function getting data from the AJAX call in the background. and this is basically happening 
+  with a promise. Remember, now with promises things work in a slightly different way.So, let's say that the data has now
+  finally arrived. And so the fetch is done. Now, callbacks related to promises like this one that we registered with the
+  promises then() method. Do actually not go into the callback queue. So, again this callback did we still have here,
+  which is coming from a promise will not be moved into the callback queue. Instead, callbacks of promises have a special
+  queue for themselves, which is the so called "microtasks queue". Now, what is special about the microtasks queue is that
+  it basically has priority over the callback queue.
+ 
+  So, at the end of an event loop tick, so after a callback has been taken from the callback queue, the event loop will 
+  check if there are any callbacks in the microtasks queue. And if there are, it will run all of them before it will run
+  any more callbacks from the regular callback queue. And, by the way, we call these callbacks from promises microtasks.
+  And therefore the name microtasks queue. And there are actually other microtasks but that's not relevant here.
+
+  So going back to our example, currently, we actually do have a microtask sitting in a microtasks queue, the call
+  stack is also empty. And therefore the event loop will now take this callback and put it in the call stack just like
+  it does with callbacks from the callback queue. And it doesn't matter if the callback queue is empty or not. So, this
+  would have worked the exact same way even if there were some callbacks in the callback queue. And again, that's because
+  microtasks always have priority. In practice, this means that microtasks can basically cut in line before all other
+  regular callbacks.
+
+  Now, if one microtask adds a new microtask then that new microtask is also executed before any callbacks from the
+  callback queue. And this means that the microtasks queue can essentially starve the callback queue. Because if we keep
+  adding more and more microtasks, then callbacks in the callback queue can never execute.
+  Now, this is usually never a problem but I just wanted to mention this possibility here anyways, who knows maybe this 
+  will be an interview question for you someday. And if so, you'd now know the answer.
+
+  But anyway, as you can hopefully see the idea of running asynchronous code with regular callbacks and with
+  microtasks coming from promises is very similar. The only difference is that they go into different queues and that
+  the event loop gives microtasks priority over regular callbacks.
+
+*************************************************** The event loop in practice ****************************************
+. the implication of the fact that micro-tasks have priority over regular callbacks, is that if one of the micro-tasks
+  takes a long time to run, then the timer will actually be delayed and not run after the zero seconds that we specified.
+  
+  So this means, that you cannot really do high precision hings using JavaScript timers. So whenever you are working with
+  Promises. So basically with micro-tasks, and with timers at the same time.
+
+****************************************************** Building a simple Promise **************************************
+. What is Promise? :
+. "I Promise a Result!". "Producing code" is code that can take some time "Consuming code" is code that must wait for the result
+. A Promise is a JavaScript object that links producing code and consuming code.
+
+. As of now, we have been consuming promises from fetch() api but we have never actually built our own promise.
+  Promises are essentially just a special kind of object in JavaScript. Now the Promise constructor takes exactly one 
+  argument and that is the so-called executor function. So we need to pass in a function here. Now, as soon as the promise
+  constructor runs, it will automatically execute this executor function that we pass in.
+
+  And as it executes this function here, it will do so by passing in two other arguments. And those arguments are the
+  resolve and reject functions.
+
+  Now into the resolved function here we pass the fulfilled value of the promise so that it can later be consumed with
+  then() method. So of course we are going to handle the results of this promise just like we handled any other
+  promise with the then() method. So again, whatever value we pass into the resolve function here is gonna be the
+  result of the promise that will be available in the then handler. And so in this case, let's simply pass in a string
+  here. Then into the reject function, we pass in the error message that we later want to be able in the catch handler,
+  so in the catch method.
+
+  RECAP: here, we created an executor function which is gonna be called by this promise constructor as soon as it runs,
+  so basically immediately. Then the promise calls this function and passes in the resolve and the reject functions
+  so that we can then use them to mark the promise as either resolved so as fulfilled or as to rejected.
+  And so this promise is eventually going to move to either the fulfilled state or the rejected state. So we always
+  need to make sure that the promise ends up in one of these two states.
+
+  USING Promise: consuming this promise that we just built. So lotteryPromise is going to be a promise object at this
+  point. And so then as always, we can call then() method, and then just like before then() method needs a callback
+  function that is going to be called with the resolved value of the promise. We also need catch any errors in case of 
+  reject using catch() method.
+
+. Now, in practice, most of the time all we actually do is to consume promises. And we usually only built promises
+  to basically wrap old callback based functions into promises. And this is a process that we call promisifying.
+  So basically promisifying means to convert callback based asynchronous behavior to promise based.
+
+************************************************** Consuming Promises with async/await ********************************
+
+. "async and await make promises easier to write". async makes a function return a Promise. await makes a function
+  wait for a Promise. async function always return a Promise.
+
+. Since ES 2017, there is now an even better and easier way to consume promises, which is called async await. So we start
+  by creating a special kind of function, which is an async function. And we do this by simply adding async in front of 
+  the function. And so this function is now an asynchronous function. So a function that will basically keep running in the
+  background while performing the code that inside of it, then when this function is done, it automatically returns a 
+  promise.
+
+  Inside an async function, we can have one or more await statements, so, await, and then here we need a promise.
+  And so we can use the promise returned from the fetch function. we can use the "await" keyword to basically await for
+  the result of this Promise. So basically await will stop the code execution at this point of the function until the
+  promise is fulfilled. And so until the data has been fetched in this case.
+
+  But now after that explanation, you might think isn't it stopping the code, blocking the execution?
+  the answer is actually no, in this case, because stopping execution in an async function, which is what we have here is
+  actually not a problem because this function is running asynchronously in the background. And so therefore it is not 
+  blocking the main thread of execution. So it's not blocking the call stack.
+
+  As soon as this promise here is resolved, then the value of this whole await expression that we have here is going
+  to be the resolved value of the promise. And so we can simply store that into a variable. And just to prove that this 
+  function here is actually asynchronous. Let's log something to the console after we call it. this console log will be 
+  displayed first, because again, this is an async function. And so once the function is called, it is then loaded off to
+  the background. And so this Fetcher will be running in the background without blocking or main thread. And so the code
+  will move on to the next line, which is then this console log first.
+
+. async await is in fact, simply syntactic sugar over consuming (then() method) promises. So of course behind the scenes,
+  we are still using promises. We are simply using a different way of consuming them here. async/await is all about 
+  consuming promises.
+
+. With async/await it becomes a lot easier to basically chain promises because we don't have to return anything.
+  like classes in JavaScript, which also hides the true nature of how things work behind the scenes.
+
+. The async and await keywords enable asynchronous, promise-based behavior to be written in a cleaner style, avoiding
+  the need to explicitly configure promise chains. We don't have to create new then() methods and we don't have to create 
+  new callback functions. So all we have to do is to await this and store the results into some variable.
+
+************************************************** Error Handling with try..catch *************************************
+. With async/await, we can't use the catch() method that we use before, because we can't really attach it anywhere, right.
+  So instead, we use something called a try catch statement. And the try catch statement is actually used in regular 
+  JavaScript as well. So it's been in the language probably since the beginning. So try catch has nothing to do with a 
+  sinc/await. But we can still use it to catch errors in async functions.
+
+. With try catch script no longer dies, instead simply catch the error. means execution can continue further after
+  catching (handling) error.
+
+************************************************** Returning values from async functions *******************************
+. An async function always returns a promise. And so here is the proof for that. And if we think about this, then it 
+  actually makes sense that here we get a promise and not the value that we would like to get. So the string here, right?
+  The reason for that is that at this point of the code, JavaScript has simply no way of knowing yet there's a string here
+  that we want because the function is still running, but it is also not blocking the code out here. And so therefore 
+  again, at this point, JavaScript has no way of knowing what will be returned from this function. And so therefore all
+  that this function does return is a promise.
+
+. Now the value that we return from an async function, so again, that's this string here will become the fulfilled
+  value of the promise that is returned by the function.
+
+. Even though there was an error in the async function, the promise that it returns is still fulfilled. Now, if we
+  wanted to fix that, if we want to be able to catch that error here(while calling) as well, then we would have to rethrow
+  that error right here(from catch block).
+
+. Rethrowing the error means to basically throw the error again so that we can then propagate it down. And so with
+  that, we will manually reject a promise that's returned from the async function.
+
+. Now it would be great if we could simply use await without the async function, but that doesn't really work, at least 
+  for now, because there is actually a proposal in the works to make this happen, but for now, await can only be used 
+  inside an async function.
+
+************************************************** Running promises in parallel ***************************************
+. Let's now imagine that we wanted to get some data about three countries at the same time, but in which the order that 
+  the data arrives does not matter at all.
+
+. With above code if we see in network tab, we find that first HTML, CSS and JavaScript are loaded so nothing strange
+  there, but then here we load the data for Portugal, right? So that's the first Ajax call. And then after that has
+  finished, we load the data for Canada, and then after that has finished, we load the data for India.
+
+  So all these fetch call happens in sequence, that doesn't make a lot of sense. So instead of running these promises
+  in sequence, we can actually run them in parallel, so all at the same time. And so then we can save valuable loading
+  time, making these three here, basically load at the same time. And each of them takes half a second.
+  And so with that, we will basically save one second, which is actually a lot of time when loading a website.
+
+  So to do this, we need to use Promise.all() combinator function which takes array of promises and run all the promises
+  in the array at the same time and returns a new Promise. so whenever you have a situation in which you need to do 
+  multiple asynchronous operations at the same time, and operations that don't depend on one another, then you should 
+  always, always run them in parallel, just like we did here using promise.all.
+
+. NOTE: if one of the promises rejects, then the whole promise.all actually rejects as well. So we say that
+        promise.all short circuits when one promise rejects. So again, because one rejected promise is enough for the
+        entire thing to reject as well.
+
+********************************************** Other Promise combinators: race, allSettled and any **********************
+. Promise.race():
+  Promise.race, is just like all other combinators, receives an array of promises and it also returns a promise.
+  Now this promise returned by Promise.race is settled as soon as one of the input promises settles. And remember
+  that settled simply means that a value is available, but it doesn't matter if the promise got rejected or fulfilled.
+  And so in Promise.race, basically the first settled promise wins the race.
+
+  And so now these three promises will basically race against each other, like in a real race. Now, if the winning
+  promise is then a fulfilled promise, then the fulfillment value of this whole race promise is gonna be the
+  fulfillment value of the winning promise.
+
+  In Promised.race, we only get one result and not an array of the results of all the three. Now a promise that gets
+  rejected can actually also win the race. And so we say that Promise.race short circuits whenever one of the
+  promises gets settled. And so again, that means no matter if fulfilled or rejected.
+
+. Promise.race is actually very useful to prevent against never ending promises or also very long running promises.
+  
+  For example, if your user has a very bad internet connection, then a fetch requests in your application might take
+  way too long to actually be useful. And so we can create a special time out promise, which automatically rejects
+  after a certain time has passed.
+
+  And it's gonna be similar to the wait function that we created earlier. But the difference is that this one is
+  actually going to reject and not going to resolve.
+
+. Promise.allSettled():
+  it takes in an array of promises again, and it will simply return an array of all the settled promises. And so again, 
+  no matter if the promises got rejected or not. So it's similar to Promise.all in regard that it also returns an array 
+  of all the results, but the difference is that Promise.all will short circuit as soon as one promise rejects, but 
+  Promise.allSettled, simply never short circuits. So it will simply return all the results of all the promises.
+
+. Promise.any():
+  Promise.any takes in an array of multiple promises and this one will then return the first fulfilled promise and it will
+  simply ignore rejected promises. So basically Promise.any is very similar to Promise.race with the difference that 
+  rejected promises are ignored. And so therefore the results of Promise.any is always gonna be a fulfilled promise, unless
+  all of them reject.

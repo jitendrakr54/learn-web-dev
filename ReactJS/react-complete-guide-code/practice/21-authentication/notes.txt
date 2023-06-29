@@ -1,0 +1,205 @@
+*************************************************** Module Introduction ************************************************
+. Module Content:
+      . How Authentication works in react apps
+      . Implementing user Authentication
+      . Adding auth persistence & auto-logout
+
+************************************************** How Authentication works ********************************************
+. Refer pdf notes
+
+. In the end it means that certain resources, certain backend routes, for example, should be protected and should not be 
+  accessible by everyone. So the front end application, the React application that wants to access certain backend 
+  resources must authenticate before this access is granted. It must get permission.
+
+. And for that of course, the question is how does our client side React application get permission from that backend 
+  application running on a server? Well, it all starts with sending a request with user credentials. So with an email 
+  and a password, for example to that backend server.
+
+  That backend server is then able to validate those credentials or create a new user if that's what we're doing. And 
+  then if the credentials are valid if we did provide a valid email password combination then the server will send us 
+  back a response that basically gives us permission to access certain protected resources.
+
+  But how does this response look like? Is it a simple yes or no? Yes, you have access. No, you don't have access.
+  Is that enough? Well, the answer is a "yes" alone would not be enough because if a server responds with a yes and in 
+  future requests from the client to the server, we then simply append that information that we got a yes in the past.
+  That of course is not enough because we could simply fake that.
+
+. Now, there are two main solutions for that. We could use server side sessions or authentication tokens. Now, server 
+  side sessions are a very popular solution especially for full stack applications where you don't have a decoupled 
+  front end and back end as we do often have it with React though.
+
+. But the idea behind server side sessions would be that on the server, after a user was logged in and authenticated
+  we store a unique identifier on the server. We basically stored a yes on the server and mapped that to a specific 
+  client with help of an id that's then sent back to the client.
+
+  And the client then sends that ID with future requests which do try to access protected resources. And since we stored 
+  a yes mapped to that id on the server the server is able to check whether that client really does have permission to 
+  access protected resources.
+
+  Now, server side sessions are a great way of solving authentication or of enabling authentication but they do require 
+  a tight coupling between backend and frontend because the backend must store information about the client. And with 
+  React apps you are often talking to decoupled backend APIs which are not closely coupled to a client and which don't 
+  store any client site information. And that's where authentication tokens come into play.
+
+. The idea behind authentication tokens is that on the server after a user was authenticated, so after a user sent a 
+  valid pair of credentials, for example, we create but don't store a permission token which is basically a string
+  that is created according to some algorithm and that includes some information.
+
+  So we create such a token on the backend and we send that token back to the client. Now, the special thing about that 
+  token is that it's validity can only be checked and proven by the backend that created that token because the token is 
+  created with help of some private key which is only known by the backend.
+
+  So in future requests from the client to the backend we attach that token to those requests, and the backend is able 
+  to take a look at that token, validated and see if it is a token that was created by that backend. And if it is a 
+  valid token, then permission to those protected resources is granted. And that is exactly what this dummy backend API
+  which I'm providing to you here does.
+
+************************************************** Project Setup & Route setup *****************************************
+. Go to backend and run "npm install" and run "npm start" to start the server.
+. Added Routes for Authentication, refer App.js
+. Add Authentication in nav bar, Refer MainNavigation.js
+
+************************************************** Working with Query parameters: useSearchParams() *********************
+. We get this button here on this auth form which basically allows us to switch to the create new user mode. In the end, 
+  it's the same form, but what will change at least later is that in one case, if we click save we do actually try to 
+  log in the user, we send a log in request to the backend.
+  
+  On the other hand, if we are in create a new user mode, we send a request to the backend that wants to create a new 
+  user. So we're sending different requests based on which kind of form we loaded here.
+
+. This feature is already implemented but it's using useState. We could implement this using query parameter.
+
+  Now, a query parameter is a parameter that's appended in the URL after a question mark. we wanna support a mode query 
+  parameter, which is either set to log in or to sign up. And depending on what it's set to we wanna load a different 
+  version of that form.
+
+  So it's the same route, it's the same path, the path is always /auth, but we get this extra parameter which defines 
+  how exactly this component should be rendered.
+
+. Now, react-router gives us a hook that makes it easy to get access to the currently set query parameters. And the hook 
+  is called useSearchParams() because query parameters are officially called search parameters. We can call 
+  useSearchParams here and this actually returns an array and hence we can use array destructuring to get access to the 
+  elements in that array. And there are two elements in that array.
+
+  The first element is an object that gives us access to the currently set query parameters and the second value we get 
+  from that array is a function that allows us to update the currently set query parameters.
+
+  Now, I don't need that function here because I will update the query parameter with help of that link that sets the 
+  query parameter, but I do need to get access to the currently active query parameters.
+
+. Refer AuthForm.js
+
+************************************************** Implementing the Auth Action ****************************************
+. Added action for Authentication. Refer Authentication.js
+
+************************************************** Validating user input & Outputting validation erors *******************
+. Refer AuthForm.js
+
+************************************************** Adding user login ****************************************************
+. Already implemented
+
+************************************************** Attaching auth tokens to outgoing requests ***************************
+. Refer EventDetail.js where we are deleting events.
+. Refer EventForm.js where we edit form and add new event. (sending stored tokens in request)
+
+************************************************** Adding user logout **************************************************
+. We might want to update the user interface based on the current authentication status. If we have a token, for example,
+  we might not want to show this authentication navigation item because it makes no sense to show that if we are logged 
+  in already.
+
+  On the other hand, it makes no sense to show the edit and delete buttons or this new event button if we are not logged 
+  in, because allowing users to go there if we're not logged in makes also no sense. So updating the UI based on the 
+  existence of a token makes a lot of sense.
+
+  However, that also means that we need a way of getting rid of a token. And at the moment, we would have to do that 
+  manually through the dev tools, which is of course not the solution we wanna offer to our users. Instead, we wanna add 
+  a Logout route.
+
+. I'll add a new file in my pages folder called Logout.js. And the special thing about this file is that it actually 
+  won't contain any component because there is no log out page. Instead, I'll just export a function and action to be 
+  precise, which will clear my local storage which will get rid of the token.
+
+. Refer MainNavigation.js, App.js, Logout.js
+
+************************************************** Updating the UI based on Auth status *********************************
+. So now to update the UI based on the existence of the token, I wanna make the token easily available in my entire 
+  application on all my routes basically, and I also wanna make sure that the information, whether the token exists or 
+  not, is automatically updated so that if the token would be removed because we log out, the UI automatically updates.
+
+  Therefore, for that reason, I don't just wanna call getAuthToken, my helper function here in main navigation, for 
+  example to get the token because that function is only called when this component is reevaluated, but it will not lead 
+  to the component being reevaluated if the token is deleted in the future. So I want a more reactive solution.
+
+. And we could use React context for managing that token across the entire application. That would be a perfectly fine 
+  way of doing that. But since we're using React-router, we can also again leverage that tool, that package for doing 
+  that.
+
+. And we could, for example, go to our root route which in the end wraps all other routes as you can see. And there we 
+  could add a loader, which simply takes a look at local storage and extracts the token from local storage. And that 
+  token would then be available through the loader data of that root route in all other routes. 
+  
+  The best thing about that is that React router will automatically reevaluate that if we for example, log out, if we 
+  submit that logout form. So it will then re fetch that token and for example determine that the token doesn't exist
+  and then update all the pages that use that loader data from that root route. So that is a very reactive solution.
+
+  In order to use data from that loader and easily get access to it, I'll assign an ID to that route.
+
+. Refer App.js, MainNavigation.js, EventsNavigation.js, EventItem.js
+
+************************************************** Adding Route Protection **********************************************
+. Now, it's good that we're conditionally updating the UI based on the existence of the token. What we can still do though
+  is we can manually go to events/new, for example so we can still reach that form even though we're not supposed to.
+
+  Of course, submitting the form would fail because we actually wouldn't be able to attach a token to the outgoing 
+  request. So we still have that protection but it would be even better if we wouldn't be able to reach that form at all
+  if we're not logged in.
+
+. So how can we add this kind of protection then? Well, we could utilize a loader. A loader that simply checks if we have 
+  a token. And if we don't have a token, redirects us away. And I'll add such a loader in this auth js helper file.
+  I'll add the checkAuthLoader here and in there I'll simply call getAuthToken to see if I have a token.
+
+  And if we don't have a token then I will return and call redirect from React-router-dom to generate a redirect response
+  and redirect a way to /auth, for example so that the user is able to log in.
+
+. Refer App.js
+
+************************************************** Adding Aautomatic logout *********************************************
+. At the moment we always stay logged in if we got that token once. So as soon as we got the token, we save it, and from 
+  that point on, we stay logged in.
+
+  Now, that's nice but unrealistic. Indeed, the backend creates a token that will actually expire after one hour.
+  Therefore, I also wanna log the user out after one hour because the token is invalid thereafter.
+
+  And I don't just wanna log the user out, I also wanna clear the token and I wanna remove it from local storage so after 
+  that one hour, the token should be removed from local storage and the UI should update accordingly.
+
+. Refer Root.js, This works but this still has flaws.
+
+************************************************** Managing the token expiration ***************************************
+. Now which flaw does this solution have? Well, at the moment, we always expired a token after 1 hour. The problem is 
+  that we of course, might have logged in. Then we were away for 10 minutes. Then we reloaded this application. And then 
+  therefore, this effect was triggered again.
+
+  We found a token in the local storage, because we did log in 10 minutes ago, but now we reset that timer to 1 hour.
+  That's not realistic, because the token is already 10 minutes old, so it will actually expire in 50 minutes, and the 
+  backend won't accept it anymore thereafter.
+
+  But our timer is set to 1 hour. Therefore, it's not enough to always set this to 1 hour. Instead we need to manage and 
+  register, the actual token expiration. And to do that, we should go to our action that's triggered, when we 
+  authenticate where we do store that token. And here we should also store the expiration time.
+
+
+
+
+. Refer Root.js, auth.js
+
+
+
+const response = await fetch(url, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(eventData),
+});

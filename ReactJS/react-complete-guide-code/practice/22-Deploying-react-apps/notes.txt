@@ -1,0 +1,89 @@
+**************************************************** Module Introduction ************************************************
+. Module Content:
+      . Deployment Steps & Pitfalls
+      . Server-side routing vs Client-side routing
+
+**************************************************** Deployment Steps **************************************************
+. Refer pdf notes
+
+. Steps:
+    . Test Code
+    . Optimize Code
+    . Build app for production
+    . Upload production code to Server
+    . Configure Server
+
+**************************************************** Understanding lazy loading *****************************************
+. Lazy loading means that we wanna load certain pieces of code only when it's needed.
+
+. When we build our application then all these imported files will actually be merged together into one big file. But 
+  even if that would not be the case, we would have to resolve all these imports in order to bring something on the 
+  screen.
+  
+  Now the theoretical problem with that is, that of course, this means all code files must be loaded before anything's 
+  shown on the screen.
+
+. In more complex applications in bigger apps with dozens or even hundreds of routes and components, that could be a 
+  problem. Having to load all the code initially will slow down that initial page load. When the user visits that website 
+  for the first time, all that code must be downloaded before anything's showing up on the screen.
+
+  And therefore that initial load can take quite long and leads to a bad user experience. And that's exactly where lazy 
+  loading comes into play. The idea behind lazy loading is that we load certain components in the end only when they're 
+  needed instead of ahead of time.
+
+**************************************************** Adding lazy loading ***********************************************
+. Well, let's say we wanna load that blog page lazily. So, only when we need it. The code for the blog page, and all the 
+  code referenced by that blog page, so for example, the code for the post list component should only be loaded when we 
+  need it.
+
+  So for example, when we visit this website and we land on the homepage we don't need the blog page code yet. We will 
+  only need it later once we navigate there. And at that point of time, once we navigate there it should be downloaded.
+  And that's exactly what lazy loading will do for us.
+
+. Suspense is basically a component provided by React that can be used by other things other components to wait for 
+  content to be loaded before actually rendering the content.
+
+**************************************************** Building the code for production **********************************
+. Now, this build step here is required because the application we're building is not the application we're going to 
+  upload at least not like this. This is not the code we're going to upload. This is the code which we use during 
+  development.
+
+  It's very readable and it sometimes even uses features which aren't supported like that in the browser. Like this JSX 
+  code that's not supported in browsers. It must be transformed before we can upload this on a server that serves it to 
+  end users.
+
+. By the way, here during development when we preview this page we also get a transformed version of that code. This 
+  development server, which we started with npm start is transforming the code as we're writing it. So it's a live 
+  transformation process, so to say.
+
+. Now, for uploading the code, we also wanna optimize it and we do this by quitting the development server and executing 
+  a different script. Here in this default project which we get from create React app, it's this build script. When we 
+  run "npm run build", we execute that script. And under the hood, this will produce a code bundle with highly optimized 
+  and transformed code which is ready to be uploaded.
+
+. And once it finished, it created that build folder here. And it's the content of that build folder that should be 
+  deployed to a server. In there in that static folder you have your optimized JavaScript file with those different 
+  dynamically loaded junks for the lazy loading, but also with that main chunk that's downloaded initially.
+
+  And that file contains all the code you wrote plus all the third party package code you're using including the React 
+  library itself. So it's the content of the build folder that now must be uploaded.
+
+**************************************************** Deployment example ************************************************
+. When it comes to deploying our website, it is really important that a React single page application is a static website.
+  It consists of only HTML, CSS, and JavaScript files and maybe a couple of images, but it contains no code that must be 
+  executed on the server.
+
+  Instead, all the code will be parsed by the browser and will be executed on the computers of our visitors. Therefore, 
+  we only need a Static Site Host. We don't need any hosting provider that executes code on the server. Such providers 
+  exist, and for certain projects you need them.
+
+**************************************************** Server-side routing & Required configuration ***********************
+. You might remember that when we deployed this website we were asked whether we wanna configure it as a single page 
+  application, and we chose yes.
+
+  Now this is important, but why? Well, keep in mind that on that website we have navigation. We can navigate between 
+  different pages, we can move between these different routes. And what's important to understand is that this navigation 
+  is provided by a React Router, so by a package that's part of our React project.
+
+  And that code for evaluating the URL and loading different components executes in the browser. It's even called 
+  react-router-dom. So it's a client side package. It's not executing on a server.

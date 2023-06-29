@@ -1,0 +1,191 @@
+************************************************ Module Content *******************************************************
+. What & Why?
+. Working with Class-bases Components
+. Error Boundries
+
+************************************************ What & Why? **********************************************************
+. See pdf notes
+
+. Now, I will emphasize using Functional Components, is the default and most modern approach of building Components these
+  days. And in most modern React projects, you will therefore pretty much work with Functional Components only. You might
+  never build a single class-based Component there because nowadays with the exception of error boundaries.
+
+. there is no reason to go for Class-Based Components. Except for personal preferences, of course. You can simply prefer
+  Class-Based Components, and that would be absolutely fine. You can build anything you can build with Functional Components
+  with Class-Based Components as well. It just requires a different mental model in some regards and some aspects.
+
+. Now, the Class-Based Components exist because they were required in the past. In the past, which means prior to React 
+  16.8, there were scenarios and use cases where you needed Class-Based Components. Specifically when dealing with State
+  and with side effects, you had to use Class-Based Components. Traditionally, prior to React 16.8, you could not change 
+  State in Functional Components and you couldn't really handle side effects there either. That changed with React 16.8
+  because that React version introduced a concept called React Hooks, which are all these Hooks, these functions starting
+  with use. useState and useEffect and so on.
+
+. These are functions for Functional Components, which bring features to Functional Components, which previously were 
+  reserved for Class-Based Components. And indeed, Class-Based Components can't use React Hooks. That's also important.
+  That's really important.
+
+************************************************ Adding a First Class-based Component **********************************
+. Here is the code snippet converted functional component into class-based component -
+    const User = (props) => {
+        return <li className={classes.user}>{props.name}</li>;
+    };
+
+    class User extends Component {
+        render() {
+            return <li className={classes.user}>{this.props.name}</li>;
+        }
+    }
+
+. Class-based components can work together with functional components. Users is a functional component, but it renders 
+  user, which is a class-based component. And that is absolutely no problem. A class-based component could also render
+  a functional component that would also work. In the end, these are just components, and you can mix and match them as 
+  you want.
+
+********************************************** Working with State & Events *********************************************
+. With class-based components, your state always is an object. With functional components, your state can be anything.
+  It can be just a Boolean, just a string, just a number but it can also be an object, but it's flexible it can be anything.
+  With class-based components, that's not the case Here your state always is an object because with class-based components,
+  you always group all the state's license and pieces you might need in a component into one state object. With functional
+  components instead if you have multiple state pieces, you could use multiple useState calls. You could also create just
+  one state object and group it together there but that is optional with functional components.
+
+. This setState then also always takes an object. And this object now contains the new state, you wanna set, but very 
+  important, it won't override the old state but instead react will behind the scenes merge the object you're passing here
+  with your existing state. So if I had another state here, which I don't need here if I had that and I then would set 
+  showUsers to false, showUsers would be set to false but the old state would be capped. The other state would be capped
+  because react merges this update with the existing state it doesn't override the state. And that's different with 
+  useState, here when you call the state updating function you always override the old state with whatever you pass to 
+  the updating function.
+
+. Refer Users component for state implementation in class based component
+
+****************************** The Component Lifecycle (class-based Components Only!) ***********************************
+
+. As I mentioned, you can't use these react hooks in class-based components, so you can't use useEffect but class-based 
+  components have a concept called the component life cycle. And of course, every component technically has a life cycle.
+  It, for example, is rendered to the DOM or remove from the DOM, but there are specific methods you can add to class-based
+  components to run code at different points in that life cycle.
+
+. And these are componentDidMount(), componentDidUpdate() and componentWillUnmount().
+  There are a couple of other less important to lifecycle methods, which will not take a closer look at here because these
+  three lifecycle methods are by far the most important and common ones.
+
+. componentDidMount() is called when a component is mounted. So when it was evaluated and now rendered to
+  the DOM. It's basically the equivalent to using useEffect() like this. You have your EFFECT function. every EFFECT function 
+  is executed when the component first is mounted. But if you have no dependencies if you have an empty dependencies array
+  the EFFECT function is only executed in that case. So useEffect() with an empty dependency array is basically your 
+  equivalent to componentDidMount().
+
+. componentDidUpdate() is called once a component was updated. So when something changed when your state changed and the
+  component was re-evaluated and re-rendered this is basically equivalent to useEffect with some dependencies, 
+  whenever the dependencies change, the use EFFECT function re-executes and the dependencies are re-evaluated when the
+  component is re-evaluated and was rendered again.
+
+. Now componentWillUnmount() is called right before the component is removed from the DOM, and here the equivalent is
+  basically the clean up function from useEffect that cleanup function is called right before the EFFECT function is 
+  executed again and also always again, when the component is about to be removed from the DOM.
+
+*********************************************** Lifecycle Methods in Action ******************************************
+. componentDidUpdate() : is equivalent to useEffect() with dependencies
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.searchTerm !== this.state.searchTerm) {
+        this.setState({
+            filteredUsers: DUMMY_USERS.filter((user) =>
+            user.name.includes(this.state.searchTerm)
+            ),
+        });
+        }
+    }
+
+. componentDidMount() : Let's say our dummy users are loaded from a server from a database. So we're sending an HTTP 
+  request. We're not doing that here, but let's imagine we're doing that. So initially filtered users might be an MTRA.
+  Then when the component is rendered for the first time, we wanna send a request to the server. Hence we can't use 
+  componentDidUpdate in this scenario because I don't wanna fetch the users over and over again. You might need to do 
+  that in other apps but not in this imaginary example. Instead, we wanna fetch the users when this component is rendered
+  for the first time, and that is something we would typically do with componentDidMount(). The equivalent to that in the
+  functional component world, would be to call useEffect with no dependencies or even with dependencies, it would execute
+  this function when the component is mounted for the first time, because it's treats the dependency as to have changed if
+  we had no dependency before because the component wasn't rendered and now it is rendered and different.
+
+    componentDidMount() {
+        // Send http request
+        this.setState({ filteredUsers: DUMMY_USERS });
+    }
+
+. componentWllUnmount() : Refer user component, when click on Hide User button, componentWillUnmount will be called.
+
+******************************************* Class-based Components & Context ******************************************
+. The only part which changes when you're working with context is related to how you use it in your class based components.
+  Creating context and providing context using Context.Provider remains same as in function component.
+
+. We got two ways of using context. One approach is Context.Consumer. The Context.Consumer component can be used in both
+  functional and class based components. So in your render method you could import the users context, so add it here and 
+  of course import it from the users context file. And then simply add that consumer or access this consumer component and
+  then use it
+
+    <UseContext.Consumer>
+    </UseContext.Consumer>
+
+. Since this is used in JSX only it works in both functional and class based components. But the user hook is used so that
+  we don't have to use this consumer component. So what's the equivalent to this? There is no perfect equivalent. you can 
+  do that by adding a static property, by adding the static keyword here and then adding the property named context type 
+  written like this. And then you assign a value of users context here. With that you're telling React hey this component
+  should have access to the user's context context, but you can only set the static contextType property once so if there
+  are two contexts which should be connected to one at the same component, this would simply not be an option, you would 
+  have to find some other work around like wrapping it in a number component or anything like that.
+
+  static contextType = UsersContext;
+
+  this.setState({
+    filteredUsers: this.context.users.filter((user) =>
+        user.name.includes(this.state.searchTerm)
+    ),
+  });
+
+************************************* Class-based vs Functional Components: A summary **********************************
+. You can build your entire application with class-based components if you want to. That is absolutely fine. And in the 
+  past, as I mentioned, you had to use them in some cases. But in modern React apps, you typically stick to functional 
+  components instead, simply because they are leaner and more flexible, as you learned throughout this module.
+
+. Nonetheless, I wanna emphasize that you don't have to use functional components, it is fine to use class-based ones if
+  you prefer them, but chances are that you also see the benefits of functional components, and therefore it is fine to 
+  generally ignore class-based components. 
+  
+. If you're not sure whether you wanna go with class-based or functional components, here's a little helper decision tree(See pdf), 
+  As a general rule, you should simply prefer functional components and you should instead use class-based components if 
+  you personally prefer them so if you disagree, if you like them, of course you can use them, there's nothing wrong with
+  them. If you are working on a project or if you're in a team where there are a lot of class-based components being used,
+  you might not have a choice then and you might be confusing your colleagues if you start working with functional components
+  only, and you also should use, and you must use, class-based components if you're building error boundaries.
+
+********************************************** Introducing Error Boundries ********************************************
+. Sometimes there are errors which you can't prevent or which are simply being used to transport information that something
+  went wrong from one part of the application to another part. Consider an HTTP request which is being sent. If the server
+  is temporarily not responding, the request can't complete and you will likely end up with an error being generated in 
+  your application. Now, there is nothing you can do about that as a developer, servers can be offline.
+
+. Nonetheless, if an error is generated inside of a component and we can't handle it in that component though, let's say 
+  we don't wanna handle this error in the users component, but in a parent component, instead, then we can't use try, catch,
+  because that only works in places where we write regular JavaScript statements, and if we throw an error and we wanna 
+  handle it in a parent component, our problem is that in this case here the Users component is generating that error, but
+  that is not a regular JavaScript statement here. Instead here, we have JSX code and the error is generated inside of that
+  JSX code, inside of the users component. Now, we can't wrap this JSX code with try, catch. Instead in such a case, you 
+  can build and utilize an error boundary.
+
+. The error boundary component is a regular class-based component, but it is a class-based component which implements the 
+  componentDidCatch lifecycle method. The componentDidCatch lifecycle method can be added to any class-based component, and
+  whenever you do add it to a class-based component, it makes that class-based component an error boundary. You can't add 
+  it to functional components, and there is no equivalent for functional components at the moment. So if you wanna build an
+  error boundary, it needs to be a class-based component, and then it is a class-based component, which implements this 
+  lifecycle method.
+
+. Now, what's this special thing about this lifecycle method? Well, this lifecycle method will be triggered whenever one 
+  of the child components throws an error or generates an error. Therefore, what we do in the error boundary as well is 
+  we add a render method, like an all components, and we return this props children, and that's special now. Here I return
+  this props children because I want to wrap my error boundary component around components which should be protected by 
+  that component. So we import ErrorBoundary from error boundary. And then we wrap it around any components which might 
+  throw errors which we wanna handle. And of course, you can wrap it around more than one component, it's totally up to 
+  you.
+
+  Refer ErrorBoundary.js

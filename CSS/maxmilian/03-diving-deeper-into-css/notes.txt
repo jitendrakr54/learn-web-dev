@@ -1,0 +1,300 @@
+*************************************************** Module Introduction **********************************************
+. Module Content:
+          . The Box Model
+          . Height & Width
+          . The "display" Property
+          . "Properties worth to remember"
+          . Pseudo classes & Elements
+
+*************************************************** Introducing the CSS Box Model *************************************
+. Every element in HTML is interpreted as a box by CSS and you can see that box in the Chrome developer tools if you 
+  inspect that element.
+
+. This is the box model, these layers, the content, the padding, the border, the margin, every element is interpreted
+  as such a box in CSS. Now there are two different types of elements then, block level and inline.
+
+*************************************************** Understanding the Box Model *************************************
+. Refer pdf notes
+
+*********************************** Understanding margin collapsing and removing default margins **********************
+. The first special thing can be seen if you inspect the section. There is some whitespace to the left and to the right, 
+  so after the orange margin, this is coming from the body actually. If you hover over the body, you can see the body 
+  also has a default margin, here the 8 pixels, that is simply coming from the browser defaults here. So what we can do 
+  to help prevent this and to make sure that our elements go directly into the edges of our page, we can set that margin 
+  to zero with that margin zero command.
+
+. margin collapsing, simply means the following, if you got two elements block element with its box model, the margin is 
+  the orange part here, if you got two elements next to each other, then margins between them are actually collapsed to 
+  one margin, the bigger margin wins. This is not a bug, this is on purpose. it's a good practice to use either margin 
+  top or margin bottom unless you don't worry about this collapsing occurring which of course also can be the case.
+
+**************************************** Deep Dive on "Margin Collapsing" ********************************************
+When working with margins, you can get unexpected results. 
+
+Why are two adjacent elements sharing one margin even though each element has its own one?
+Why does a parent element (e.g. <section>  as in the videos) suddenly take on the margin of the child element (e.g. <h1> )?
+It's always related to margin collapsing. You can dive deeply into it with the help of the following awesome article: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing
+
+There, three base cases are described:
+
+Adjacent siblings which both have margins
+A parent which holds one or more child elements where the first and/ or last (or the only) child has margins
+An element without content, padding, border and height
+Let's explore these cases:
+
+1. Adjacent Siblings
+
+In this case, the first element might have a margin of 10px  (on all sides let's say) and the second one has 5px  (or 20px  - the values don't matter).
+
+CSS will collapse the margins and only add the bigger one between the elements. So if we got margins of 10px  and 5px , a 10px  margin would be added between the elements?
+
+2. A parent with children that have a margin
+
+To be precise, the first and/ or last or the only child has to have margins (top and/ or bottom). In that case, the parent elements margin will collapse with the child element(s)' margins. Again, the bigger margin wins and will be applied to the parent element.
+
+If the parent element has padding, inline content (other than the child elements) or a border, this behavior should not occur, the child margin will instead be added to the content of the wrapping parent element.
+
+3. An empty element with margins
+
+This case probably doesn't occur that often but if you got an element with no content, no padding, no border and no height, then the top and bottom margin will be merged into one single margin. Again, the bigger one wins.
+
+********************************************** Theory Time - Working with shorthand properties ************************
+. Refer pdf notes
+
+. Shorthand properties are simply normal properties that combine the values of multiple other properties in a single 
+  property, the so-called shorthand property.
+
+********************************************** Applying shorthand in practice *****************************************
+. Refer main.CSS
+
+********************************************** Diving into the height & width properties ******************************
+. if you set height 100% and you expect it to now get the height of the full page, well you're going to be sad, as you 
+  can see, it now only got a little bit bigger, the only thing it now does is it includes the height of the margin, of 
+  the h1 element. The reason for that is that 100% refers to the available height given by the parent container.
+
+************************************************* Understanding Box Sizing ******************************************
+. we change the height and width of the box unsurprisingly but what exactly did we change? When we set the height and 
+  the width, did we set the height and width of the content, of the content plus the padding, of the content, the 
+  padding and the border or of the content the padding, the border and the margin.
+
+. Now if we set the padding, margin, border of the box. the height really is 528 pixels for the content, the width is 
+  100% of our content too but now the padding, border and margin add up to that. So what we actually now got is a total 
+  width and height that's bigger than what we specified.
+
+  So if Total width becomes: width of content + padding + border + margin.
+
+  This happens because all elements by default happen to have a certain way of calculating width and height which is 
+  called content box. we can set this behavior by adding the box-sizing property to the element where we want to change 
+  it. This means if we set a width and height, we set width and height of the content, not of the entire box including 
+  padding and border. We can set it to border box though, now width and height include padding and border, they don't 
+  include the margin.
+
+  It's actually so common that you often overwrite the styling for all your elements toalways use box-sizing: border-box 
+  because it's more convenient to think of the height and width referring to the entire box without margin than to just 
+  the content.
+
+  if you want to reset all elements to have a certain behavior, like using box sizing border box, then you use the star, 
+  the universal selector because this is now not using inheritance, it's not using the same mechanism as setting some 
+  body had, it's really targeting every element on its own, hence overwriting inheritance and also overwriting browser
+  defaults and sets the box sizing to border box.
+
+************************************************ Adding the Header to our Project **************************************
+. Added header element in html and styled that using main-header class.
+
+************************************************ Understanding the display property ***********************************
+. The display property allows us to change the behavior of an element from block to inline or even to inline-block which 
+  is a mixture or to none to remove it from the DOM even.
+
+. In HTML, we got inline and we got block level elements, example for inline elements would be anchor tags, they are 
+  rendered inline. If we have two anchor tags after each other as here for customers and we reload the page, we see 
+  they're rendered in the same line, they don't take the full entire width as block level elements do. 
+  
+  That on the other hand is what block level elements do. If we inspect a list item, so not the anchor tag side of it, 
+  just the list item, you can see the blue content takes the full available width minus margin padding, what's taken up 
+  by other elements surrounding it, the anchor tag again only takes the width its content needs. 
+  
+  Both actually use the box model, though for the inline element, we can't really set a margin top and bottom for 
+  example because that's not how inline elements work, they are not positioned in the flow like block level elements,
+  they don't take a new line necessarily, hence margin top and bottom is difficult because they might be inline with 
+  another element. So that's the difference and we can change that behavior with the display property
+
+. We can set our class which we assign to a list item, so the main-nav__item class, we can set that in our CSS code,
+  don't forget the dot, to display inline-block, this mixes the behavior of both inline and block level elements. Like 
+  inline elements, these elements can go next to each other now but they still behave like block level elements when it
+  comes to setting top and bottom margins, setting paddings, things that are not possible on inline elements.
+
+************************************************ display: none vs visibility: hidden ***********************************
+. We had a look at display: none;  - this value removes the element to which you apply it from the document flow. This 
+  means that the element is not visible and it also doesn't "block its position". Other elements can (and will) take its 
+  place instead.
+
+  There is an alternative to that though.
+
+  If you only want to hide an element but you want to keep its place (i.e. other elements don't fill the empty spot), 
+  you can use visibility: hidden; 
+
+  Here's a visual example:
+
+    .box-1 {
+      display: none;
+    }
+ 
+    .box-2 {
+      display: inline-block;
+    }
+
+  The first element just isn't displayed. It's still part of the DOM though, you can still access it via JavaScript for 
+  example.
+
+  Here's an example for visibility: hidden :
+
+    .box-1 {
+      visibility: hidden;
+    }
+ 
+    .box-2 {
+      display: inline-block;
+    }
+
+  The element is only invisible, it's not removed from the document flow and of course also not from the DOM.
+
+************************************************ HTML Refresher: Block-level vs Inline Elements ***********************
+. It's not really a CSS topic, though it's related to it: The difference between block-level and inline elements.
+
+  You can find a free YouTube video about this topic here: https://www.youtube.com/watch?v=A5z_mxjjwKw
+
+  Here's the executive summary:
+
+  Block-level elements are rendered as a block and hence take up all the available horizontal space. You can set 
+  margin-top and margin-bottom and two block-level elements will render in two different lines.
+
+  Some examples are: <div> , <section> , <article> , <nav>  but also <h1> , <h2>  etc and <p> .
+
+  Inline elements on the other hand only take up the space they require to fit their content in. Hence two 
+  inline-elements will fit into the same line (as long as the combined content doesn't take up the entire space in which 
+  case a line break would be added).
+
+  They also use the box-model you learned about but margin-top  and margin-bottom  have no effect on the element. 
+  padding-top  and padding-bottom  also have a different effect. They don't push the adjacent content away but they will 
+  do so with the element border. You can read more about that behavior in the following article: https://hacks.mozilla.
+  org/2015/03/understanding-inline-box-model/
+
+  Additionally, setting a width  or height  on an inline element also has no effect. The width and height is auto to 
+  take as much space as required by the content.
+
+  Logically, this makes sense since you don't want your inline elements to destroy your multi-line text-layout. If you 
+  want to do so or need both block-level and inline behavior, you can set display: inline-block  to merge behaviors.
+
+  Some example elements are: <a> , <span> , <img> 
+
+******************************************** Applying the display property & styling our navigation bar ***************
+. Inside header, we still have div and nav which are in two different line which is a propblem. So  we nned make it in
+  one line.
+
+  We do it by setting display property of both div and nav to inline-block.
+
+******************************************* Understanding an unexpected "inline-block" behavior ***********************
+. The space between div and nav is considered as another inline element and henec nav doesn't get width to accomodate 
+  itself, so we need to provide more width by substracting from total width.
+
+******************************************* Working with "text-decoration" & "vertical-align "***********************
+. .main-nav {
+    display: inline-block;
+    text-align: right;
+    width: calc(100% - 70px);
+    vertical-align: middle; // to align verticallly in middle
+  }
+
+***************************************************** Styling anchor tag **********************************************
+. .main-nav__item a {
+    color: #0e4f1f;
+    text-decoration: none;
+  }
+
+***************************************************** Adding pseudo classes ******************************************
+. .main-nav__item a:hover {
+    color: white;
+  }
+
+  .main-nav__item a:active {
+    color: white;
+  }
+
+************************************************** Theory Time - Pseudo classes & Pseudo elements *********************
+. Pseudo classes define a style or allow us to define a style for a special state of an element, like the hover or 
+  active state. 
+  
+  Pseudo elements allow us to define a style of a specific part of an element. Pseudo classes are defined with a single 
+  colon and then the class name like hover or active and pseudo elements are defined by adding two colons and then the 
+  element name and it's about the state versus the part, that's the difference.
+
+  p::first-letter {
+    color: red;
+    font-size: 20px;
+  }
+
+. Very interesting are the after and before pseudo elements, they actually allow you to render content through CSS and
+  this should only be helpful content which adds to the design, not crucial page content, such content should always go 
+  into HTML especially for accessibility reasons.
+
+  .main-nav__item a::after {
+    content: " (Link)";
+    color: red;
+  }
+
+  this pseudo element can be helpful to render a little helper icon after a text.
+
+************************************************** Grouping Rules *****************************************************
+. If we have common ruleset then we can group those rules using comma then if we ever need to change something then we 
+  can change at one common place.
+
+  .main-nav__item a:hover,
+  .main-nav__item a:active {
+    color: white;
+  }
+
+************************************************** Working with "font-weight" & "border" ******************************
+. Added "font-weight" to anchor and border to anchor when hovers
+
+************************************************** Adding & styling a CTA-Button **************************************
+. .main-nav__item--cta a:hover,
+  .main-nav__item--cta a:active {
+    color: #ff1b68;
+    background: white;
+    border: none;
+  }
+
+  need to fix why hover effect doesn't apply on whole li
+
+************************************************** Adding & background image to our project ***************************
+. #product-overview {
+    background: url("freedom.jpg");
+    width: 100%;
+    height: 528px;
+    padding: 10px;
+  }
+
+************************************************** Properties worth to remember **************************************
+. See pdf notes
+
+
+************************************************** Wrap up ***********************************************************
+. We had a look at the box model, a core concept of CSS, every element is treated as a box, no matter if it's an inline 
+  or a block level element, it's treated as a box. The difference just is for inline elements, margin top and bottom 
+  don't have an effect, they are applied but you don't see it but besides that, everything is a box and understanding 
+  that you can set content, padding, border and a margin is crucial.
+
+************************************************** Useful Resources & Links *******************************************
+CSS Box Model: https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Box_model
+
+box-sizing : https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing
+
+More on height & width: https://www.w3schools.com/css/css_dimension.asp
+
+The display  Property: https://developer.mozilla.org/en-US/docs/Web/CSS/display
+
+Pseudo Classes on the MDN: https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes
+
+Dive deeper into Pseudo Elements: https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements
+
+

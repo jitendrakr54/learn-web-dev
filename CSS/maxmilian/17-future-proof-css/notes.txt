@@ -1,0 +1,207 @@
+************************************************ Module Introduction ***************************************************
+
+
+******************************************** CSS Modules & their working groups ****************************************
+. Refer: https://www.w3.org/TR/tr-groups-all#tr_Cascading_Style_Sheets__CSS__Working_Group
+
+************************************************** Using CSS variables *************************************************
+. CSS variables are a relatively new feature which allow you to put that reused value into a variable which you defined 
+  with this strange looking syntax, --my-color. Now this is a property which kind of exists, the browser understands that
+  this now should become a custom variable and then you can reuse that variable with that var function.
+
+  And there also is a special syntax which you see at the very bottom where we provide a second value, this is a fallback
+  value in case the variable is not defined yet.
+
+    :root {
+      --dark-green: #0e4f1f;
+      --highlight-color: #ff1b68;
+    }
+
+    .main-header__brand {
+      color: var(--dark-green);
+      text-decoration: none;
+      font-weight: bold;
+      /* width: 20px; */
+    }
+
+  Advantage of the CSS variables is that we define them once and if we ever decide to change this color, we only need to 
+  do it in one place and the same of course if we were to define a font size or something.
+
+  The disadvantage is the browser support as I mentioned, right now, Internet Explorer doesn't support it,
+
+. Refer https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
+
+****************************************************** Vendor Prefixes *************************************************
+. our users are able to use different browsers and different browsers implement new features differently and at different
+  speed. Once a certain feature reaches recommendation state, you saw that earlier in this module, it should be implemented
+  in all browsers equally but until then, each browser might not implement it or implement some of its features or maybe 
+  implement some features differently than other browsers do, simply to try how it works, how the users of that browser 
+  use that feature and so on. For this, we got vendor prefixes.
+
+  This is a mechanism which allows browser vendors to implement an upcoming feature in an early version without breaking 
+  the feature when it finally gets released, here's an example, flexbox. We add it by setting display to flex and nowadays, 
+  the support for this is pretty good.
+
+  A few years ago when that standard was brand new and in very active development, browsers started to implement flexbox 
+  step-by-step by implementing prefixed versions of the flex value, here are some examples. Now the interesting thing here
+  is these are special values which only work in some browsers, for example -webkit-box works in older versions of Safari,
+  -webkit-flex in newer versions, MS flexbox in Internet Explorer and Edge. So these values are not understood by other 
+  browsers but they don't need to understand it because they either already implement the flex value or their own prefixed 
+  version.
+
+. Why do we use these prefixes at all, why don't they just all use flex?
+
+  Because if the standard then changes or becomes finalized and they therefore all implement the same specification, then
+  if they suddenly overwrite the flex value to now work different than it used to be, a lot of websites that were early
+  adopters of that technology would get broken. Therefore they have their early adopter implementation, the prefixed 
+  version which they don't change even if the standard changes or becomes final and then they implement their final version
+  once that is the case. So now they got different implementations and this allows you a developer to use these features 
+  ahead of time.
+  
+  It also ensures that your webpage won't suddenly break and it also, that's another advantage, allows you to safely 
+  implement a certain feature which will still work, at least to some extent, even in older browsers because let's say an
+  older version of Safari already supported flexbox with -webkit-box but didn't support it with display flex. Well, if you
+  also provide that vendor prefix, it will understand this, it won't understand the other values for display but it will 
+  then just ignore them, that's how the web works and therefore, you can still use flexbox even in that older version, 
+  even though it doesn't support flex yet. So vendor prefixes are really great as they allow us to implement new features
+  ahead of time and even support older browsers.
+
+    .main-header {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+    } 
+
+. Refer https://developer.mozilla.org/en-US/docs/Glossary/Vendor_Prefix
+
+************************************************* Which prefixes should you use? ****************************************
+. Refer http://shouldiprefix.com/
+
+. There is a tool for that, auto prefixer. You can simply google for CSS auto prefixer and you should find this Github page
+  here, post CSS auto prefixer. This is a tool which automatically fetches a list of properties you should prefix and then
+  adds these prefixes to your code, so it simply runs over your code and adds the prefixes and you specify which browsers
+  you want to support and based on that list of browsers you want support, it does the prefixing.
+
+. Refer shared.prod.css
+
+********************************************* Detecting browser support with @supports *********************************
+. @supports allows you to check for feature-support before using a property.
+
+  @supports (display: grid) {
+    body {
+      display: grid;
+      grid-template-rows: 3.5rem auto fit-content(8rem);
+      grid-template-areas:
+        "header"
+        "main"
+        "footer";
+      padding-top: 0;
+      height: 100%;
+    }
+  }
+
+. Refer https://developer.mozilla.org/en-US/docs/Web/CSS/%40supports
+
+*********************************************************** Polyfills **************************************************
+. A polyfill is a Javascript package which enables certain CSS features in browsers which would not support it otherwise.
+
+  Now obviously, we learned about vendor prefixes, which help us support older browsers and about the supports query which
+  helps us implementing nice fallbacks. Sometimes, there is no prefix we can use because some browsers simply doesn't 
+  support a feature, not even with a prefix and we also don't want to implement a fallback, we want to use that cool 
+  feature which we can use in modern browsers too.
+
+  For some CSS features, so-called polyfills exist. These are Javascript packages which you can download and import into 
+  your code and they will simply parse your CSS code and then style your page accordingly with some Javascript logic,
+  so they basically implement a certain feature by falling back to other CSS features and kind of replicating that look you
+  want it to have. Now polyfills are not available for every CSS feature though, for example for the grid, there are no 
+  polyfills because the grid uses some techniques that simply can't be replicated easily with vanilla CSS and Javascript
+  but for some features, polyfills are an option.
+
+. Polyfills come at a cost, it's a Javascript package you download, you add and you import into your HTML file. Therefore,
+  your users have to download it and then it will execute, it will parse the DOM, it will manipulate some styles, these 
+  all impacts the performance of your page. So especially for bigger polyfills because some feature might be very 
+  complicated to replicate, you should really consider if implementing a fallback, with supports or something like that, 
+  isn't a better solution. If you come to the conclusion that it isn't, polyfills are a great tool but you should really 
+  use them with care and use them rarely.
+
+*************************************************** Eliminating cross-browser inconsistencies ***************************
+. Another problem we face besides some features not being supported in some browsers are cross-browser inconsistencies, 
+  this means that different browsers use different defaults. You remember this default styling some elements get? The 
+  default font size of h1 tags, the default font family which gets used, things like that, browsers implement that 
+  differently. For some elements, we might have different margins or paddings, different box sizing behavior, that box 
+  sizing is set to border box in some browsers for some elements by default for example and so on.
+
+. Therefore, you can implement some reset libraries like normalize.css, which is a CSS package you add as one of the first
+  imports or as the first import in your HTML file, which basically overwrites some of the global browser defaults.
+  So for example, this could set box sizing to border box for all elements or you do that manually of course. For example 
+  in our code, in the shared.css file, we are doing such a reset with a universal selector where we set box sizing to 
+  border box. This is one of the things normalize.css or other packages like it might do for you, you can of course do it
+  on your own.
+
+****************************************************** How to name css classes ******************************************
+. use kebab case,
+
+  so this is class name style where you use lowercase characters and separate words with dashes. It's important because 
+  CSS is case insensitive, so if you use snake case for example, where you have one word and separate the words with 
+  uppercase characters, this is not something CSS understands, for CSS, snake case with a capital C is the same as snake 
+  case with a lowercase c. So if you got two classes with the same name and you think they are different, they aren't and
+  this can lead to strange behaviors.
+
+  Additionally since you can't use this snake case version, you would have to use really long words without any separators
+  which are hard to read, so use kebab case, it's easy to read, easy to understand and the browser understands it too.
+
+. Refer pdf for other rules
+
+. In this course, I actually try to follow a convention which is called Block Element Modifier styles, BEM. This is a 
+  convention which makes sure that we name our classes in a uniform and consistent way across our project and that we also
+  prevent clashes because as you can imagine, the bigger your project gets, the higher the chance of you reusing some class
+  name unintentionally and all of a sudden, you might overwrite the style somewhere else in your page without you noticing
+  it at first. Therefore BEM enforces a certain way of naming are classes which should minimize this risk.
+
+. Refer pdf notes
+
+**************************************************** "Vanilla CSS" vs CSS Frameworks ***********************************
+. Foundation or Bootstrap 4. These are simply third-party CSS packages, often they also come with Javascript portion for 
+  some interactive elements but in general, they are packages of code which give you prestyled components and utility 
+  classes.
+
+  So in the end, they expose a bunch of CSS classes which you can start using and if you apply one of their class to one 
+  element, it immediately looks in a certain way because they did the styling.
+
+. There also are utility frameworks like Tailwind CSS which are also giving you some help, they offer you some styles in 
+  which you can build up on, they give you some utility classes but they don't give you prestyled components, they don't 
+  do all the work for you.
+
+  this is kind of an alternative to Bootstrap but it follows a different approach. This does not offer with a bunch of 
+  components, you'll find no single component here, instead it offers a bunch of utility features. It also offers some 
+  layouting system which makes it easier for you to position elements and it does so by also exposing utility CSS classes
+  which you can add to your code and these classes allow you to quickly achieve certain looks and styles and behaviors.
+
+  Here, you've got more control over the final outcome and the look of that outcome but you still can build up on some of
+  the utility classes without writing everything from scratch on your own.
+
+. Refer pdf notes
+
+********************************************************* Wrap Up ******************************************************
+. Refer pdf notes
+
+
+
+**************************************************** Useful Resources & Links ******************************************
+
+CSS Modules & Working Groups: https://www.w3.org/TR/tr-groups-all#tr_Cascading_Style_Sheets__CSS__Working_Group
+
+CSS Variables: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
+
+Vendor Prefixes: https://developer.mozilla.org/en-US/docs/Glossary/Vendor_Prefix
+
+Which Vendor Prefixes should you use? => http://shouldiprefix.com/
+
+@supports: https://developer.mozilla.org/en-US/docs/Web/CSS/%40supports
+
+BEM in Detail: http://getbem.com/introduction/
+
+An introduction to Bootstrap 4: https://academind.com/learn/css/bootstrap-4-tutorial/
+
+CSS Polyfills: https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills

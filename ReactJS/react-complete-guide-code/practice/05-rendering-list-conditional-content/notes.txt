@@ -1,0 +1,184 @@
+******************************************* Module Introduction ********************************************************
+. Outputting Dynamic lists of content
+. Rendering content under certain conditions
+
+******************************************* Rendering lists of data ****************************************************
+. Get rid of hard coded expenses in Expenses component and applied map() on expenses array
+  eg:
+    return (
+        <Card className="expenses">
+            <ExpensesFilter
+                selected={filteredYear}
+                onChangeFilter={filterChangeHandler}
+            />
+            {props.items.map((expense) => (
+                <ExpenseItem
+                title={expense.title}
+                amount={expense.amount}
+                date={expense.date}
+            ></ExpenseItem>
+            ))}
+        </Card>
+  );
+
+********************************************* Using stateful lists *****************************************************
+. In App component, we have addExpenseHandler() function, which has triggered whenever a new expenses added. And we even 
+  received the expense as a parameter here. So all we got to do is we have to add this expense to this expenses array.
+  But of course, if we just edit like this nothing would happen because you already learned that just because you change
+  some variable, React won't update the component. Instead to achieve that, you need to use state.
+  eg:
+    const App = () => {
+        const [expenses, setExpenses] = useState(DUMMY_EXPENSES);
+
+        const addExpenseHandler = (expense) => {
+        // setExpenses([expense, ...expenses]); not a correct way
+
+        setExpenses((prevExpenses) => {
+            return [expense, ...prevExpenses];
+            });
+        };
+
+        return (
+            <div>
+            <h2>Let's get started!</h2>
+            <NewExpense onAddExpense={addExpenseHandler} />
+            <Expenses items={expenses} />
+            </div>
+        );
+    };
+
+************************************************* Understanding "Keys" ************************************************
+. So why are we getting this key warning? After all it looks like everything works. Well React has a special concept when
+  it comes to rendering lists of data a concept which exists to ensure that React is able to update and render such lists
+  efficiently without performance losses, or bugs, which may occur.
+
+  So what actually happens here when I add a new item is that React, renders this new item as the last item in this list 
+  of div's and updates all items and replace their content, such that it again matches the order of the items in my 
+  Array. And this is not great. This is happening because to React all these items look similar and it only sees that my 
+  Array changed that it's now longer than before. And hence it simply renders an additional div and it adds that at the 
+  end. And then it simply walks through all the items and updates the content inside of every item to match the Array 
+  content again. The final result, therefore is correct here but from a performance perspective this is not great 
+  because all items are visited and updated and it can even lead to bugs. If the expense items would be state full items
+  and we would have some state managed inside of that.
+
+  why does React, behave like this? The answer is because it has no other way. It currently simply checks the length of 
+  the Array and then has a look at the number of items that were already rendered. The individual items all look similar 
+  to React though so it can't know where a new item should be added or anything like that. That's why we get this 
+  warning because we have a way of telling react where a new item it should be added. And we do that by going to the 
+  place where we output our list of items. So does map method here and we then add a special prop to this item here. 
+  
+  And that's the "key" prop. This is not a prop we are using instead of expense item but instead it's a prop you can add 
+  to any component no matter if it's a custom component by you or if it's a built in HTML element, you can always add 
+  this. And if you do add it, if you add the key to your component or HTML element, then you can help React identify the 
+  individual items. For that you need to set a unique value per list item and dat, for example in this case here would be
+  the expense ID because in our expenses Array, every item has a unique ID. So long story short. You should always add 
+  such a key when mapping out lists of items.
+
+. Keys help React identify which items have changed, are added, or are removed. Keys should be given to the elements 
+  inside the array to give the elements a stable identity.
+
+  When the state of your component changes, the render function will return a new tree of React elements, different to 
+  the previous/current one. React needs to figure out what are the differences to efficiently update the UI with the 
+  most recent changes. This process of matching both element trees is called reconciliation.
+
+*********************************************** Assignement 1 **********************************************************
+. Display expenses as per selected filteredYear
+
+    function Expenses(props) {
+        const [filteredYear, setFilteredYear] = useState("2020");
+
+        const filterChangeHandler = (selectedYear) => {
+            setFilteredYear(selectedYear);
+        };
+
+        const filteredExpenses = props.tems.filter((expense) => {
+            return expense.date.getFullYear().toString() === filteredYear;
+        });
+
+        return (
+            <Card className="expenses">
+            <ExpensesFilter
+                selected={filteredYear}
+                onChangeFilter={filterChangeHandler}
+            />
+            {filteredExpenses.map((expense) => (
+                <ExpenseItem
+                key={expense.id}
+                title={expense.title}
+                amount={expense.amount}
+                date={expense.date}
+                ></ExpenseItem>
+            ))}
+            </Card>
+        );
+    }
+
+********************************************** Outputting conditional content ******************************************
+. In Expenses.js, we render our list of expense items, but if our filtered expenses, array turns out to be empty, we 
+  render nothing. Now, we might wanna instead render a message telling the user that we have no items for the chosen 
+  filter. And for that, we wanna render content conditionally. How can we do that? Well, we can again add a dynamic 
+  expression here in our JSX code and simply use a condition here. I'm not talking about an if condition because long 
+  statements like this, the same is true for four loops are actually not allowed here between these curly braces, but we 
+  can use a ternary expression here.
+
+    return (
+        <Card className="expenses">
+            <ExpensesFilter
+                selected={filteredYear}
+                onChangeFilter={filterChangeHandler}
+            />
+            {filteredExpenses.length === 0 ? (
+                <p>No expense found!</p>
+            ) : (
+                filteredExpenses.map((expense) => (
+                <ExpenseItem
+                    key={expense.id}
+                    title={expense.title}
+                    amount={expense.amount}
+                    date={expense.date}
+                ></ExpenseItem>
+                ))
+            )}
+        </Card>
+    );
+
+********************************************* Adding conditional return statements *************************************
+. Added ExpensesList component and used in Expenses component
+
+    const ExpensesList = (props) => {
+        if (props.items.length === 0) {
+            return <h2 className="expenses-list__fallback">Found no expenses!</h2>;
+        }
+
+        return (
+            <ul className="expenses-list">
+            {props.items.map((expense) => (
+                <ExpenseItem
+                key={expense.id}
+                title={expense.title}
+                amount={expense.amount}
+                date={expense.date}
+                ></ExpenseItem>
+            ))}
+            </ul>
+        );
+    };
+
+********************************************* Assignement 4 ************************************************************
+. Add a button "Add Expense", and when clicked form should be opened and after submitting or cancelling form, form should
+  be hidden and button should be shown.
+. Refer isEditing in NewExpense component
+
+********************************************* Demo App : Adding a Chart ************************************************
+. Created Chart sub-folder, Added Chart component, used ChartBar component in Chart component using dataPoints.
+. Passed all required props to ChartBar component
+
+********************************************* Adding dynamic styles ****************************************************
+. Use style attribute, it's same in JSX as HTML attribute
+. Use curly brace as we use for props then Pass object containing stylesheet as below
+. If stylesheet has multi word property something as background-color then need to quote as 'background-color' or in 
+  camel notation backgroundColor
+
+  style={{ height: barFillHeight,  backgroundColor: 'red'}}
+
+******************************************** Wrap Up & Next Steps ******************************************************

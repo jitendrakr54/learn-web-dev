@@ -1,0 +1,79 @@
+*************************************************** What is React.js? *************************************************
+. Traditionally in websites, when we, for example, clicked a link or a button, our request was sent to a server and a 
+  new HTML page was sent back to the browser where it then could be displayed. And therefore, traditionally, websites 
+  could feel a bit clunky, we might have that latency where we wait for this new HTML page to load and so on.
+
+  And it's this request and response cycle, which we can break up with JavaScript. So at this point we don't even need 
+  React, it's just a JavaScript which can help us here. Because JavaScript is a programming language that allows us as a 
+  developer to run logic in the browser. And the great thing about that logic in the browser is that it can do things 
+  that manipulate what the user sees.
+
+  JavaScript in the browser is able to manipulate to so-called Dom, the HTML elements that are rendered onto the screen.
+  We can manipulate this with JavaScript. And that allows us to change what the users sees without fetching a new HTML 
+  page. We don't need to request a new HTML page just to present something different to the user. So that's why 
+  JavaScript can help us.
+
+  And since React is a JavaScript library, it looks like it can also help us with that. It might be an extra building 
+  block, and indeed, React.js is a client-side JavaScript library. It helps us with writing that client-side JavaScript 
+  code and it's all about building modern reactive user interfaces for websites.
+
+. React is open source library for building user interfaces. it's not a framework. It only focuses on building rich user
+  interfaces, so it doesn't have Routing, http and so on.
+
+. React has component based architecture, this lets you break down your application into small encapsulated part then 
+  compose into more complex UIs. for example traditional website can be broken down into header, side-nav, main-content
+  and footer. Components also makes us to write re-usable code. for example, you can have the component for an article 
+  on react, same component can be reused for articles on other section.
+
+. React is declarative so we have to tell react what we want and react with its react DOM library will build the actual 
+  UI.
+
+*************************************************** Why React instead of "Just JavaScript" ****************************
+. JavaScript uses imperative approach to build application because We simply describe action after action, step after 
+  step and that can reach its limits. And in addition, even if we don't reach any limits, we as a developer have to take 
+  care about all the nitty-gritty details. We have to run the low level code for creating a button, for setting it's 
+  text content. And therefore in the end, we reinvent the wheel, over and over again, doing repetitive tasks.
+
+. We, as a React developer, work on a higher level, which makes working with React and which makes building complex user 
+  interfaces way easier. And that is why we want to use React.js, it makes building modern, rich, complex user 
+  interfaces easier. And it does so, by giving us a higher level syntax, where we write code in a declarative way, in a 
+  declarative component-focused way, we define what we wanna have on the screen. What the end goal is. We create these 
+  custom HTML elements and React will do the rest.
+
+*************************************************** Building Single-Page-Applications (SPAs) **************************
+. when working with React we often build so-called Single Page Applications. Because whilst we can use React to control 
+  parts of an HTML page, let's say some interactive sidebar, and therefore we add a widget, you could say to a page 
+  where only a part of the page is controlled with React.
+
+  It is more common to control the entire page with React. Which means that we use React for everything we see on the 
+  screen and even for switching pages. So when we click on a link and we load a new page as I did with Netflix when I 
+  clicked on my list it looks to the user as if we switched a page but we actually don't request a new HTML file from 
+  some server. Instead we just used JavaScript through React.js to change what's visible on the screen. And that often 
+  leads to a smoother UI and a better user experience.
+
+. As you see it at the example of Netflix. It's built with React and there we never request a second HTML page. Hence 
+  it's a Single Page Application where after the initial request to decide React takes over and controls what we see on 
+  the screen.
+
+. Developed by facebook in 2011.
+
+. React racts to state changes.
+
+
+. Both React and Angular are same in terms of component based architecture. However angualr is a framework, a complete 
+  solution, while React is a library. 
+  
+  So with Angualr, we don't have to rely on community for building an web application, everything comes under framework. 
+  Ract only takes care of the view and making sure view is in sync with state. that's all React does, nothing less, 
+  nothing more. For this reason React has very small API to learn. So when building application with React we need to 
+  use other libraries for things like routing or calling http services.
+
+. What is SPA:
+  A single-page application (SPA) is a web application or website that loads only one HTML page and dynamically updates 
+  it with new data from the web server as the user interacts with it. The aim is to make the website more responsive
+  and similar to a desktop or native application. Some examples of SPAs are Gmail, Google Maps, Airbnb, Netflix, Pinterest, and
+  Paypal.
+
+  A single - page application (SPA) is a web application or website that interacts with the web browser by dynamically 
+  rewriting the current web page with new data from the web server, instead of the default method of the browser loading 
+  entire new pages. In React, this is achieved using Browser Router, often just called React Router and Link.

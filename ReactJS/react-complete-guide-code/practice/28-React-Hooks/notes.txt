@@ -1,0 +1,44 @@
+************************************************ Module Introduction **************************************************
+. Why this module? : Refer pdf notes
+
+. Module Content:
+        . What are "React Hooks"?
+        . Using React hooks with function component
+        . Rules of hooks & custom hooks
+
+************************************************ What are "React Hooks"? **********************************************
+. Refer pdf notes
+
+. Now, Functional Components, historically without React Hooks were limited to outputting content. You could only use 
+  Functional Components for outputting something. They received props and returned JSX. You were not able to change some 
+  internal state in those components in the past. Nowadays you are, but in the past, this was not possible.
+
+  That's why we had two different ways of building Components. That's why we had Class-based Components and we still 
+  have those by the way. You can still write Class-based Components and there is nothing wrong with that. But with the 
+  React Hooks, you actually don't need to create Class-based Components anymore. But in the past, we had to do that 
+  because in the past only Class-based Components could contain and manage "state," which of course is important to 
+  change what your application shows on the screen. 
+  
+  But the downside with Class-based Components was and is that they have more overhead, more extra code than Functional 
+  Components. Functional Components are very lean. It's just a function that returns JSX, Class-based Components need a 
+  constructor maybe to initialize a  state. You might add extra life cycle methods and therefore Class-based Components 
+  can quickly grow in size. They also suffer from other potential problems, but they definitely are more code to write
+  than Functional Components.
+
+  But because Class-based Components were the only kind of Components that could manage "state," you had to convert 
+  Functional Components to Class-based Components if you wanted to manage "state," or if you wanted to add lifecycle 
+  methods prior to React 16.8, but with the release of React version 16.8 in 2018, React Hooks were introduced.
+
+. React Hooks is a feature that now allows you to manage "state" in Functional Components and to kind of add life cycle 
+  methods there as well. Now React Hooks are just special JavaScript functions provided by React.JS. And these special 
+  functions can only be called and used therefore in Functional Components.
+
+  You can't use React Hooks in Class-based Components. Now, to mark those special functions so that you don't 
+  accidentally use them in the wrong place, they all start with the "use" word. The built in React Hooks are all called 
+  useState, useEffect, useRef, and so on. 
+  
+  Now these extra functions when called in your Functional Components, then add extra functionality, extra capabilities 
+  to your Functional Components. For example, with the useState hook, you can add the functionality to manage and change 
+  state in a Functional Component. And that's why React Hooks are amazing because with them, you don't need to switch 
+  between Functional and Class-based Components. Instead, you can build your entire React application with Functional 
+  Components only.

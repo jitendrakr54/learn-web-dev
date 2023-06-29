@@ -1,0 +1,265 @@
+It's a language based on CSS which is not understood by the browser.
+Sass: Syntactically Awesome Style Sheets
+
+****************************************************** What is Sass & Scss *********************************************
+. SASS stands for Syntactically Awesome Style Sheets and SASS, as I already mentioned, does not run in the browser, 
+  instead it extends CSS during development only. Now what does this mean? You can think of it like this; during 
+  development, you as a developer, you want to save time and you want to write clean reusable code that's easy to 
+  maintain and to adjust. With CSS, you can quickly end up with huge CSS files, with dozens, hundreds or thousands of 
+  rules. Now managing this can be cumbersome and you also find yourself repeating certain things a lot, so it would be 
+  nice if you had a more condensed, easier syntax, maybe something that allows you to nest CSS selectors into each other 
+  for example and SASS simply offers such features.
+
+. The important thing is of course that you can only use it during development, so it needs to be compiled to normal CSS 
+  before you can ship it to production because the browser doesn't understand SASS. So the idea is that you as a developer
+  can write SASS/SCSS code and then you let some tool compile it to normal CSS.
+
+. SASS Features: What we can generally do with SASS is we can nest CSS rules to shorten our code, we can inherit from other
+  rules so that we don't have to repeat ourselves as often, we can use helper functions to achieve certain things, like 
+  making a color a bit more brighter or things like that. We can add mixins to create reusable snippets of code you could
+  say and I will show you how this works. 
+  
+  We can split our code into multiple files easily with partials. We can define variables, let's say if a certain hex code
+  of a color gets used a couple of times on our page, instead of writing that hex code every time and changing it whenever
+  we change the color, we can simply store it in a variable and use that variable and we can also use conditions and loops
+  and a couple of other features.
+
+****************************************************** Installing Sass ************************************************
+npm install -g sass
+
+****************************************************** Nesting Selectors **********************************************
+. create new file - main.sass
+
+. SASS actually works without semi-colons and without braces, instead indentation is used to determine to which selector
+  a certain property belongs. So if we were to convert main.css code to valid SASS code, we would remove all these 
+  semi-colons and we would remove all the curly braces.
+
+. Now you might like this or you may not like this, this is really something which differs from person to person. Most 
+  people find SCSS a bit easier though, it uses the same features as SASS does but it actually keeps the CSS syntax with
+  the semi-colons and the curly braces. 
+
+  Created main.scss
+
+. For documentation links, we nest a list item, we nest documentation link and we nest documentation link hover and active.
+  So what we can do is, we can go to documentation links and simply add another selector nested into this selector, so 
+  next to the other properties. With normal CSS, this would not be possible but now, this will actually be converted to 
+  this syntax here.
+
+. Now how do we turn this into normal CSS though because this would not run. We need the command line. and there we run -
+    "sass main.scss main.css"
+
+  this will now generate the main.css file, it also gives us a map file which is a source map file which makes it easier
+  for the browser to map our code to the original source code but we don't have to worry about that right now.
+  In the new main.css file though, you can see that instead, it automatically created these nestings we had in there 
+  before. So we get the same code as before but now generated automatically by the SASS command.
+
+. if you don't want to rerun this command whenever you make a change in your .scss file, then you can also enter -
+    "sass --watch main.scss:main.css"
+
+  Now this will enter watch mode and as you see, this is now an ongoing process which you can quit with control c and now
+  whenever we change something in that file and save that file, it will automatically recompile.
+
+****************************************************** Adding Nested properties ****************************************
+. In main.scss, we have below flex properties in .container:
+      .container {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: center;
+        padding: 3rem 0;
+        box-sizing: border-box;
+      }
+
+  Here we got two properties from the flex namespace; flex direction and flex wrap. Now we can nest these two properties
+  as well and these will be converted back to normal css.
+      .container {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        flex: {
+          direction: column;
+          wrap: nowrap;
+        }
+        align-items: center;
+        padding: 3rem 0;
+        box-sizing: border-box;
+      }
+
+  If they're from the same namespace, so if they start with the same part here, flex-, font- and so on.
+
+****************************************************** Understanding variables ****************************************
+. Now variables allow us to define a certain value and reuse it throughout our code, for example that color here. This 
+  color, this exact color is getting used a lot as you can see, here we use it quite a lot in our code. Now if we define 
+  it like this and we ever decide we want to use a different color, we have to go to all these places in our code and 
+  manually adjust it, which is not super comfortable.
+
+  So what we can do typically at the top of the file, we can define a so-called variable, a feature which is also available
+  in next gen CSS, but which is also available here in SCSS and when using variables in SCSS, you of course have the great
+  benefit that it will be compiled to code which does not use CSS variables, so which will run in all browsers and not 
+  just in more recent ones. So this is a great way of using variables without having to support cutting edge browsers only.
+
+  $main-color: #521751;
+
+****************************************************** Storing lists & maps in variables ********************************
+. A list simply is a variable that holds more than one value, a typical example would be something like the box shadow here,
+  this is a list of values, it's not just one value, it's a list of values and of course we could store each value 
+  individually in a variable and then construct this from multiple variables but it's easier if we just store this.
+  Another example could be border and font-family
+
+    $border-default: 0.05rem solid $main-color;
+  
+  Now as I mentioned, you can basically put anything you find on the right side of a colon into a variable but this 
+  officially is named a list because it's more than one value.
+
+. we've got a couple of different colors in our app, as we actually do. We do have that purple color. I want to create a 
+  map of colors, obviously we could use main-color, we could use secondary-color and we could store all these colors and
+  variables and there would be nothing wrong with that but sometimes you want to have more structure and you want to group
+  your variables and map allows you to do that.
+
+  A map is constructed by adding parentheses first of all, that is how you simply start a new map. In the parentheses,
+  you now create key-value pairs by first of all defining a key, so a name of your choice, like main, you could name it 
+  main color but we're already in the colors map so it's clear that this is a color. So main is the key, then you add a 
+  colon and then the value of the key and you add more key-value pairs by adding a comma and then adding secondary.
+
+    $colors: (
+      main: #521751,
+      secondary: #fa923f,
+    );
+
+. SASS also is a couple of built-in functions, one of them being map-get() which allows you to get a value from a SASS map.
+  There, you first of all pass the name of the map, which is colors in our case and then the name of the key you want to 
+  get.
+
+    $border-default: 0.05rem solid map-get($colors, main);
+
+********************************************************* Built-In Functions *******************************************
+. Refer Built-In Functions in index.html
+  
+  background: lighten(map-get($colors, main), 72%);
+
+********************************************************* Assignment ***************************************************
+. Use variable as much as possible in code
+
+  $size-default: 1rem;
+  $size-tiny: 0.2rem;
+
+************************************************** Adding Simple Arithmetic ********************************************
+. padding: $size-default * 3 0;
+  box-shadow: $size-tiny $size-tiny $size-tiny/2 #ccc;
+
+************************************************** Adding better import and partials ***********************************
+. In main.scss, we are importing typography.css and if we check transformed main.css, there typography.css is imported as
+  it is. and we can verify same in network tab, there we can see index.html, main.css and typography.css are downloaded.
+
+. Now sometimes you want to generate one big CSS file but still split it up during development, so that you have an easier
+  time managing it but still that you can spit out one big file. And for our case here, this would make sense because in 
+  typography, we're again using our color, so it would be nice if we could also use our variables in there.
+
+  So for that, I will create a so-called partial. Now a partial starts with an underscore in the file name and then you 
+  can name it whatever you want, here I'll name it variables.scss. The idea behind a partial is that you can include it 
+  in many other files and behind the scenes, SASS will ensure that it only gets included once or that its values are only
+  used once.
+
+. Now in typography.css, we can use variables for border, for that we need to convert that into .scss file. and then import
+  typography.scss in main.scss. and if we check main.css (compiled file). Now there no longer is an import statement but 
+  instead the code from the typography file was simply copied into the main.css file and the values from the colors were 
+  replaced because it still understands this import here in the typography file. So now, we only have one big file and as
+  a developer, we still work with multiple files which is typically what we want because it makes our life easier.
+
+. So this is a cool way of creating one file which leads to less HTTP requests to be made, whilst still ensuring that we 
+  have a comfortable of way working with these files because we still work with our files, we now even have a separate 
+  file for the variables but we get one file as a result. And this is with the help of partials for the variables file and
+  the better import statement which will actually include the content, as it does here for this import instead of really
+  making a separate request.
+
+. Refer main.scss, typography.scss, main.css
+
+****************************************************** Improving media quries ******************************************
+. let's say for the HTML element and go up to the HTML element and actually nest the media query now. Now what you can do
+  is you can get rid of that selector, since you already nested the media query in that selector and of the first curly 
+  brace and just keep the closing curly brace of the media query and now if you save that, what this will do is, it will 
+  still generate a separate media query, so valid CSS code which nests this HTML rule but you as a developer have this 
+  convenient way of keeping your media queries close to the elements which they affect. You don't have to use it.
+
+  html {
+    font-size: 94.75%;
+
+    @media (min-width: 40rem) {
+      font-size: 125%;
+    }
+  }
+
+. Refer main.scss
+
+*************************************************** Understanding Inheritance ******************************************
+. Inheritance means that if you got a certain ruleset for a given selector which you also want to use on a different 
+  selector, then you can simply inherit from this selector.
+
+  .sass-introduction {
+    @extend .sass-section;
+    box-shadow: $size-tiny $size-tiny $size-tiny/2 #ccc;
+  }
+
+. this is of course a very cool feature that ensures that you can easily set up shared styles and use or add them to any 
+  other classes you get without manually having to take care that you implement that shared class in your HTML code, 
+  Instead you keep your specialized classes and simply let SASS do the rest.
+
+********************************************************** Adding mixins ***********************************************
+. Now what are mixins? Mixins are reuseable custom functions. You already got functions, like map-get or lighten which do
+  utility things for you and mixins are really your own functions you can write. They are super useful whenever you want 
+  to for example put some code which you commonly use into such a function so that you just have to include your mixin 
+  function in that place and then enter that code you outsourced.
+
+  @mixin display-flex() {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+  }
+
+  .container {
+    @include display-flex();
+  }
+
+. so mixin is super useful because with that now, we can put code snippets which we use quite a lot into our own mixins.
+
+. mixin for media queries
+  @mixin media-min-width() {
+    @media (min-width: $width) {
+      @content;
+    }
+  }
+
+  @mixin html {
+    font-size: 94.75%;
+
+    @include media-min-width(40rem) {
+      font-size: 125%;
+    }
+  }
+
+********************************************************** Using the Ampersand operator ********************************
+.
+  .documentation-link {
+    text-decoration: none;
+    color: map-get($colors, main);
+    display: block;
+    padding: $size-tiny;
+    border: $border-default;
+
+    &:hover,
+    &:active {
+      color: white;
+      background: map-get($colors, secondary);
+      border-color: map-get($colors, secondary);
+    }
+  }
+
+********************************************************** Wrap Up *****************************************************
+
+********************************************************** Useful Resources & Links ************************************
+. Dive deeper into Sass: https://sass-lang.com/guide

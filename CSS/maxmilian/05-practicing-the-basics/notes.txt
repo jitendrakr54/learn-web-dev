@@ -1,0 +1,24 @@
+. So when we click on a button, we get this blue outline, another browser default. You can inspect it in the developer
+  tools by selecting the button and then clicking on this pseudo selector hov thing here. and when we check focus we see
+  blue outline here. Now the outline is comparable to a border but it's not part of the box model, keep in mind the border
+  is part of the box model, the outline actually is not. The outline is just some additional border-like thing which 
+  actually is applied outside of the box,
+
+  so before the margin but after the border and it's therefore like a lighter version of the border. You can style it with
+  the outline property.
+
+. Creating a circle
+  Refer .key--feature__img
+
+. When we set float: right to free package it goes to he right but the premium package takes it's space, so basically it
+  floats around free package. What we have to do is we have to basically keep its space reserved and tell the other block 
+  level elements that come after it that they shouldn't respect any previous floatings.
+
+  and we do this with a little hack and that's why you don't really use floats for positioning anymore, it's ugly, you add
+  an additional helper div after the element you've floated, so after the free plan section here, a div which you simply
+  give a class with any name of your choice, I'll name it clear fix because I will fix the floating with something which 
+  is called clear and then you define that class, I'll define it before I add my hashtags, my ID selectors clear fix and 
+  there you have one property clear both, which means clear floats on both sides, left and right which are the two values
+  you can assign here.
+
+  This means any elements coming after this element or an element with that class will not respect previous floats.

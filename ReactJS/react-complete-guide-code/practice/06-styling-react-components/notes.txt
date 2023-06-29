@@ -1,0 +1,147 @@
+******************************************* Module Content ***********************************************************
+. with regular css, even though we're importing it into the CourseGoalList component is not scoped to that component.
+  It would affect any element on the entire page which has a goal list, CSS class. So that's one thing we will tackle here.
+
+. Conditional & Dynamic Styles
+. Styled Components
+. CSS Modules
+
+
+******************************************* Setting Dynamic Inline Styles *********************************************
+. Now we want to change the color of input box when input field is invalid like click submit button without input 
+  anything. this can be done by setting dynamic inline css as follows-
+
+  const [isValid, setIsValid] = useState(true);
+  const formSubmitHandler = (event) => {
+    event.preventDefault();
+    if (enteredValue.trim().length === 0) {
+      setIsValid(false);
+      return;
+    }
+    props.onAddGoal(enteredValue);
+  };
+
+  <input
+        type="text"
+        style={{
+        borderColor: !isValid ? "red" : "black",
+        background: !isValid ? "salmon" : "transparent",
+        }}
+        onChange={goalInputChangeHandler}
+  />
+
+  But this approach of setting css inline is not good as it will lead to code duplicacy. and also applying inline css 
+  would not be appropriate as it overrides inital styles.
+
+******************************************** Setting CSS dynamically ***************************************************
+. Now instead of adding inline css we can keep all styling in css and apply those styling dynamically on the div as 
+  follows-
+  
+  .form-control.invalid input {
+    border-color: red;
+    background: #ffd7d7;
+  }
+
+  .form-control.invalid label {
+    color: red;
+  }
+
+  <div className={`form-control ${!isValid ? "invalid" : ""}`}>
+
+******************************************** Introducing Styled Components *******************************************
+. Currently we're using just CSS for that regular CSS files with regular selectors, mostly class selectors but also 
+  sometimes combined with tag selectors for example. We're importing these files into our component files, but as I 
+  emphasized multiple times, this does not result in those styles being scoped to this component only. So that means that
+  if we had any other element anywhere else in a DOM that had a form controlled CSS class on it, this style for example, 
+  would target it and would affect it. So it's not like we only care about foreign control elements in this component, 
+  no, every element on the entire page is affected because by default, those styles are not scoped.
+  
+  and you might want to avoid this. And there are various ways of avoiding this. the two most popular approaches therefore. Approach number one is to use a package called 'Styled components'.
+  Style components is a package that helps you build components which have certain styles attached to them where the styles really only affect the components to which they were attached and not any other components. Now to get started, we need to install that package. 
+      npm install --save styled-components
+
+. ************************* Using styled-component:
+  We can get rid of the button CSS import, and instead now we use styled.button and then we add two back ticks like this.
+  Now that certainly is a super weird syntax, This is called attacked template, literal. It's a default JavaScript feature,
+  it's not specific to this package, not specific to react you could use it in any JavaScript project.
+
+  const Button = styled.button``;
+
+  And now what does this do? Well, button is simply a method on this styled object. Styled is an object we're importing 
+  from style components and there we can access the button method. It's just a special kind of method you could say.
+  In the end this will be executed as a method behind the scenes and what you pass in here will be passed into this method
+  just in a special way. Actually, that styled package has methods for all HTML elements. It has p method for a paragraph
+  h1, h2 and so on for the h1, h2 tags, div to create a div and so on.
+
+  And now we can just copy all the button styles from Button.css here and add them in here. We'll need to tweak them, but
+  that is something we can do. we need to remove button selectors and Now for a pseudo selectors, you can use the ampersand
+  symbol that's supported by that styled component package. So in this case, we're saying, "Hey, when this button here has
+  focus, please apply to style."
+
+. Now the button which is returned all to by default applies all the props you might be passing to your own button 
+  component which we're exporting here in the end.
+
+  if we inspect it in the developer tools. Of course it's a regular button, that's what this button method here in the 
+  end returns. But you see on that, there is a very strange class two strange classes to be precise. And these are class 
+  names we certainly didn't set up. These are class names dynamically generated by the styled components package.
+  Because what this package does in the end is it looks at the styles we set up here and then it wraps these styles into
+  generated class names where it guarantees that every class name is unique so that it can spill over to other components
+  of the app. And it will then add these classes as global CSS. But now since we have unique class names for every styled
+  component, the style set up here will never be able to affect the number of component in the app because these unique 
+  class names are really well unique per style component.
+
+********************************************** Styled component & Dynamic props ***************************************
+. Thus far, we always had one component per file, and that generally is a good rule to keep. But if you have a component
+  that is really only getting used by the other component in that file, having both components in the same file can make 
+  sense too.
+
+. In styled component we can pass props and that props can be used to set stylesheet dynamically as follows - 
+
+  <FormControl invalid={!isValid}>
+    <label>Course Goal</label>
+    <input type="text" onChange={goalInputChangeHandler} />
+  </FormControl>
+
+  Here, we are passing invalid props when form input is invalid then use this props to set stylesheet -
+
+  & input {
+    display: block;
+    width: 100%;
+    border: 1px solid ${(props) => (props.invalid ? "#ffd7d7" : "#ccc")};
+    background: ${(props) => (props.invalid ? "#ffd7d7" : "transparent")}
+    font: inherit;
+    line-height: 1.5rem;
+    padding: 0 0.25rem;
+  }
+
+*********************************************** Styled component & media queries ****************************************
+  @media (min-width: 768px) {
+    width: auto;
+  }
+
+********************************************* Using CSS modules stylesheet **********************************************
+  CSS modules is another way of using scoped styles. CSS Modules is a feature which is only available in projects that 
+  are configured to support it because it needs a code transformation that needs to be done before your code runs in the 
+  browser. Now, the good thing is the react projects created with create react app which we used are already configured 
+  to support CSS Modules.
+
+  To use CSS module for scoped style, first thing we need to do is we have to rename css file as 'Button.module.css' and
+  then import this as - import styles from "./Button.module.css"
+  Now Instead of applying a string class named like this (className="button") you apply something dynamic. You refer to 
+  that styles thing which you're importing from the CSS file. And that thing turns out to be an object. And in that 
+  object, you'll have every class you defined in your file as a property. So if I added a button class here in the CSS 
+  file I now have the button property here. And that's all we need to do. className={styles.button}
+
+  Now we see something interesting if we inspect this here in the Dev tools. On the button you'll see a very strange 
+  class. This is not the same class as added by style components. Those classes looked like this here on the div. 
+  Instead this looks a bit like the class we defined, button, but with more information added to it. It's basically 
+  component name, underscore, our class name and the CSS file, double underscore some unique hash. What CSS Modules does 
+  or what this concept of CSS Modules does. What the build process does under the hood is it takes those CSS classes and 
+  a CSS file and basically changes those class names to be unique. That's the core thing it does.
+
+. CSS modules and mediaqueries:
+  @media (min-width: 768px) {
+    .button {
+      width: auto;
+    }
+  }

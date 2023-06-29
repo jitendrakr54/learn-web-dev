@@ -1,0 +1,107 @@
+***************************************************** Module Introduction *********************************************
+. Module Content:
+      . CSS Animations & why they are sometimes not enough
+      . Animating React components with extra libraries
+
+***************************************************** Preparing the Demo Project ***************************************
+. Copied downloaded project, shown modal and backdrop conditionally
+. Refer App.js, Modal.js, Backdrop.js
+
+***************************************************** Using CSS transitions ********************************************
+. Refer Modal.css
+
+***************************************************** Using CSS Animations ********************************************
+. Refer Modal.css
+
+***************************************************** CSS transitions & Animations limitations *************************
+. we see that our modal div and the backdrop div are always present in developer tools, they're just not visible because 
+  we're actually animating this here. Now that of course means that all our code, all our html code is always in the dom 
+  and just not displayed because the opacity is 0,
+
+  this might not be what we want, it populates our dom with a lot of elements which slows it down a little bit and which 
+  also might not be the best case or the best way to do for accessibility and it is not very react-ish.
+
+. We can still fix this by showing modal and backdrop conditionally but when we remove the modal, animations are not 
+  shown, that's because element is removed instantly because React doesn't wait for that.
+
+. Refer App.js
+
+***************************************************** Using ReactTransitionGroup **************************************
+. https://github.com/reactjs/react-transition-group
+
+. Refer App.js
+
+***************************************************** Wrapping the Transition component ********************************
+. Refer App.js, Modal.js
+
+***************************************************** Animating Timings ************************************************
+. Refer Modal.js - animaionTiming
+
+***************************************************** Transition Events ************************************************
+. now sometimes you want to execute certain code when the state of the animation finishes and not just change what you 
+  render to the screen, and for this we get 6 different callbacks functions.
+
+  With these methods, you got all the control you need to find out what happened, what finished, what started and then 
+  time your animations based on that.
+
+. Refer App.js
+
+***************************************************** The CSSTransition Component **************************************
+. Now sometimes you don't want to control the transition as we do here where we get this function with the state and 
+  where we then manually attach css classes or change the style. We can of course do this, we are doing this in both the 
+  app.js file and our modal.js file.
+
+  But sometimes you just want to have a couple of predefined css classes for the different animation states and you want 
+  to make sure they get attached depending on the state of the animation. Essentially what we're doing here manually 
+  would be nice if that would be managed automatically and turns out the package we're using has a special css 
+  transition component.
+
+. we initally set className and based on the state, it will be appended. So for example if we set 'fade-slide' and state 
+  is enter then className would be 'fade-slide-enter'. If state is enter-active then className would be 
+  'fade-slide-enter-active'. If state is exit then className would be 'fade-slide-exit'. If state is exit-active then 
+  className would be 'fade-slide-exit-active'.
+
+  and we need to define these classes in css.
+
+. Refer Modal.js, Modal.css
+
+***************************************************** Customizing CSS Classnames **************************************
+. For some reason, you could also want to make sure that you still use modal open and modal closed, so that you 
+  essentially don't have to define these classes. For that reason, you cannot only pass a string with your trunk here to 
+  classNames.
+
+  you can also pass a javascript object and in this object, you can manually define various css classes that should be 
+  used for the different hooks. So there in this object you passed to class name.
+
+. Refer Modal.js
+
+***************************************************** Animating Lists ************************************************
+. Refer List.js
+
+***************************************************** Alternative animation package ************************************
+. There are alternatives to this package, one popular alternative is React-Motion, if you google for it you'll find the 
+  github repository where you find more instructions about it. Now react motion follows a totally different approach, in 
+  react motion for example you don't really define manually the timer animation should take, instead react motion tries 
+  to emulate real world physics to figure out the best timing an animation should take and it simply allows you to 
+  define end and starting states and it tries its best to use this real world physics to emulate or to interpolate the 
+  state in-between.
+
+. Another alternative is React-Move  React Move has two basic components it exposes to you which allow you to animate 
+  single items or groups of items, animate a node group and with react move, you always work with objects describing the 
+  state of an animation. React move is heavily influenced by the three JS transitions so if you know that, you might 
+  have an edge using this and in the end, you could find detailed docs and explanations on how it works in its 
+  documentation.
+
+  Here you do define durations but you then don't just define styles like opacity and so on but you can really control 
+  way more with that and build more complex animations with it.
+
+. And finally, there is react router transition that's another library I want to mention, though I'll be honest there 
+  are more libraries than that and you can get the feeling of a new react animation library coming up every week but to 
+  react router transition is a very interesting and special one. It is as the name suggests there to allow you to easily 
+  create route transitions, so animations between different routes.
+
+  It builds up on react motion and it basically gives you this animated switch component which you use to replace your 
+  normal router switch with and it's made to work with react router version four which I covered in this course or 
+  higher, and animated switch then does all the same the normal switch does but it allows you to define atEnter, 
+  atLeave, atActive and then a class name here which is set up like this to allow you to animate the routing, so to 
+  animate the switching of pages.

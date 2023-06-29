@@ -1,0 +1,103 @@
+**************************************************** Module Introduction ***********************************************
+. Module Content:
+      . Rotating, moving, skewing & scaling elements.
+      . 3D Transformations
+
+************************************************ Rotating elements and setting transform-origin ************************
+. transform actually is hardware accelerated and it keeps the element in the document flow.
+
+. it rotates around the center of the element. You can change that though, you can change it with the help of the 
+  transform origin property.
+
+    .package__badge {
+      transform: rotateZ(45deg);
+      /* transform-origin: center; */
+      /* transform-origin: top left; */
+    }
+
+****************************************************** Using Rotate and translate **************************************
+. Now we also want to move the element and of course we can do this with top and right, it's an absolute element. If we 
+  set top to let's say 1rem here, we move it down by 1rem, therefore it went down a little bit.
+
+  Now nothing wrong with using top and right, however if the element wasn't positioned absolute but instead statically 
+  like a normal element, we couldn't use that, we could then use the margin to kind of move it in a hacky way or set the 
+  position to relative to use top and right again. 
+  
+  There actually is a better way if you really just want to move it for some visual effects and that is the translate 
+  property or the translate function to be precise on the transform property.
+
+  translateX and Y, the axis changes when we rotate the element, the axis always goes through the center of that badge.
+
+****************************************************** Working with "skew" and "scale" *********************************
+. Refer .testimonial__image-container and .testimonial__image in customer.css
+
+****************************************************** Applying transformation shorthands ******************************
+. So rotate, by default rotates around the z-axis.
+
+. Translate, if we don't enter anything else, will allow us to enter one or two values. If we only enter one, like this,
+  but it's now only translating on the x-axis, the second value is what we need to enter to translate on the y-axis.
+
+. for skew, we're already using that function where we just skew on the x-axis, the second value would then be the y-axis
+  as you learned and for scale, there if we enter one value, we actually scale on both X and Y at the same time.
+  If you want to scale either of the two, we can use scaleX and scaleY.
+
+****************************************************** Rotating elements in 3Dimensions *******************************
+. Refer 3d_demo
+
+****************************************************** Understanding the "perspective" property ************************
+. let's now change the perspective from which we're looking at this. To change the perspective, we've got a special 
+  function we can use on transform, perspective. There you enter a value in pixels or rem, like for example 100 pixels.
+
+  If I enter 100 pixels and reload, now you see this looks as if we're sitting next to the element and the reason for this
+  is, the smaller perspective is, so for example one pixel, the closer you are to the element. So for one pixel, we're 
+  right inside of the elements so to say. If we increase this to 1000 pixels, then we're really far away but still closer
+  too than we were before.
+
+  So now we can actually see this effect a bit better because it now goes outside of its surrounding box and therefore it
+  creates a 3D look.
+
+. Instead of using the perspective function, you can also use the perspective property by the way. You can set perspective
+  here, with the perspective property. perspective property actually has to be applied to the parent element, the advantage
+  then is that you get the same perspective on all child elements. If you use perspective function, then each element 
+  where you apply it has its own perspective, even if they sit next to each other, this can leads to strange effects.
+
+  Now you can also change the angle with perspective origin. Here you by default have center but you can also enter right.
+  We can now also introduce rotateZ to complete it and enter 30 degrees here and now it's also rotating around that.
+
+. Important to understand is simply that you can control both the rotation of the element on three axis, as well as the 
+  perspective from which you're looking at this, both regarding the distance as well as the angle.
+
+. Refer 3d_demo
+************************************************ Moving elements along the Z-axis with "translateZ" ********************
+. Refer 3d_demo
+
+************************************************ Rotating the containerwith "transform style" **************************
+. let's now transform the container itself. Let's transform it by rotating it, by rotating it around the y-axis. If I 
+  rotate the container by 90 degrees, so we shouldn't see the container and I reload the page, everything is hidden.
+
+  Now of course, logically this doesn't make a lot of sense because even if the container is rotated by 90 degrees, since
+  we also rotate the red box and move the blue box a little bit to the back, we should definitely see these two elements 
+  still because they actually have their own 3D space inside of the container.
+
+  The default behavior however flattens this 3D space and you can change this behavior with another property which you 
+  add to the container, it's called transform style. The default value is flat, which means the container rotates and the
+  elements move with the container but they're actually in a flat 3D space in there, so the overall container is seen as 
+  one flat object.
+
+  However, you can change that value to preserve-3D. With this value, the 3D position of the child elements is preserved.
+  So now if you reload, you can actually still see the red box.
+
+. Refer 3d_demo
+
+************************************************ Flipping elements & "backface-visibility" *****************************
+. backface-visibility: hidden; default value is visible
+
+. Refer 3d_demo
+
+***************************************************** Wrap Up **********************************************************
+. Refer pdf
+
+***************************************************** Useful resources & links *****************************************
+. CSS Transforms: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transforms/Using_CSS_transforms
+
+  3D Transforms: https://desandro.github.io/3dtransforms/
