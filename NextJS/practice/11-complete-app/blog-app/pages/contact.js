@@ -1,9 +1,15 @@
+import ContactForm from "@/components/contact/contact-form";
+import Head from "next/head";
 import { Fragment } from "react";
 
 export default function Contact() {
   return (
     <Fragment>
-      <div>Hello</div>
+      <Head>
+        <title>Contact me</title>
+        <meta name="description" content="Send me your messages" />
+      </Head>
+      <ContactForm />
     </Fragment>
   );
 }
