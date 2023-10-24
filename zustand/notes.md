@@ -79,3 +79,47 @@ export const useStore = create(store);
 
 const tasks = useStore((store) => store.tasks);
 ```
+
+---
+
+<p style="text-align: center; font-size: 20px; font-weight: bold; color: #e68a00"> Middleware: Redux toolkit using zustand </p>
+
+```js
+import { devtools } from "zustand/middleware";
+export const useStore = create(devtools(store));
+```
+
+---
+
+<p style="text-align: center; font-size: 20px; font-weight: bold; color: #e68a00"> Middleware: Persist store in local storage </p>
+
+```js
+import { devtools, persist } from "zustand/middleware";
+export const useStore = create(persist(devtools(store), { name: "store" }));
+```
+
+---
+
+<p style="text-align: center; font-size: 20px; font-weight: bold; color: #e68a00"> Middleware: Logger </p>
+
+- Log whenever state changes
+
+  ```js
+  const log = (config) => (set, get, api) =>
+    config(
+      (...args) => {
+        console.log(args);
+        set(...args);
+      },
+      get,
+      api
+    );
+
+  export const useStore = create(
+    log(persist(devtools(store), { name: "store" }))
+  );
+  ```
+
+---
+
+<p style="text-align: center; font-size: 20px; font-weight: bold; color: #e68a00"> Unittest</p>
